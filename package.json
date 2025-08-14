@@ -35,8 +35,6 @@
 		"tailwind-merge": "2.5.4"
 	},
 	"devDependencies": {
-		"@repo/typescript-config": "*",
-		"@repo/eslint-config": "*",
 		"@types/react": "19.0.1",
 		"@types/react-dom": "19.0.1",
 		"@vitejs/plugin-react": "4.5.2",
@@ -53,7 +51,10 @@
 		"vitest": "3.2.4",
 		"tailwindcss": "3.4.0",
 		"autoprefixer": "10.4.0",
-		"postcss": "8.4.0"
+		"postcss": "8.4.0",
+		"eslint": "^8.57.0",
+		"@typescript-eslint/eslint-plugin": "^6.21.0",
+		"@typescript-eslint/parser": "^6.21.0"
 	},
 	"peerDependencies": {
 		"react": "19.0.0",
