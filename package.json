@@ -35,8 +35,8 @@
 		"tailwind-merge": "2.5.4"
 	},
 	"devDependencies": {
-		"@repo/typescript-config": "workspace:*",
-		"@repo/eslint-config": "workspace:*",
+		"@repo/typescript-config": "*",
+		"@repo/eslint-config": "*",
 		"@types/react": "19.0.1",
 		"@types/react-dom": "19.0.1",
 		"@vitejs/plugin-react": "4.5.2",
