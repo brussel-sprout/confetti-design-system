@@ -1,0 +1,224 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* CSS Custom Properties for Theme */
+:root {
+	/* Primary Brand Colors */
+	--color-primary: hsl(340, 35%, 68%);
+	--color-primary-foreground: hsl(30, 15%, 97%);
+	--color-primary-50: hsl(340, 35%, 95%);
+	--color-primary-100: hsl(340, 35%, 90%);
+	--color-primary-200: hsl(340, 35%, 80%);
+	--color-primary-300: hsl(340, 35%, 70%);
+	--color-primary-400: hsl(340, 35%, 60%);
+	--color-primary-500: hsl(340, 35%, 68%);
+	--color-primary-600: hsl(340, 35%, 58%);
+	--color-primary-700: hsl(340, 35%, 48%);
+	--color-primary-800: hsl(340, 35%, 38%);
+	--color-primary-900: hsl(340, 35%, 28%);
+
+	/* Secondary Colors */
+	--color-secondary: hsl(30, 12%, 85%);
+	--color-secondary-foreground: hsl(25, 8%, 25%);
+	--color-secondary-50: hsl(30, 12%, 95%);
+	--color-secondary-100: hsl(30, 12%, 90%);
+	--color-secondary-200: hsl(30, 12%, 80%);
+	--color-secondary-300: hsl(30, 12%, 70%);
+	--color-secondary-400: hsl(30, 12%, 60%);
+	--color-secondary-500: hsl(30, 12%, 85%);
+	--color-secondary-600: hsl(30, 12%, 75%);
+	--color-secondary-700: hsl(30, 12%, 65%);
+	--color-secondary-800: hsl(30, 12%, 55%);
+	--color-secondary-900: hsl(30, 12%, 45%);
+
+	/* Background Colors */
+	--color-background: hsl(30, 15%, 97%);
+	--color-foreground: hsl(25, 8%, 25%);
+
+	/* Accent Colors */
+	--color-accent: hsl(25, 45%, 58%);
+	--color-accent-foreground: hsl(30, 15%, 97%);
+	--color-accent-50: hsl(25, 45%, 95%);
+	--color-accent-100: hsl(25, 45%, 90%);
+	--color-accent-200: hsl(25, 45%, 80%);
+	--color-accent-300: hsl(25, 45%, 70%);
+	--color-accent-400: hsl(25, 45%, 60%);
+	--color-accent-500: hsl(25, 45%, 58%);
+	--color-accent-600: hsl(25, 45%, 48%);
+	--color-accent-700: hsl(25, 45%, 38%);
+	--color-accent-800: hsl(25, 45%, 28%);
+	--color-accent-900: hsl(25, 45%, 18%);
+
+	/* Neutral Colors */
+	--color-muted: hsl(30, 12%, 90%);
+	--color-muted-foreground: hsl(25, 8%, 45%);
+	--color-muted-50: hsl(30, 12%, 95%);
+	--color-muted-100: hsl(30, 12%, 90%);
+	--color-muted-200: hsl(30, 12%, 80%);
+	--color-muted-300: hsl(30, 12%, 70%);
+	--color-muted-400: hsl(30, 12%, 60%);
+	--color-muted-500: hsl(30, 12%, 50%);
+	--color-muted-600: hsl(30, 12%, 40%);
+	--color-muted-700: hsl(30, 12%, 30%);
+	--color-muted-800: hsl(30, 12%, 20%);
+	--color-muted-900: hsl(30, 12%, 10%);
+
+	/* Border and Input Colors */
+	--color-border: hsl(30, 12%, 82%);
+	--color-input: hsl(30, 12%, 82%);
+
+	/* Extended Brand Palette */
+	--color-powder-blue-500: hsl(200, 25%, 70%);
+	--color-powder-blue-600: hsl(200, 28%, 60%);
+	--color-powder-blue-700: hsl(200, 30%, 50%);
+
+	--color-cream-200: hsl(35, 33%, 90%);
+	--color-cream-300: hsl(35, 30%, 80%);
+	--color-cream-400: hsl(35, 28%, 70%);
+
+	--color-blush-500: hsl(340, 50%, 75%);
+	--color-blush-600: hsl(340, 50%, 65%);
+	--color-blush-700: hsl(340, 50%, 55%);
+
+	--color-charcoal-600: hsl(0, 0%, 36%);
+	--color-charcoal-700: hsl(0, 0%, 31%);
+	--color-charcoal-800: hsl(0, 0%, 27%);
+
+	/* Semantic Colors */
+	--color-destructive: hsl(0, 84%, 60%);
+	--color-destructive-foreground: hsl(0, 0%, 98%);
+	--color-success: hsl(142, 76%, 36%);
+	--color-success-foreground: hsl(0, 0%, 98%);
+	--color-warning: hsl(38, 92%, 50%);
+	--color-warning-foreground: hsl(0, 0%, 98%);
+	--color-info: hsl(199, 89%, 48%);
+	--color-info-foreground: hsl(0, 0%, 98%);
+
+	/* Border radius */
+	--radius: 0.75rem;
+	--radius-sm: 0.5rem;
+	--radius-md: 0.625rem;
+	--radius-lg: 0.75rem;
+	--radius-xl: 1rem;
+	--radius-2xl: 1.25rem;
+	--radius-3xl: 1.5rem;
+
+	/* Spacing */
+	--spacing-18: 4.5rem;
+	--spacing-88: 22rem;
+	--spacing-128: 32rem;
+}
+
+/* Base styles */
+html,
+body {
+	@apply text-foreground;
+	font-family: var(--font-sans);
+	background-color: var(--color-background);
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@apply font-medium text-foreground;
+}
+
+h1 {
+	@apply text-3xl sm:text-4xl;
+}
+h2 {
+	@apply text-2xl sm:text-3xl;
+}
+h3 {
+	@apply text-xl sm:text-2xl;
+}
+h4 {
+	@apply text-lg sm:text-xl;
+}
+h5 {
+	@apply text-base sm:text-lg;
+}
+h6 {
+	@apply text-sm sm:text-base;
+}
+
+/* Focus styles */
+.focus-ring {
+	@apply focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2;
+}
+
+/* Animation utilities */
+.animate-fade-in {
+	animation: fadeIn 0.6s ease-out;
+}
+
+.animate-float {
+	animation: float 3s ease-in-out infinite;
+}
+
+.animate-slide-up {
+	animation: slideUp 0.3s ease-out;
+}
+
+.animate-slide-down {
+	animation: slideDown 0.3s ease-out;
+}
+
+.animate-scale-in {
+	animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+}
+
+@keyframes slideUp {
+	0% {
+		transform: translateY(100%);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideDown {
+	0% {
+		transform: translateY(-100%);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes scaleIn {
+	0% {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
