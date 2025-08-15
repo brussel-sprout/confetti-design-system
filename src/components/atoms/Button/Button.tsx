@@ -4,7 +4,7 @@ import type { HTMLMotionProps } from 'framer-motion'
 
 import { cn } from '../../../utils/cn'
 
-export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragStart' | 'onDragEnd'> {
+export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart' | 'onAnimationEnd' | 'onAnimationIteration'> {
 	variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive'
 	size?: 'sm' | 'md' | 'lg'
 	children: React.ReactNode
