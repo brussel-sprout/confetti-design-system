@@ -36,6 +36,9 @@ export type { PartyCardProps } from './components/molecules/PartyCard'
 export { PartySelector } from './components/organisms/PartySelector'
 export type { PartySelectorProps, PartyOption } from './components/organisms/PartySelector'
 
+export { PartySelectionLayout } from './components/organisms/PartySelectionLayout'
+export type { PartySelectionLayoutProps } from './components/organisms/PartySelectionLayout'
+
 // Demo
 export { Demo } from './components/Demo'
 

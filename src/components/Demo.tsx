@@ -9,6 +9,7 @@ import { FeatureList } from './atoms/FeatureList'
 import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
 import { PartyCard } from './molecules/PartyCard'
 import { PartySelector } from './organisms/PartySelector'
+import { PartySelectionLayout } from './organisms/PartySelectionLayout'
 import type { PartyOption } from './organisms/PartySelector'
 
 export const Demo: React.FC = () => {
@@ -79,10 +80,24 @@ export const Demo: React.FC = () => {
 
 				{/* Party Selector Demo */}
 				<section className="space-y-8">
-					<h2 className="text-3xl font-semibold text-foreground">Party Selection Interface</h2>
+					<h2 className="text-3xl font-semibold text-foreground">Party Selection Layout (Full Screen)</h2>
+					<div className="border border-border rounded-lg overflow-hidden">
+						<PartySelectionLayout
+							options={partyOptions}
+							onSelect={(id) => console.log('Selected:', id)}
+							onBack={() => console.log('Back clicked')}
+							onContinue={(id) => console.log('Continue with:', id)}
+							className="min-h-[600px]"
+						/>
+					</div>
+				</section>
+
+				{/* Original Party Selector Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Party Selector Component</h2>
 					<PartySelector
-						title="What type of party are you planning?"
-						subtitle="Choose your party type to get personalized themes and recommendations tailored just for you."
+						title="Alternative Layout Version"
+						subtitle="This is the original component version with different styling."
 						options={partyOptions}
 						onSelect={(id) => console.log('Selected:', id)}
 						onBack={() => console.log('Back clicked')}
