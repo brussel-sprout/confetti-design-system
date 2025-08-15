@@ -21,7 +21,6 @@
 		"build-storybook": "storybook build",
 		"dev": "storybook dev -p 6006",
 		"lint": "eslint src --ext .ts,.tsx",
-		"storybook": ",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
 		"type-check": "tsc --noEmit"
