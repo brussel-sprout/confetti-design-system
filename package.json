@@ -4,9 +4,6 @@
 	"private": true,
 	"type": "module",
 	"types": "./src",
-	"files": [
-		"dist"
-	],
 	"scripts": {
 		"build": "tsc && vite build",
 		"build-storybook": "storybook build",
