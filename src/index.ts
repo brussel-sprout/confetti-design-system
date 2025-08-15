@@ -47,6 +47,9 @@ export type { CheckboxProps } from './components/atoms/Checkbox'
 export { RadioButton } from './components/atoms/RadioButton'
 export type { RadioButtonProps, RadioOption } from './components/atoms/RadioButton'
 
+export { DatePicker } from './components/atoms/DatePicker'
+export type { DatePickerProps } from './components/atoms/DatePicker'
+
 // Molecules
 export { Card, CardHeader, CardContent, CardFooter } from './components/molecules/Card'
 export type {

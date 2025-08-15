@@ -12,6 +12,7 @@ import { TextArea } from './atoms/TextArea'
 import { Select } from './atoms/Select'
 import { Checkbox } from './atoms/Checkbox'
 import { RadioButton } from './atoms/RadioButton'
+import { DatePicker } from './atoms/DatePicker'
 import { Icon } from './atoms/Icon'
 import { StatusBadge } from './atoms/StatusBadge'
 import { FeatureList } from './atoms/FeatureList'
@@ -360,6 +361,14 @@ export const Demo: React.FC = () => {
 										{ value: 'option3', label: 'Option 3', helperText: 'Third choice' },
 									]}
 									name="demo-radio"
+								/>
+							</div>
+							
+							<div className="space-y-4">
+								<DatePicker
+									label="Date Picker"
+									placeholder="Select date..."
+									helperText="Modern date picker with calendar"
 								/>
 							</div>
 						</CardContent>
