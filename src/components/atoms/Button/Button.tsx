@@ -84,11 +84,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			>
 				<button ref={ref} className={classes} disabled={disabled || loading} {...props}>
 					{loading && (
-						<motion.div
-							animate={{ rotate: 360 }}
-							transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-							className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
-						/>
+						<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
 					)}
 					{children}
 				</button>
