@@ -5,6 +5,7 @@ import { cn } from '../../../utils/cn'
 export interface CardProps {
 	children: React.ReactNode
 	className?: string
+	onClick?: () => void
 }
 
 export interface CardHeaderProps {
