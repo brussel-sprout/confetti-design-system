@@ -78,17 +78,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className)
 
 		return (
-			<motion.div
+			<motion.button
+				ref={ref}
+				className={classes}
+				disabled={disabled || loading}
 				whileHover={!disabled && !loading ? { scale: 1.02 } : {}}
 				whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
+				{...props}
 			>
-				<button ref={ref} className={classes} disabled={disabled || loading} {...props}>
-					{loading && (
-						<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-					)}
-					{children}
-				</button>
-			</motion.div>
+				{loading && (
+					<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+				)}
+				{children}
+			</motion.button>
 		)
 	}
 )
