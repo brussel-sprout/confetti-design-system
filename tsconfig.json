@@ -20,7 +20,8 @@
 		"inlineSources": false,
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
-		"preserveWatchOutput": true
+		"preserveWatchOutput": true,
+    "outDir": "dist"
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist", ".storybook", "**/*.stories.tsx", "**/*.test.tsx"]
