@@ -17,9 +17,15 @@ const Button = React.forwardRef(({ variant = 'default', size = 'md', className =
         destructive: cn('bg-destructive text-destructive-foreground', 'hover:bg-destructive/80', 'focus:ring-destructive/20', 'border-destructive'),
     };
     const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className);
-    // Separate motion props from HTML button props
-    const { onDrag, onDragStart, onDragEnd, ...buttonProps } = props;
-    return (_jsxs(motion.button, { ref: ref, className: classes, disabled: disabled || loading, whileHover: !disabled && !loading ? { scale: 1.02 } : {}, whileTap: !disabled && !loading ? { scale: 0.98 } : {}, ...buttonProps, children: [loading && (_jsx("div", { className: "w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" })), children] }));
+    const motionProps = {
+        ref,
+        className: classes,
+        disabled: disabled || loading,
+        whileHover: !disabled && !loading ? { scale: 1.02 } : {},
+        whileTap: !disabled && !loading ? { scale: 0.98 } : {},
+        ...props,
+    };
+    return (_jsxs(motion.button, { ...motionProps, children: [loading && (_jsx("div", { className: "w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" })), children] }));
 });
 Button.displayName = 'Button';
 export { Button };
