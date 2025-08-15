@@ -1,4 +1,4 @@
-import { jsx as _jsx } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { motion } from 'framer-motion';
 import React from 'react';
 import { cn } from '../../../utils/cn';
@@ -25,11 +25,7 @@ const Button = React.forwardRef(({ variant = 'default', size = 'md', className =
         whileTap: !disabled && !loading ? { scale: 0.98 } : {},
         ...props,
     };
-    return (_jsx(motion.button, { ...motionProps, as: true, HTMLMotionProps: true }), _jsx(, {}));
-    'button' > ['ref'] >
-        { loading } && (_jsx("div", { className: "w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" }));
-}, { children });
-motion.button >
-;
+    return (_jsxs(motion.button, { ...motionProps, children: [loading && (_jsx("div", { className: "w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" })), children] }));
+});
 Button.displayName = 'Button';
 export { Button };
