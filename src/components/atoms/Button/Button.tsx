@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import React from 'react'
+import type { HTMLMotionProps } from 'framer-motion'
 
 import { cn } from '../../../utils/cn'
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragStart' | 'onDragEnd'> {
 	variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive'
 	size?: 'sm' | 'md' | 'lg'
 	children: React.ReactNode
@@ -77,18 +78,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className)
 
-		// Separate motion props from HTML button props
-		const { onDrag, onDragStart, onDragEnd, ...buttonProps } = props
+		const motionProps: HTMLMotionProps<'button'> = {
+			ref,
+			className: classes,
+			disabled: disabled || loading,
+			whileHover: !disabled && !loading ? { scale: 1.02 } : {},
+			whileTap: !disabled && !loading ? { scale: 0.98 } : {},
+			...props,
+		}
 
 		return (
-			<motion.button
-				ref={ref}
-				className={classes}
-				disabled={disabled || loading}
-				whileHover={!disabled && !loading ? { scale: 1.02 } : {}}
-				whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
-				{...buttonProps}
-			>
+			<motion.button {...motionProps}>
 				{loading && (
 					<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
 				)}
