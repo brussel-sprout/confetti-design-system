@@ -3,14 +3,14 @@
 /* CSS Custom Properties for Theme */
 @theme {
 	/* Primary Brand Colors */
-	--color-primary: hsl(340 35% 68%);
+	--color-primary: hsl(340 35% 75%);
 	--color-primary-foreground: hsl(30 15% 97%);
 	--color-primary-50: hsl(340 35% 95%);
 	--color-primary-100: hsl(340 35% 90%);
 	--color-primary-200: hsl(340 35% 80%);
 	--color-primary-300: hsl(340 35% 70%);
 	--color-primary-400: hsl(340 35% 60%);
-	--color-primary-500: hsl(340 35% 68%);
+	--color-primary-500: hsl(340 35% 75%);
 	--color-primary-600: hsl(340 35% 58%);
 	--color-primary-700: hsl(340 35% 48%);
 	--color-primary-800: hsl(340 35% 38%);
