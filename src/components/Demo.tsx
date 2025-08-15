@@ -3,6 +3,15 @@ import React from 'react'
 import { Badge } from './atoms/Badge'
 import { Button } from './atoms/Button'
 import { Input } from './atoms/Input'
+import { TextInput } from './atoms/TextInput'
+import { EmailInput } from './atoms/EmailInput'
+import { PasswordInput } from './atoms/PasswordInput'
+import { NumberInput } from './atoms/NumberInput'
+import { SearchInput } from './atoms/SearchInput'
+import { TextArea } from './atoms/TextArea'
+import { Select } from './atoms/Select'
+import { Checkbox } from './atoms/Checkbox'
+import { RadioButton } from './atoms/RadioButton'
 import { Icon } from './atoms/Icon'
 import { StatusBadge } from './atoms/StatusBadge'
 import { FeatureList } from './atoms/FeatureList'
@@ -255,7 +264,7 @@ export const Demo: React.FC = () => {
 					{/* Inputs */}
 					<Card>
 						<CardHeader>
-							<h3 className="text-xl font-semibold">Input Component</h3>
+							<h3 className="text-xl font-semibold">Original Input Component</h3>
 							<p className="text-muted-foreground">
 								Form inputs with labels, validation, and icons
 							</p>
@@ -274,6 +283,84 @@ export const Demo: React.FC = () => {
 									error="Password is required"
 								/>
 								<Input label="Disabled" placeholder="This is disabled" disabled />
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* New Input Components */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Specialized Input Components</h3>
+							<p className="text-muted-foreground">
+								Dedicated input components for specific use cases
+							</p>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<TextInput 
+									label="Text Input" 
+									placeholder="Enter text..." 
+									helperText="Basic text input"
+								/>
+								<EmailInput 
+									label="Email Input" 
+									placeholder="Enter email..." 
+									helperText="Built-in email validation"
+								/>
+								<PasswordInput 
+									label="Password Input" 
+									placeholder="Enter password..." 
+									helperText="Toggle visibility"
+								/>
+								<NumberInput 
+									label="Number Input" 
+									placeholder="Enter number..." 
+									helperText="With stepper controls"
+									value="10"
+									min={0}
+									max={100}
+								/>
+								<SearchInput 
+									label="Search Input" 
+									placeholder="Search..." 
+									helperText="With clear button"
+									value="search term"
+								/>
+								<Select
+									label="Select Input"
+									placeholder="Choose option..."
+									helperText="Dropdown selection"
+									options={[
+										{ value: 'option1', label: 'Option 1' },
+										{ value: 'option2', label: 'Option 2' },
+										{ value: 'option3', label: 'Option 3' },
+									]}
+								/>
+							</div>
+							
+							<div className="space-y-4">
+								<TextArea
+									label="Text Area"
+									placeholder="Enter long text..."
+									helperText="Multi-line text input"
+									rows={3}
+								/>
+								
+								<Checkbox
+									label="Checkbox Input"
+									helperText="Single checkbox option"
+								/>
+								
+								<RadioButton
+									label="Radio Button Group"
+									helperText="Choose one option"
+									options={[
+										{ value: 'option1', label: 'Option 1', helperText: 'First choice' },
+										{ value: 'option2', label: 'Option 2', helperText: 'Second choice' },
+										{ value: 'option3', label: 'Option 3', helperText: 'Third choice' },
+									]}
+									name="demo-radio"
+								/>
 							</div>
 						</CardContent>
 					</Card>
