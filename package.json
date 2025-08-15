@@ -3,8 +3,19 @@
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",
-	"types": "./src",
-  "main": "./src/index.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./styles": "./dist/styles/index.css"
+	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsc && vite build",
 		"build-storybook": "storybook build",
@@ -13,7 +24,8 @@
 		"storybook": "storybook dev -p 6006",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
-		"type-check": "tsc --noEmit"
+		"type-check": "tsc --noEmit",
+    "postinstall": "npm run build"
 	},
 	"dependencies": {
 		"clsx": "2.1.0",
