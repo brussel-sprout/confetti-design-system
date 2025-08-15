@@ -1,5 +1,5 @@
-// Styles
-import './styles/base.css'
+// DO NOT UNCOMMENT
+// import './styles/base.css'
 
 // Atoms
 export { Button } from './components/atoms/Button'
