@@ -31,7 +31,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			'transition-all duration-200 ease-in-out',
 			'focus:outline-none focus:ring-2 focus:ring-offset-2',
 			'disabled:opacity-50 disabled:cursor-not-allowed',
-			'rounded-xl shadow-sm backdrop-blur-sm',
+			'rounded-xl backdrop-blur-sm',
 			'border-2'
 		)
 
@@ -44,31 +44,31 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		const variantClasses = {
 			default: cn(
 				'bg-primary text-primary-foreground',
-				'hover:bg-primary/90 hover:shadow-lg',
+				'hover:bg-primary/90',
 				'focus:ring-primary/20',
 				'border-primary'
 			),
 			secondary: cn(
 				'bg-secondary text-secondary-foreground',
-				'hover:bg-secondary/90 hover:shadow-lg',
+				'hover:bg-secondary/90',
 				'focus:ring-secondary/20',
 				'border-secondary'
 			),
 			outline: cn(
 				'bg-background/80 text-foreground',
-				'hover:bg-background/60 hover:shadow-lg',
+				'hover:bg-background/60',
 				'focus:ring-border/20',
 				'border-border/30'
 			),
 			ghost: cn(
 				'bg-transparent text-foreground',
-				'hover:bg-background/60 hover:shadow-lg',
+				'hover:bg-background/60',
 				'focus:ring-border/20',
 				'border-transparent'
 			),
 			destructive: cn(
 				'bg-destructive text-destructive-foreground',
-				'hover:bg-destructive/90 hover:shadow-lg',
+				'hover:bg-destructive/90',
 				'focus:ring-destructive/20',
 				'border-destructive'
 			),
