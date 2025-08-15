@@ -8,7 +8,7 @@
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
 		},
-		"./styles": "./dist/styles/index.css"
+		"./styles": "./src/styles/base.css"
 	},
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
