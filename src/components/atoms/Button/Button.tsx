@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import React from 'react'
+import type { HTMLMotionProps } from 'framer-motion'
 
 import { cn } from '../../../utils/cn'
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart' | 'onAnimationEnd' | 'onAnimationIteration'> {
 	variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive'
 	size?: 'sm' | 'md' | 'lg'
 	children: React.ReactNode
@@ -31,8 +32,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			'transition-all duration-200 ease-in-out',
 			'focus:outline-none focus:ring-2 focus:ring-offset-2',
 			'disabled:opacity-50 disabled:cursor-not-allowed',
-			'rounded-xl shadow-sm backdrop-blur-sm',
-			'border-2'
+			'rounded-lg backdrop-blur-sm',
+			'border-2',
+			'cursor-pointer'
 		)
 
 		const sizeClasses = {
@@ -44,31 +46,31 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		const variantClasses = {
 			default: cn(
 				'bg-primary text-primary-foreground',
-				'hover:bg-primary/90 hover:shadow-lg',
+				'hover:bg-primary/80',
 				'focus:ring-primary/20',
 				'border-primary'
 			),
 			secondary: cn(
 				'bg-secondary text-secondary-foreground',
-				'hover:bg-secondary/90 hover:shadow-lg',
+				'hover:bg-secondary/80',
 				'focus:ring-secondary/20',
 				'border-secondary'
 			),
 			outline: cn(
 				'bg-background/80 text-foreground',
-				'hover:bg-background/60 hover:shadow-lg',
+				'hover:bg-background/40',
 				'focus:ring-border/20',
 				'border-border/30'
 			),
 			ghost: cn(
 				'bg-transparent text-foreground',
-				'hover:bg-background/60 hover:shadow-lg',
+				'hover:bg-background/40',
 				'focus:ring-border/20',
 				'border-transparent'
 			),
 			destructive: cn(
 				'bg-destructive text-destructive-foreground',
-				'hover:bg-destructive/90 hover:shadow-lg',
+				'hover:bg-destructive/80',
 				'focus:ring-destructive/20',
 				'border-destructive'
 			),
@@ -76,22 +78,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className)
 
+		const motionProps = {
+			ref,
+			className: classes,
+			disabled: disabled || loading,
+			whileHover: !disabled && !loading ? { scale: 1.02 } : {},
+			whileTap: !disabled && !loading ? { scale: 0.98 } : {},
+			...props,
+		}
+
 		return (
-			<motion.div
-				whileHover={!disabled && !loading ? { scale: 1.02 } : {}}
-				whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
-			>
-				<button ref={ref} className={classes} disabled={disabled || loading} {...props}>
-					{loading && (
-						<motion.div
-							animate={{ rotate: 360 }}
-							transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-							className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
-						/>
-					)}
-					{children}
-				</button>
-			</motion.div>
+			<motion.button {...motionProps}>
+				{loading && (
+					<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+				)}
+				{children}
+			</motion.button>
 		)
 	}
 )

@@ -8,23 +8,21 @@
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
 		},
-		"./styles": "./dist/styles/index.css"
+		"./styles": "./src/styles/base.css"
 	},
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"files": [
-		"dist"
-	],
 	"scripts": {
 		"build": "tsc && vite build",
 		"build-storybook": "storybook build",
-		"dev": "vite build --watch",
+		"dev": "npm run storybook",
 		"lint": "eslint src --ext .ts,.tsx",
 		"storybook": "storybook dev -p 6006",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
-		"type-check": "tsc --noEmit"
+		"type-check": "tsc --noEmit",
+    "postinstall": "npx tsc"
 	},
 	"dependencies": {
 		"clsx": "2.1.0",

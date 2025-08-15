@@ -2,7 +2,7 @@
 
 A comprehensive design system for the Confetti application, providing consistent, reusable UI components built with React, TypeScript, and Tailwind CSS.
 
-## 🚀 Features
+## 🚀 Features!
 
 - **Atomic Design**: Components organized as atoms, molecules, and organisms
 - **TypeScript**: Full type safety with comprehensive interfaces
