@@ -22,7 +22,7 @@
 		"test": "vitest",
 		"test:ui": "vitest --ui",
 		"type-check": "tsc --noEmit",
-    "postinstall": "npm run build"
+    "postinstall": "tsc"
 	},
 	"dependencies": {
 		"clsx": "2.1.0",
