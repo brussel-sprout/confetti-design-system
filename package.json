@@ -19,7 +19,7 @@
 	"scripts": {
 		"build": "tsc && vite build",
 		"build-storybook": "storybook build",
-		"dev": "vite build --watch",
+		"dev": "vit edev",
 		"lint": "eslint src --ext .ts,.tsx",
 		"storybook": "storybook dev -p 6006",
 		"test": "vitest",
