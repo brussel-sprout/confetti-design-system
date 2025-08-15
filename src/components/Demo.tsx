@@ -5,7 +5,7 @@ import { Button } from './atoms/Button'
 import { Input } from './atoms/Input'
 import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
 
-export const Demo: React.FC = () => {
+export const Demo: React.FC = () => {npm r
 	return (
 		<div className="min-h-screen bg-background p-8">
 			<div className="max-w-6xl mx-auto space-y-12">
