@@ -4,6 +4,7 @@
 	"private": true,
 	"type": "module",
 	"types": "./src",
+  "main": "./src/index.ts",
 	"scripts": {
 		"build": "tsc && vite build",
 		"build-storybook": "storybook build",
