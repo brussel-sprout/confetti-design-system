@@ -88,7 +88,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		}
 
 		return (
-			<motion.button {...motionProps} as HTMLMotionProps<'button'>['ref']>
+			<motion.button {...motionProps}>
 				{loading && (
 					<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
 				)}
