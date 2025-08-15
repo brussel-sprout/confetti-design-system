@@ -60,9 +60,11 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 		const canContinue = currentSelectedId && options.find(opt => opt.id === currentSelectedId)?.status === 'active'
 
 		return (
-			<div 
+			<motion.div 
 				ref={ref} 
 				className={cn('min-h-screen bg-background flex flex-col', className)} 
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
 				transition={{ duration: 0.3, delay: 0.2, ease: "easeOut" }}
 			>
 				{/* Main Content Container */}
@@ -120,22 +122,27 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 				<motion.div 
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.4, ease: "easeOut" }}
 					transition={{ duration: 0.6, delay: 0.4 }}
 				>
 					<div className="max-w-7xl mx-auto px-6 py-6">
 						<div className="flex items-center justify-between">
 							{/* Back Button */}
-					initial={{ opacity: 0, y: 5 }}
-								variant="ghost"
-								onClick={onBack}
-								className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+							<motion.div
+								initial={{ opacity: 0, y: 5 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
 							>
-								<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-								</svg>
-								Back
-							</Button>
+								<Button
+									variant="ghost"
+									onClick={onBack}
+									className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+								>
+									<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+									</svg>
+									Back
+								</Button>
+							</motion.div>
 
 							{/* Status Text */}
 							<div className="hidden md:flex items-center text-muted-foreground">
@@ -149,32 +156,41 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 								)}
 							</div>
 
-					transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
-							<Button
-							initial={{ opacity: 0, y: 10 }}
-							transition={{ 
-								duration: 0.3, 
-								delay: 0.05 * index,
-								ease: "easeOut"
-							}}
-								className={cn(
-									'transition-all duration-300',
-									canContinue 
-										? 'bg-primary hover:bg-primary/90' 
-										? 'ring-2 ring-primary ring-offset-2 shadow-lg'
-								)}
+							{/* Continue Button */}
+							<motion.div
+								initial={{ opacity: 0, y: 10 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ 
+									duration: 0.3, 
+									delay: 0.05 * index,
+									ease: "easeOut"
+								}}
 							>
-								Continue
-								<svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-								</svg>
-							</Button>
+								<Button
+									onClick={handleContinue}
+									disabled={!canContinue}
+									className={cn(
+										'transition-all duration-300',
+										canContinue 
+											? 'bg-primary hover:bg-primary/90' 
+											: 'bg-muted text-muted-foreground cursor-not-allowed',
+										canContinue 
+											? 'ring-2 ring-primary ring-offset-2 shadow-lg'
+											: ''
+									)}
+								>
+									Continue
+									<svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+									</svg>
+								</Button>
+							</motion.div>
 						</div>
 					</div>
 				</motion.div>
-			</div>
+			</motion.div>
 		)
-				initial={{ opacity: 0, y: 5 }}
+	}
 )
 
 PartySelectionLayout.displayName = 'PartySelectionLayout'
