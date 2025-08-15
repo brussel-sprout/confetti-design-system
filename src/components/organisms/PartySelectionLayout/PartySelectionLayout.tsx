@@ -28,8 +28,7 @@ export interface PartySelectionLayoutProps {
 	className?: string
 }
 
-const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayoutProps>(
-	({ 
+const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayoutProps>(({ 
 		title = "What type of party are you planning?",
 		subtitle = "Choose your party type to get personalized themes and recommendations tailored just for you.",
 		options, 
@@ -162,7 +161,7 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ 
 									duration: 0.3, 
-									delay: 0.05 * index,
+									delay: 0.1,
 									ease: "easeOut"
 								}}
 							>
