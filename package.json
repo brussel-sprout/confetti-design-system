@@ -19,9 +19,9 @@
 	"scripts": {
 		"build": "tsc && vite build",
 		"build-storybook": "storybook build",
-		"dev": "vite dev",
+		"dev": "storybook dev -p 6006",
 		"lint": "eslint src --ext .ts,.tsx",
-		"storybook": "storybook dev -p 6006",
+		"storybook": ",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
 		"type-check": "tsc --noEmit"
