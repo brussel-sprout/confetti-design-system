@@ -63,7 +63,7 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 			<div 
 				ref={ref} 
 				className={cn('min-h-screen bg-background flex flex-col', className)} 
-				{...props}
+				transition={{ duration: 0.3, delay: 0.2, ease: "easeOut" }}
 			>
 				{/* Main Content Container */}
 				<div className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-6 py-12">
@@ -118,15 +118,15 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 
 				{/* Footer Navigation */}
 				<motion.div 
-					className="border-t border-border bg-background/80 backdrop-blur-sm"
-					initial={{ opacity: 0, y: 20 }}
+					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4, ease: "easeOut" }}
 					transition={{ duration: 0.6, delay: 0.4 }}
 				>
 					<div className="max-w-7xl mx-auto px-6 py-6">
 						<div className="flex items-center justify-between">
 							{/* Back Button */}
-							<Button
+					initial={{ opacity: 0, y: 5 }}
 								variant="ghost"
 								onClick={onBack}
 								className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
@@ -149,15 +149,19 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 								)}
 							</div>
 
-							{/* Continue Button */}
+					transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
 							<Button
-								onClick={handleContinue}
-								disabled={!canContinue}
+							initial={{ opacity: 0, y: 10 }}
+							transition={{ 
+								duration: 0.3, 
+								delay: 0.05 * index,
+								ease: "easeOut"
+							}}
 								className={cn(
 									'transition-all duration-300',
 									canContinue 
 										? 'bg-primary hover:bg-primary/90' 
-										: 'opacity-50 cursor-not-allowed'
+										? 'ring-2 ring-primary ring-offset-2 shadow-lg'
 								)}
 							>
 								Continue
@@ -170,7 +174,7 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 				</motion.div>
 			</div>
 		)
-	}
+				initial={{ opacity: 0, y: 5 }}
 )
 
 PartySelectionLayout.displayName = 'PartySelectionLayout'
