@@ -45,31 +45,31 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		const variantClasses = {
 			default: cn(
 				'bg-primary text-primary-foreground',
-				'hover:bg-primary/90',
+				'hover:bg-primary/80',
 				'focus:ring-primary/20',
 				'border-primary'
 			),
 			secondary: cn(
 				'bg-secondary text-secondary-foreground',
-				'hover:bg-secondary/90',
+				'hover:bg-secondary/80',
 				'focus:ring-secondary/20',
 				'border-secondary'
 			),
 			outline: cn(
 				'bg-background/80 text-foreground',
-				'hover:bg-background/60',
+				'hover:bg-background/40',
 				'focus:ring-border/20',
 				'border-border/30'
 			),
 			ghost: cn(
 				'bg-transparent text-foreground',
-				'hover:bg-background/60',
+				'hover:bg-background/40',
 				'focus:ring-border/20',
 				'border-transparent'
 			),
 			destructive: cn(
 				'bg-destructive text-destructive-foreground',
-				'hover:bg-destructive/90',
+				'hover:bg-destructive/80',
 				'focus:ring-destructive/20',
 				'border-destructive'
 			),
