@@ -1,5 +1,3 @@
-// Styles
-import './styles/base.css';
 // Atoms
 export { Button } from './components/atoms/Button';
 export { Input } from './components/atoms/Input';
