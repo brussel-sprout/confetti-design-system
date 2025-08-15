@@ -22,6 +22,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			disabled = false,
 			loading = false,
 			children,
+			onDrag,
+			onDragStart,
+			onDragEnd,
 			...props
 		},
 		ref
@@ -78,14 +81,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className)
 
-		const motionProps: HTMLMotionProps<'button'> = {
+		const motionProps = {
 			ref,
 			className: classes,
 			disabled: disabled || loading,
 			whileHover: !disabled && !loading ? { scale: 1.02 } : {},
 			whileTap: !disabled && !loading ? { scale: 0.98 } : {},
 			...props,
-		}
+		} as HTMLMotionProps<'button'>
 
 		return (
 			<motion.button {...motionProps}>
