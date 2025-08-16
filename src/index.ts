@@ -59,6 +59,10 @@ export type {
 	NavbarDropdownDividerProps
 } from './components/organisms/Navbar'
 
+// Organisms - PartyDetailsForm
+export { PartyDetailsForm } from './components/organisms/PartyDetailsForm'
+export type { PartyDetailsFormProps, PartyDetails } from './components/organisms/PartyDetailsForm'
+
 // Demo
 export { Demo } from './components/Demo'
 
