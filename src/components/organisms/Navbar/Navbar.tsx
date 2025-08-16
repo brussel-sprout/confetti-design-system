@@ -5,12 +5,10 @@ import { cn } from '../../../utils/cn'
 
 export interface NavbarProps {
 	className?: string
-	onLoginClick?: () => void
-	onSignupClick?: () => void
 }
 
 const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
-	({ className = '', onLoginClick, onSignupClick, ...props }, ref) => {
+	({ className = '', ...props }, ref) => {
 		return (
 			<nav
 				ref={ref}
@@ -31,8 +29,8 @@ const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
 
 						{/* Auth Links */}
 						<div className="flex items-center gap-4">
-							<button
-								onClick={onLoginClick}
+							<a
+								href="/login"
 								className={cn(
 									'text-sm font-medium text-muted-foreground',
 									'hover:text-foreground transition-colors duration-200',
@@ -41,9 +39,9 @@ const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
 								)}
 							>
 								Login
-							</button>
-							<button
-								onClick={onSignupClick}
+							</a>
+							<a
+								href="/sign-up"
 								className={cn(
 									'text-sm font-medium',
 									'bg-primary text-primary-foreground',
@@ -53,7 +51,7 @@ const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
 								)}
 							>
 								Sign Up
-							</button>
+							</a>
 						</div>
 					</div>
 				</div>

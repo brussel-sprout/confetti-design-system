@@ -15,14 +15,6 @@ const meta: Meta<typeof Navbar> = {
 		},
 	},
 	argTypes: {
-		onLoginClick: {
-			action: 'login clicked',
-			description: 'Callback function when login button is clicked',
-		},
-		onSignupClick: {
-			action: 'signup clicked',
-			description: 'Callback function when signup button is clicked',
-		},
 		className: {
 			control: { type: 'text' },
 			description: 'Additional CSS classes',
