@@ -135,7 +135,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		return (
 			<div ref={containerRef} className={cn('relative', className)} {...props}>
 				{/* Compact Display */}
-				<div className="flex items-center gap-1 text-sm overflow-hidden">
+				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full">
 					<button
 						onClick={() => handleFieldClick('name')}
 						className={cn(
