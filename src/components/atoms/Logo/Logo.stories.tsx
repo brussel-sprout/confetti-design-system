@@ -10,7 +10,7 @@ const meta: Meta<typeof Logo> = {
 		docs: {
 			description: {
 				component:
-					'A logo component featuring an AI brain icon in a rounded square with "Party Planner" text. Multiple sizes and variants available.',
+					'A logo component featuring a magic wand icon in a rounded square with "Party Planner" text. Multiple sizes and variants available.',
 			},
 		},
 	},

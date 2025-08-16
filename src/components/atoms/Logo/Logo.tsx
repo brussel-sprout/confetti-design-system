@@ -1,5 +1,5 @@
 import React from 'react'
-import { Brain } from 'lucide-react'
+import { Wand } from 'lucide-react'
 
 import { cn } from '../../../utils/cn'
 
@@ -42,7 +42,7 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
 					currentSize.icon
 				)}
 			>
-				<Brain className={currentSize.iconSize} />
+				<Wand className={currentSize.iconSize} />
 			</div>
 		)
 
