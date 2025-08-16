@@ -11,6 +11,9 @@ export type { InputProps } from './components/atoms/Input'
 export { Badge } from './components/atoms/Badge'
 export type { BadgeProps } from './components/atoms/Badge'
 
+export { Logo } from './components/atoms/Logo'
+export type { LogoProps } from './components/atoms/Logo'
+
 // Molecules
 export { Card, CardHeader, CardContent, CardFooter } from './components/molecules/Card'
 export type {
