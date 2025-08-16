@@ -112,9 +112,44 @@ const NavbarLink = React.forwardRef<HTMLAnchorElement, NavbarLinkProps>(
 const NavbarAccountDropdown = React.forwardRef<HTMLDivElement, NavbarAccountDropdownProps>(
 	({ username, children, className = '', ...props }, ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
+		const dropdownRef = React.useRef<HTMLDivElement>(null)
+
+		// Close dropdown when clicking outside
+		React.useEffect(() => {
+			const handleClickOutside = (event: MouseEvent) => {
+				if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+					setIsOpen(false)
+				}
+			}
+
+			if (isOpen) {
+				document.addEventListener('mousedown', handleClickOutside)
+			}
+
+			return () => {
+				document.removeEventListener('mousedown', handleClickOutside)
+			}
+		}, [isOpen])
+
+		// Close dropdown when pressing Esc
+		React.useEffect(() => {
+			const handleEscapeKey = (event: KeyboardEvent) => {
+				if (event.key === 'Escape') {
+					setIsOpen(false)
+				}
+			}
+
+			if (isOpen) {
+				document.addEventListener('keydown', handleEscapeKey)
+			}
+
+			return () => {
+				document.removeEventListener('keydown', handleEscapeKey)
+			}
+		}, [isOpen])
 
 		return (
-			<div ref={ref} className={cn('relative', className)} {...props}>
+			<div ref={dropdownRef} className={cn('relative', className)} {...props}>
 				<button
 					onClick={() => setIsOpen(!isOpen)}
 					className={cn(
