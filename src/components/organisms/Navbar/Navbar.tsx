@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Dropdown, DropdownTrigger, DropdownContent, DropdownItem, DropdownDivider } from '../../molecules/Dropdown'
 import { cn } from '../../../utils/cn'
 
 export interface NavbarProps {
@@ -27,6 +28,17 @@ export interface NavbarLinkProps {
 export interface NavbarAccountDropdownProps {
 	username: string
 	children: React.ReactNode
+	className?: string
+}
+
+export interface NavbarDropdownItemProps {
+	children: React.ReactNode
+	onClick?: () => void
+	variant?: 'default' | 'destructive'
+	className?: string
+}
+
+export interface NavbarDropdownDividerProps {
 	className?: string
 }
 
@@ -111,135 +123,42 @@ const NavbarLink = React.forwardRef<HTMLAnchorElement, NavbarLinkProps>(
 // Account Dropdown component
 const NavbarAccountDropdown = React.forwardRef<HTMLDivElement, NavbarAccountDropdownProps>(
 	({ username, children, className = '', ...props }, ref) => {
-		const [isOpen, setIsOpen] = React.useState(false)
-		const dropdownRef = React.useRef<HTMLDivElement>(null)
-
-		// Close dropdown when clicking outside
-		React.useEffect(() => {
-			const handleClickOutside = (event: MouseEvent) => {
-				if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-					setIsOpen(false)
-				}
-			}
-
-			if (isOpen) {
-				document.addEventListener('mousedown', handleClickOutside)
-			}
-
-			return () => {
-				document.removeEventListener('mousedown', handleClickOutside)
-			}
-		}, [isOpen])
-
-		// Close dropdown when pressing Esc
-		React.useEffect(() => {
-			const handleEscapeKey = (event: KeyboardEvent) => {
-				if (event.key === 'Escape') {
-					setIsOpen(false)
-				}
-			}
-
-			if (isOpen) {
-				document.addEventListener('keydown', handleEscapeKey)
-			}
-
-			return () => {
-				document.removeEventListener('keydown', handleEscapeKey)
-			}
-		}, [isOpen])
-
 		return (
-			<div ref={dropdownRef} className={cn('relative', className)} {...props}>
-				<button
-					onClick={() => setIsOpen(!isOpen)}
+			<Dropdown className={className} {...props}>
+				<DropdownTrigger
 					className={cn(
 						'flex items-center gap-2 px-3 py-2 rounded-lg',
 						'text-sm font-medium text-foreground',
-						'hover:bg-muted/50 transition-colors duration-200',
-						'focus:outline-none focus:ring-2 focus:ring-primary/20'
+						'hover:bg-muted/50 transition-colors duration-200'
 					)}
 				>
 					<span>{username}</span>
-					<svg 
-						className={cn(
-							'w-4 h-4 transition-transform duration-200',
-							isOpen ? 'rotate-180' : ''
-						)} 
-						fill="none" 
-						stroke="currentColor" 
-						viewBox="0 0 24 24"
-					>
+					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
 					</svg>
-				</button>
-
-				{isOpen && (
-					<div className={cn(
-						'absolute right-0 mt-2 w-48 py-2',
-						'bg-background border border-border rounded-lg shadow-lg',
-						'animate-fade-in z-50'
-					)}>
-						{React.Children.map(children, (child) =>
-							React.cloneElement(child as React.ReactElement, {
-								onClick: (e: React.MouseEvent) => {
-									const originalOnClick = (child as React.ReactElement).props.onClick
-									if (originalOnClick) originalOnClick(e)
-									setIsOpen(false)
-								}
-							})
-						)}
-					</div>
-				)}
-			</div>
+				</DropdownTrigger>
+				<DropdownContent>
+					{children}
+				</DropdownContent>
+			</Dropdown>
 		)
 	}
 )
 
-// Dropdown Menu Item
-export interface NavbarDropdownItemProps {
-	children: React.ReactNode
-	onClick?: () => void
-	variant?: 'default' | 'destructive'
-	className?: string
-}
-
+// Navbar-specific dropdown item (wrapper around generic DropdownItem)
 const NavbarDropdownItem = React.forwardRef<HTMLButtonElement, NavbarDropdownItemProps>(
-	({ children, onClick, variant = 'default', className = '', ...props }, ref) => {
-		const variantClasses = {
-			default: cn(
-				'w-full flex items-center gap-3 px-4 py-2 text-left',
-				'text-sm text-foreground hover:bg-muted/50',
-				'transition-colors duration-200'
-			),
-			destructive: cn(
-				'w-full flex items-center gap-3 px-4 py-2 text-left',
-				'text-sm text-destructive hover:bg-destructive/10',
-				'transition-colors duration-200'
-			),
-		}
-
+	(props, ref) => {
 		return (
-			<button
-				ref={ref}
-				onClick={onClick}
-				className={cn(variantClasses[variant], className)}
-				{...props}
-			>
-				{children}
-			</button>
+			<DropdownItem ref={ref} {...props} />
 		)
 	}
 )
 
-// Dropdown Divider
-export interface NavbarDropdownDividerProps {
-	className?: string
-}
-
+// Navbar-specific dropdown divider (wrapper around generic DropdownDivider)
 const NavbarDropdownDivider = React.forwardRef<HTMLHRElement, NavbarDropdownDividerProps>(
-	({ className = '', ...props }, ref) => {
+	(props, ref) => {
 		return (
-			<hr ref={ref} className={cn('my-1 border-border', className)} {...props} />
+			<DropdownDivider ref={ref} {...props} />
 		)
 	}
 )

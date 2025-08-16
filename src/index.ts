@@ -23,6 +23,22 @@ export type {
 	CardFooterProps,
 } from './components/molecules/Card'
 
+// Molecules - Dropdown
+export { 
+	Dropdown, 
+	DropdownTrigger, 
+	DropdownContent, 
+	DropdownItem, 
+	DropdownDivider 
+} from './components/molecules/Dropdown'
+export type { 
+	DropdownProps, 
+	DropdownTriggerProps, 
+	DropdownContentProps, 
+	DropdownItemProps, 
+	DropdownDividerProps 
+} from './components/molecules/Dropdown'
+
 // Organisms
 export { 
 	Navbar, 
