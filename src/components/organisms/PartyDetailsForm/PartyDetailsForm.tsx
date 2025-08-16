@@ -1,6 +1,5 @@
 import React from 'react'
 import { Calendar, Clock, Users, MapPin, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
 
 import { Button } from '../../atoms/Button'
 import { Input } from '../../atoms/Input'
@@ -171,116 +170,95 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				</div>
 
 				{/* Mega Menu Form */}
-				<AnimatePresence>
-					{isOpen && (
-						<motion.div
-							initial={{ 
-								opacity: 0, 
-								scale: 0.8,
-								x: clickOrigin.x - 200, // Offset to center the form on the click point
-								y: clickOrigin.y - 50
-							}}
-							animate={{ 
-								opacity: 1, 
-								scale: 1,
-								x: 0,
-								y: 0
-							}}
-							exit={{ 
-								opacity: 0, 
-								scale: 0.9,
-								transition: { duration: 0.15 }
-							}}
-							transition={{
-								type: "spring",
-								stiffness: 300,
-								damping: 25,
-								duration: 0.3
-							}}
-							className={cn(
-								'absolute top-full left-0 right-0 mt-2 z-50',
-								'bg-background border border-border rounded-xl shadow-lg',
-								'p-6'
-							)}
-						>
-							<div className="flex items-center justify-between mb-6">
-								<h3 className="text-lg font-semibold text-foreground">Edit Party Details</h3>
-								<button
-									onClick={handleClose}
-									className="p-1 text-muted-foreground hover:text-foreground transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20"
-								>
-									<X className="w-4 h-4" />
-								</button>
-							</div>
+				{isOpen && (
+					<div
+						className={cn(
+							'absolute top-full left-0 right-0 mt-2 z-50',
+							'bg-background border border-border rounded-xl shadow-lg',
+							'p-6',
+							'animate-scale-in'
+						)}
+						style={{
+							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`
+						}}
+					>
+						<div className="flex items-center justify-between mb-6">
+							<h3 className="text-lg font-semibold text-foreground">Edit Party Details</h3>
+							<button
+								onClick={handleClose}
+								className="p-1 text-muted-foreground hover:text-foreground transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+							>
+								<X className="w-4 h-4" />
+							</button>
+						</div>
 
-							<form onSubmit={handleSubmit} className="space-y-4">
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<div className="md:col-span-2">
-										<Input
-											name="name"
-											label="Party Name"
-											value={formData.name}
-											onChange={(e) => handleInputChange('name', e.target.value)}
-											placeholder="Enter party name"
-											leftIcon={<Calendar className="w-4 h-4" />}
-										/>
-									</div>
-
+						<form onSubmit={handleSubmit} className="space-y-4">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div className="md:col-span-2">
 									<Input
-										name="date"
-										label="Date"
-										type="date"
-										value={formData.date}
-										onChange={(e) => handleInputChange('date', e.target.value)}
+										name="name"
+										label="Party Name"
+										value={formData.name}
+										onChange={(e) => handleInputChange('name', e.target.value)}
+										placeholder="Enter party name"
 										leftIcon={<Calendar className="w-4 h-4" />}
 									/>
-
-									<Input
-										name="time"
-										label="Time"
-										type="time"
-										value={formData.time}
-										onChange={(e) => handleInputChange('time', e.target.value)}
-										leftIcon={<Clock className="w-4 h-4" />}
-									/>
-
-									<Input
-										name="headCount"
-										label="Guest Count"
-										type="number"
-										min="1"
-										value={formData.headCount || ''}
-										onChange={(e) => handleInputChange('headCount', parseInt(e.target.value) || 0)}
-										placeholder="Number of guests"
-										leftIcon={<Users className="w-4 h-4" />}
-									/>
-
-									<Input
-										name="address"
-										label="Location"
-										value={formData.address}
-										onChange={(e) => handleInputChange('address', e.target.value)}
-										placeholder="Enter party location"
-										leftIcon={<MapPin className="w-4 h-4" />}
-									/>
 								</div>
 
-								<div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
-									<Button
-										type="button"
-										variant="outline"
-										onClick={handleClose}
-									>
-										Cancel
-									</Button>
-									<Button type="submit">
-										Save Changes
-									</Button>
-								</div>
-							</form>
-						</motion.div>
-					)}
-				</AnimatePresence>
+								<Input
+									name="date"
+									label="Date"
+									type="date"
+									value={formData.date}
+									onChange={(e) => handleInputChange('date', e.target.value)}
+									leftIcon={<Calendar className="w-4 h-4" />}
+								/>
+
+								<Input
+									name="time"
+									label="Time"
+									type="time"
+									value={formData.time}
+									onChange={(e) => handleInputChange('time', e.target.value)}
+									leftIcon={<Clock className="w-4 h-4" />}
+								/>
+
+								<Input
+									name="headCount"
+									label="Guest Count"
+									type="number"
+									min="1"
+									value={formData.headCount || ''}
+									onChange={(e) => handleInputChange('headCount', parseInt(e.target.value) || 0)}
+									placeholder="Number of guests"
+									leftIcon={<Users className="w-4 h-4" />}
+								/>
+
+								<Input
+									name="address"
+									label="Location"
+									value={formData.address}
+									onChange={(e) => handleInputChange('address', e.target.value)}
+									placeholder="Enter party location"
+									leftIcon={<MapPin className="w-4 h-4" />}
+								/>
+							</div>
+
+							<div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+								<Button
+									type="button"
+									variant="outline"
+									onClick={handleClose}
+								>
+									Cancel
+								</Button>
+								<Button type="submit">
+									Save Changes
+								</Button>
+							</div>
+						</form>
+					</div>
+				)}
 			</div>
 		)
 	}
