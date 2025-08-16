@@ -10,11 +10,31 @@ const meta: Meta<typeof Navbar> = {
 		docs: {
 			description: {
 				component:
-					'A responsive navigation bar component with logo and authentication links. Designed for composition with different states and content.',
+					'A responsive navigation bar component with logo and authentication. Supports both logged out (login/signup links) and logged in (account dropdown) states.',
 			},
 		},
 	},
 	argTypes: {
+		isLoggedIn: {
+			control: { type: 'boolean' },
+			description: 'Whether the user is logged in',
+		},
+		username: {
+			control: { type: 'text' },
+			description: 'Username to display in the account dropdown',
+		},
+		onProfileClick: {
+			action: 'profile clicked',
+			description: 'Callback when profile is clicked',
+		},
+		onSettingsClick: {
+			action: 'settings clicked',
+			description: 'Callback when settings is clicked',
+		},
+		onLogoutClick: {
+			action: 'logout clicked',
+			description: 'Callback when logout is clicked',
+		},
 		className: {
 			control: { type: 'text' },
 			description: 'Additional CSS classes',
@@ -28,11 +48,28 @@ type Story = StoryObj<typeof meta>
 
 // Default logged out state
 export const LoggedOut: Story = {
-	args: {},
+	args: {
+		isLoggedIn: false,
+	},
 	parameters: {
 		docs: {
 			description: {
 				story: 'Default navbar state for logged out users with login and signup buttons.',
+			},
+		},
+	},
+}
+
+// Logged in state
+export const LoggedIn: Story = {
+	args: {
+		isLoggedIn: true,
+		username: 'John Doe',
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: 'Navbar state for logged in users with account dropdown containing profile, settings, and logout options.',
 			},
 		},
 	},
@@ -62,6 +99,9 @@ export const WithPageContent: Story = {
 			</div>
 		</div>
 	),
+	args: {
+		isLoggedIn: false,
+	},
 	parameters: {
 		docs: {
 			description: {
@@ -73,7 +113,10 @@ export const WithPageContent: Story = {
 
 // Interactive playground
 export const Playground: Story = {
-	args: {},
+	args: {
+		isLoggedIn: false,
+		username: 'Jane Smith',
+	},
 	parameters: {
 		docs: {
 			description: {
