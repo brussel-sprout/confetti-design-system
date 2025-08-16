@@ -1,5 +1,6 @@
 import React from 'react'
 import { Calendar, Clock, Users, MapPin, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import { Button } from '../../atoms/Button'
 import { Input } from '../../atoms/Input'
@@ -25,13 +26,27 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 	({ partyDetails, onSave, className = '', ...props }, ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
+		const [clickOrigin, setClickOrigin] = React.useState({ x: 0, y: 0 })
+		const containerRef = React.useRef<HTMLDivElement>(null)
 
 		// Update form data when partyDetails prop changes
 		React.useEffect(() => {
 			setFormData(partyDetails)
 		}, [partyDetails])
 
-		const handleFieldClick = () => {
+		const handleFieldClick = (event: React.MouseEvent) => {
+			// Calculate the click position relative to the container
+			if (containerRef.current) {
+				const containerRect = containerRef.current.getBoundingClientRect()
+				const buttonRect = (event.target as HTMLElement).getBoundingClientRect()
+				
+				// Calculate the center of the clicked button relative to container
+				const buttonCenterX = buttonRect.left + buttonRect.width / 2 - containerRect.left
+				const buttonCenterY = buttonRect.top + buttonRect.height / 2 - containerRect.top
+				
+				setClickOrigin({ x: buttonCenterX, y: buttonCenterY })
+			}
+			
 			setIsOpen(true)
 		}
 
@@ -83,7 +98,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		}
 
 		return (
-			<div ref={ref} className={cn('relative', className)} {...props}>
+			<div ref={containerRef} className={cn('relative', className)} {...props}>
 				{/* Compact Display */}
 				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full">
 					<button
@@ -156,9 +171,33 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				</div>
 
 				{/* Mega Menu Form */}
-				{isOpen && (
-					<div
-						className={cn(
+				<AnimatePresence>
+					{isOpen && (
+						<motion.div
+							initial={{ 
+								opacity: 0, 
+								scale: 0.8,
+								x: clickOrigin.x - 200, // Offset to center the form on the click point
+								y: clickOrigin.y - 50
+							}}
+							animate={{ 
+								opacity: 1, 
+								scale: 1,
+								x: 0,
+								y: 0
+							}}
+							exit={{ 
+								opacity: 0, 
+								scale: 0.9,
+								transition: { duration: 0.15 }
+							}}
+							transition={{
+								type: "spring",
+								stiffness: 300,
+								damping: 25,
+								duration: 0.3
+							}}
+							className={cn(
 								'absolute top-full left-0 right-0 mt-2 z-50',
 								'bg-background border border-border rounded-xl shadow-lg',
 								'p-6'
@@ -239,8 +278,9 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									</Button>
 								</div>
 							</form>
-					</div>
-				)}
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</div>
 		)
 	}
