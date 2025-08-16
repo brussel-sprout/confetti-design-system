@@ -26,14 +26,48 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
 		const [clickOrigin, setClickOrigin] = React.useState({ x: 0, y: 0 })
+		const [focusField, setFocusField] = React.useState<EditableField | null>(null)
 		const containerRef = React.useRef<HTMLDivElement>(null)
+		
+		// Refs for each input field
+		const nameInputRef = React.useRef<HTMLInputElement>(null)
+		const dateInputRef = React.useRef<HTMLInputElement>(null)
+		const timeInputRef = React.useRef<HTMLInputElement>(null)
+		const headCountInputRef = React.useRef<HTMLInputElement>(null)
+		const addressInputRef = React.useRef<HTMLInputElement>(null)
 
 		// Update form data when partyDetails prop changes
 		React.useEffect(() => {
 			setFormData(partyDetails)
 		}, [partyDetails])
 
-		const handleFieldClick = (event: React.MouseEvent) => {
+		// Focus the appropriate input when form opens
+		React.useEffect(() => {
+			if (isOpen && focusField) {
+				// Small delay to ensure the form is fully rendered
+				setTimeout(() => {
+					switch (focusField) {
+						case 'name':
+							nameInputRef.current?.focus()
+							break
+						case 'date':
+							dateInputRef.current?.focus()
+							break
+						case 'time':
+							timeInputRef.current?.focus()
+							break
+						case 'headCount':
+							headCountInputRef.current?.focus()
+							break
+						case 'address':
+							addressInputRef.current?.focus()
+							break
+					}
+				}, 100)
+			}
+		}, [isOpen, focusField])
+
+		const handleFieldClick = (event: React.MouseEvent, field: EditableField) => {
 			// Calculate the click position relative to the container
 			if (containerRef.current) {
 				const containerRect = containerRef.current.getBoundingClientRect()
@@ -46,11 +80,13 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				setClickOrigin({ x: buttonCenterX, y: buttonCenterY })
 			}
 			
+			setFocusField(field)
 			setIsOpen(true)
 		}
 
 		const handleClose = () => {
 			setIsOpen(false)
+			setFocusField(null)
 			setFormData(partyDetails) // Reset form data
 		}
 
@@ -101,7 +137,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				{/* Compact Display */}
 				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full">
 					<button
-						onClick={handleFieldClick}
+						onClick={(e) => handleFieldClick(e, 'name')}
 						className={cn(
 							'font-semibold text-foreground hover:text-primary transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -115,7 +151,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={handleFieldClick}
+						onClick={(e) => handleFieldClick(e, 'date')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -129,7 +165,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={handleFieldClick}
+						onClick={(e) => handleFieldClick(e, 'time')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -143,7 +179,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={handleFieldClick}
+						onClick={(e) => handleFieldClick(e, 'headCount')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -157,7 +193,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={handleFieldClick}
+						onClick={(e) => handleFieldClick(e, 'address')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap text-left truncate min-w-0',
@@ -196,6 +232,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								<div className="md:col-span-2">
 									<Input
+										ref={nameInputRef}
 										name="name"
 										label="Party Name"
 										value={formData.name}
@@ -206,6 +243,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 								</div>
 
 								<Input
+									ref={dateInputRef}
 									name="date"
 									label="Date"
 									type="date"
@@ -215,6 +253,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 								/>
 
 								<Input
+									ref={timeInputRef}
 									name="time"
 									label="Time"
 									type="time"
@@ -224,6 +263,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 								/>
 
 								<Input
+									ref={headCountInputRef}
 									name="headCount"
 									label="Guest Count"
 									type="number"
@@ -235,6 +275,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 								/>
 
 								<Input
+									ref={addressInputRef}
 									name="address"
 									label="Location"
 									value={formData.address}
