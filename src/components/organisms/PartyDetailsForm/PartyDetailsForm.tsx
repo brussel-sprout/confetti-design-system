@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, Users, MapPin, X } from 'lucide-react'
 
 import { Button } from '../../atoms/Button'
@@ -25,98 +24,20 @@ type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
 	({ partyDetails, onSave, className = '', ...props }, ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
-		const [focusedField, setFocusedField] = React.useState<EditableField | null>(null)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
-		const isOpeningRef = React.useRef(false)
-		const formRef = React.useRef<HTMLFormElement>(null)
-		const containerRef = React.useRef<HTMLDivElement>(null)
-		const clickOutsideTimeoutRef = React.useRef<NodeJS.Timeout>()
 
 		// Update form data when partyDetails prop changes
 		React.useEffect(() => {
 			setFormData(partyDetails)
 		}, [partyDetails])
 
-		// Close menu when clicking outside
-		React.useEffect(() => {
-			const handleClickOutside = (event: MouseEvent) => {
-				if (isOpeningRef.current) {
-					return
-				}
-				
-				if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-					handleClose()
-				}
-			}
-
-			if (isOpen) {
-				// Clear any existing timeout
-				if (clickOutsideTimeoutRef.current) {
-					clearTimeout(clickOutsideTimeoutRef.current)
-				}
-				
-				// Delay adding the event listener to avoid immediate closing
-				clickOutsideTimeoutRef.current = setTimeout(() => {
-					document.addEventListener('mousedown', handleClickOutside)
-				}, 100)
-			} else {
-				// Clear timeout if menu closes before timeout completes
-				if (clickOutsideTimeoutRef.current) {
-					clearTimeout(clickOutsideTimeoutRef.current)
-				}
-			}
-
-			return () => {
-				if (clickOutsideTimeoutRef.current) {
-					clearTimeout(clickOutsideTimeoutRef.current)
-				}
-				document.removeEventListener('mousedown', handleClickOutside)
-			}
-		}, [isOpen])
-
-		// Close menu when pressing Esc
-		React.useEffect(() => {
-			const handleEscapeKey = (event: KeyboardEvent) => {
-				if (isOpen && event.key === 'Escape') {
-					handleClose()
-				}
-			}
-
-			if (isOpen) {
-				document.addEventListener('keydown', handleEscapeKey)
-			}
-
-			return () => {
-				document.removeEventListener('keydown', handleEscapeKey)
-			}
-		}, [isOpen])
-
-		// Focus the appropriate field when menu opens
-		React.useEffect(() => {
-			if (isOpen && focusedField && formRef.current) {
-				const input = formRef.current.querySelector(`input[name="${focusedField}"]`) as HTMLInputElement
-				if (input) {
-					setTimeout(() => input.focus(), 100)
-				}
-			}
-		}, [isOpen, focusedField])
-
-		const handleFieldClick = (field: EditableField) => {
-			isOpeningRef.current = true
-			setFocusedField(field)
+		const handleFieldClick = () => {
 			setIsOpen(true)
-			
-			// Clear the opening flag after the click event has fully processed
-			setTimeout(() => {
-				isOpeningRef.current = false
-			}, 150)
 		}
 
 		const handleClose = () => {
 			setIsOpen(false)
-			setFocusedField(null)
 			setFormData(partyDetails) // Reset form data
-			isOpeningRef.current = false
 		}
 
 		const handleSave = () => {
@@ -161,18 +82,12 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			return address
 		}
 
-		const handleFieldClickWrapper = (field: EditableField, event: React.MouseEvent) => {
-			event.preventDefault()
-			event.stopPropagation()
-			handleFieldClick(field)
-		}
-
 		return (
-			<div ref={containerRef} className={cn('relative', className)} {...props}>
+			<div ref={ref} className={cn('relative', className)} {...props}>
 				{/* Compact Display */}
 				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full">
 					<button
-						onClick={(e) => handleFieldClickWrapper('name', e)}
+						onClick={handleFieldClick}
 						className={cn(
 							'font-semibold text-foreground hover:text-primary transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -186,7 +101,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={(e) => handleFieldClickWrapper('date', e)}
+						onClick={handleFieldClick}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -200,7 +115,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={(e) => handleFieldClickWrapper('time', e)}
+						onClick={handleFieldClick}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -214,7 +129,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={(e) => handleFieldClickWrapper('headCount', e)}
+						onClick={handleFieldClick}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -228,7 +143,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={(e) => handleFieldClickWrapper('address', e)}
+						onClick={handleFieldClick}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap text-left truncate min-w-0',
@@ -241,14 +156,9 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				</div>
 
 				{/* Mega Menu Form */}
-				<AnimatePresence>
-					{isOpen && (
-						<motion.div
-							initial={{ opacity: 0, y: -10 }}
-							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: -10 }}
-							transition={{ duration: 0.2 }}
-							className={cn(
+				{isOpen && (
+					<div
+						className={cn(
 								'absolute top-full left-0 right-0 mt-2 z-50',
 								'bg-background border border-border rounded-xl shadow-lg',
 								'p-6'
@@ -264,7 +174,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 								</button>
 							</div>
 
-							<form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+							<form onSubmit={handleSubmit} className="space-y-4">
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div className="md:col-span-2">
 										<Input
@@ -329,9 +239,8 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									</Button>
 								</div>
 							</form>
-						</motion.div>
-					)}
-				</AnimatePresence>
+					</div>
+				)}
 			</div>
 		)
 	}
