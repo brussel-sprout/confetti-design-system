@@ -1,6 +1,7 @@
 import { User, Settings, LogOut } from 'lucide-react'
 
 import { Logo } from '../../atoms/Logo'
+import { PartyDetailsForm } from '../PartyDetailsForm'
 import { 
 	Navbar, 
 	NavbarLeft, 
@@ -12,6 +13,7 @@ import {
 } from './Navbar'
 
 import type { Meta, StoryObj } from '@storybook/react'
+import type { PartyDetails } from '../PartyDetailsForm'
 
 const meta: Meta<typeof Navbar> = {
 	title: 'Organisms/Navbar',
@@ -31,6 +33,21 @@ const meta: Meta<typeof Navbar> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const samplePartyDetails: PartyDetails = {
+	name: 'Sarah\'s Birthday Bash',
+	date: '2024-03-15',
+	time: '19:00',
+	headCount: 25,
+	address: '123 Main Street, San Francisco, CA 94102'
+}
+
+const longPartyDetails: PartyDetails = {
+	name: 'Annual Company Holiday Celebration Extravaganza',
+	date: '2024-12-25',
+	time: '18:30',
+	headCount: 150,
+	address: '1234 Very Long Street Name Avenue, Downtown Business District, San Francisco, California 94102'
+}
 // Logged out state composition
 export const LoggedOut: Story = {
 	render: () => (
@@ -90,6 +107,134 @@ export const LoggedIn: Story = {
 	},
 }
 
+// Logged in with party details
+export const LoggedInWithPartyDetails: Story = {
+	render: () => (
+		<div className="pb-96">
+			<Navbar>
+				<NavbarLeft>
+					<Logo size="sm" />
+				</NavbarLeft>
+				<div className="flex-1 max-w-2xl mx-8 min-w-0">
+					<PartyDetailsForm
+						partyDetails={samplePartyDetails}
+						onSave={(details) => console.log('Saved:', details)}
+					/>
+				</div>
+				<NavbarRight>
+					<NavbarAccountDropdown username="John Doe">
+						<NavbarDropdownItem>
+							<User className="w-4 h-4" />
+							Profile
+						</NavbarDropdownItem>
+						<NavbarDropdownItem>
+							<Settings className="w-4 h-4" />
+							Settings
+						</NavbarDropdownItem>
+						<NavbarDropdownDivider />
+						<NavbarDropdownItem variant="destructive">
+							<LogOut className="w-4 h-4" />
+							Logout
+						</NavbarDropdownItem>
+					</NavbarAccountDropdown>
+				</NavbarRight>
+			</Navbar>
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Logged in navbar with party details form in the center. Shows how the form adapts to available space between logo and account dropdown.',
+			},
+		},
+	},
+}
+
+// Logged in with long party details
+export const LoggedInWithLongPartyDetails: Story = {
+	render: () => (
+		<div className="pb-96">
+			<Navbar>
+				<NavbarLeft>
+					<Logo size="sm" />
+				</NavbarLeft>
+				<div className="flex-1 max-w-2xl mx-8 min-w-0">
+					<PartyDetailsForm
+						partyDetails={longPartyDetails}
+						onSave={(details) => console.log('Saved:', details)}
+					/>
+				</div>
+				<NavbarRight>
+					<NavbarAccountDropdown username="Jane Smith">
+						<NavbarDropdownItem>
+							<User className="w-4 h-4" />
+							Profile
+						</NavbarDropdownItem>
+						<NavbarDropdownItem>
+							<Settings className="w-4 h-4" />
+							Settings
+						</NavbarDropdownItem>
+						<NavbarDropdownDivider />
+						<NavbarDropdownItem variant="destructive">
+							<LogOut className="w-4 h-4" />
+							Logout
+						</NavbarDropdownItem>
+					</NavbarAccountDropdown>
+				</NavbarRight>
+			</Navbar>
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Logged in navbar with long party details that demonstrate text truncation behavior when space is limited.',
+			},
+		},
+	},
+}
+
+// Narrow viewport simulation
+export const LoggedInNarrowViewport: Story = {
+	render: () => (
+		<div className="pb-96 max-w-md mx-auto">
+			<Navbar>
+				<NavbarLeft>
+					<Logo size="sm" variant="icon-only" />
+				</NavbarLeft>
+				<div className="flex-1 mx-4 min-w-0">
+					<PartyDetailsForm
+						partyDetails={samplePartyDetails}
+						onSave={(details) => console.log('Saved:', details)}
+					/>
+				</div>
+				<NavbarRight>
+					<NavbarAccountDropdown username="John">
+						<NavbarDropdownItem>
+							<User className="w-4 h-4" />
+							Profile
+						</NavbarDropdownItem>
+						<NavbarDropdownItem>
+							<Settings className="w-4 h-4" />
+							Settings
+						</NavbarDropdownItem>
+						<NavbarDropdownDivider />
+						<NavbarDropdownItem variant="destructive">
+							<LogOut className="w-4 h-4" />
+							Logout
+						</NavbarDropdownItem>
+					</NavbarAccountDropdown>
+				</NavbarRight>
+			</Navbar>
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Logged in navbar in a narrow viewport showing how the party details form adapts to very limited space. Uses icon-only logo and shortened username.',
+			},
+		},
+	},
+}
 // With page content
 export const WithPageContent: Story = {
 	render: () => (
