@@ -140,7 +140,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						onClick={() => handleFieldClick('name')}
 						className={cn(
 							'font-semibold text-foreground hover:text-primary transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left',
+							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={partyDetails.name || 'Add party name'}
@@ -154,7 +154,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						onClick={() => handleFieldClick('date')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left',
+							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={partyDetails.date || 'Add date'}
@@ -168,7 +168,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						onClick={() => handleFieldClick('time')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left',
+							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={partyDetails.time || 'Add time'}
@@ -182,7 +182,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						onClick={() => handleFieldClick('headCount')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left',
+							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={`${partyDetails.headCount || 0} guests`}
@@ -196,7 +196,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						onClick={() => handleFieldClick('address')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left',
+							'whitespace-nowrap text-left truncate min-w-0',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={partyDetails.address || 'Add location'}
