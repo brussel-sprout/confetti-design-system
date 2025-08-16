@@ -56,28 +56,30 @@ export const LoggedOut: Story = {
 // Logged in state composition
 export const LoggedIn: Story = {
 	render: () => (
-		<Navbar>
-			<NavbarLeft>
-				<Logo size="sm" />
-			</NavbarLeft>
-			<NavbarRight>
-				<NavbarAccountDropdown username="John Doe">
-					<NavbarDropdownItem>
-						<User className="w-4 h-4" />
-						Profile
-					</NavbarDropdownItem>
-					<NavbarDropdownItem>
-						<Settings className="w-4 h-4" />
-						Settings
-					</NavbarDropdownItem>
-					<NavbarDropdownDivider />
-					<NavbarDropdownItem variant="destructive">
-						<LogOut className="w-4 h-4" />
-						Logout
-					</NavbarDropdownItem>
-				</NavbarAccountDropdown>
-			</NavbarRight>
-		</Navbar>
+		<div className="pb-48">
+			<Navbar>
+				<NavbarLeft>
+					<Logo size="sm" />
+				</NavbarLeft>
+				<NavbarRight>
+					<NavbarAccountDropdown username="John Doe">
+						<NavbarDropdownItem>
+							<User className="w-4 h-4" />
+							Profile
+						</NavbarDropdownItem>
+						<NavbarDropdownItem>
+							<Settings className="w-4 h-4" />
+							Settings
+						</NavbarDropdownItem>
+						<NavbarDropdownDivider />
+						<NavbarDropdownItem variant="destructive">
+							<LogOut className="w-4 h-4" />
+							Logout
+						</NavbarDropdownItem>
+					</NavbarAccountDropdown>
+				</NavbarRight>
+			</Navbar>
+		</div>
 	),
 	parameters: {
 		docs: {
@@ -132,30 +134,32 @@ export const WithPageContent: Story = {
 // Custom composition example
 export const CustomComposition: Story = {
 	render: () => (
-		<Navbar>
-			<NavbarLeft>
-				<Logo size="sm" />
-			</NavbarLeft>
-			<NavbarRight>
-				<NavbarLink href="/events">Events</NavbarLink>
-				<NavbarLink href="/pricing">Pricing</NavbarLink>
-				<NavbarAccountDropdown username="Jane Smith">
-					<NavbarDropdownItem>
-						<User className="w-4 h-4" />
-						My Profile
-					</NavbarDropdownItem>
-					<NavbarDropdownItem>
-						<Settings className="w-4 h-4" />
-						Account Settings
-					</NavbarDropdownItem>
-					<NavbarDropdownDivider />
-					<NavbarDropdownItem variant="destructive">
-						<LogOut className="w-4 h-4" />
-						Sign Out
-					</NavbarDropdownItem>
-				</NavbarAccountDropdown>
-			</NavbarRight>
-		</Navbar>
+		<div className="pb-48">
+			<Navbar>
+				<NavbarLeft>
+					<Logo size="sm" />
+				</NavbarLeft>
+				<NavbarRight>
+					<NavbarLink href="/events">Events</NavbarLink>
+					<NavbarLink href="/pricing">Pricing</NavbarLink>
+					<NavbarAccountDropdown username="Jane Smith">
+						<NavbarDropdownItem>
+							<User className="w-4 h-4" />
+							My Profile
+						</NavbarDropdownItem>
+						<NavbarDropdownItem>
+							<Settings className="w-4 h-4" />
+							Account Settings
+						</NavbarDropdownItem>
+						<NavbarDropdownDivider />
+						<NavbarDropdownItem variant="destructive">
+							<LogOut className="w-4 h-4" />
+							Sign Out
+						</NavbarDropdownItem>
+					</NavbarAccountDropdown>
+				</NavbarRight>
+			</Navbar>
+		</div>
 	),
 	parameters: {
 		docs: {
