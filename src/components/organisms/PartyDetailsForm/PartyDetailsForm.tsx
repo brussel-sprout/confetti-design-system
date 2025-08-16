@@ -27,9 +27,10 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [focusedField, setFocusedField] = React.useState<EditableField | null>(null)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
-		const [isOpening, setIsOpening] = React.useState(false)
+		const isOpeningRef = React.useRef(false)
 		const formRef = React.useRef<HTMLFormElement>(null)
 		const containerRef = React.useRef<HTMLDivElement>(null)
+		const clickOutsideTimeoutRef = React.useRef<NodeJS.Timeout>()
 
 		// Update form data when partyDetails prop changes
 		React.useEffect(() => {
@@ -39,23 +40,39 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		// Close menu when clicking outside
 		React.useEffect(() => {
 			const handleClickOutside = (event: MouseEvent) => {
-				if (
-					!isOpening &&
-					containerRef.current && 
-					!containerRef.current.contains(event.target as Node)
-				) {
+				if (isOpeningRef.current) {
+					return
+				}
+				
+				if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
 					handleClose()
 				}
 			}
 
 			if (isOpen) {
-				document.addEventListener('mousedown', handleClickOutside)
+				// Clear any existing timeout
+				if (clickOutsideTimeoutRef.current) {
+					clearTimeout(clickOutsideTimeoutRef.current)
+				}
+				
+				// Delay adding the event listener to avoid immediate closing
+				clickOutsideTimeoutRef.current = setTimeout(() => {
+					document.addEventListener('mousedown', handleClickOutside)
+				}, 100)
+			} else {
+				// Clear timeout if menu closes before timeout completes
+				if (clickOutsideTimeoutRef.current) {
+					clearTimeout(clickOutsideTimeoutRef.current)
+				}
 			}
 
 			return () => {
+				if (clickOutsideTimeoutRef.current) {
+					clearTimeout(clickOutsideTimeoutRef.current)
+				}
 				document.removeEventListener('mousedown', handleClickOutside)
 			}
-		}, [isOpen, isOpening])
+		}, [isOpen])
 
 		// Close menu when pressing Esc
 		React.useEffect(() => {
@@ -85,21 +102,21 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		}, [isOpen, focusedField])
 
 		const handleFieldClick = (field: EditableField) => {
-			setIsOpening(true)
+			isOpeningRef.current = true
 			setFocusedField(field)
 			setIsOpen(true)
 			
-			// Clear the opening flag after a short delay
+			// Clear the opening flag after the click event has fully processed
 			setTimeout(() => {
-				setIsOpening(false)
-			}, 100)
+				isOpeningRef.current = false
+			}, 150)
 		}
 
 		const handleClose = () => {
 			setIsOpen(false)
 			setFocusedField(null)
 			setFormData(partyDetails) // Reset form data
-			setIsOpening(false)
+			isOpeningRef.current = false
 		}
 
 		const handleSave = () => {
