@@ -27,6 +27,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [focusedField, setFocusedField] = React.useState<EditableField | null>(null)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
+		const [isOpening, setIsOpening] = React.useState(false)
 		const formRef = React.useRef<HTMLFormElement>(null)
 		const containerRef = React.useRef<HTMLDivElement>(null)
 
@@ -38,23 +39,23 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		// Close menu when clicking outside
 		React.useEffect(() => {
 			const handleClickOutside = (event: MouseEvent) => {
-				if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+				if (
+					!isOpening &&
+					containerRef.current && 
+					!containerRef.current.contains(event.target as Node)
+				) {
 					handleClose()
 				}
 			}
 
 			if (isOpen) {
-				// Add a longer delay to prevent immediate closing when opening
-				const timeoutId = setTimeout(() => {
-					document.addEventListener('mousedown', handleClickOutside)
-				}, 200)
-
-				return () => {
-					clearTimeout(timeoutId)
-					document.removeEventListener('mousedown', handleClickOutside)
-				}
+				document.addEventListener('mousedown', handleClickOutside)
 			}
-		}, [isOpen])
+
+			return () => {
+				document.removeEventListener('mousedown', handleClickOutside)
+			}
+		}, [isOpen, isOpening])
 
 		// Close menu when pressing Esc
 		React.useEffect(() => {
@@ -84,17 +85,21 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		}, [isOpen, focusedField])
 
 		const handleFieldClick = (field: EditableField) => {
-			// Prevent event bubbling to avoid immediate close
-			event?.preventDefault()
-			event?.stopPropagation()
+			setIsOpening(true)
 			setFocusedField(field)
 			setIsOpen(true)
+			
+			// Clear the opening flag after a short delay
+			setTimeout(() => {
+				setIsOpening(false)
+			}, 100)
 		}
 
 		const handleClose = () => {
 			setIsOpen(false)
 			setFocusedField(null)
 			setFormData(partyDetails) // Reset form data
+			setIsOpening(false)
 		}
 
 		const handleSave = () => {
@@ -142,8 +147,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		const handleFieldClickWrapper = (field: EditableField, event: React.MouseEvent) => {
 			event.preventDefault()
 			event.stopPropagation()
-			setFocusedField(field)
-			setIsOpen(true)
+			handleFieldClick(field)
 		}
 
 		return (
