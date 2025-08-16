@@ -23,6 +23,10 @@ export type {
 	CardFooterProps,
 } from './components/molecules/Card'
 
+// Organisms
+export { Navbar } from './components/organisms/Navbar'
+export type { NavbarProps } from './components/organisms/Navbar'
+
 // Demo
 export { Demo } from './components/Demo'
 
