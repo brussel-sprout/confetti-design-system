@@ -38,16 +38,20 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		// Close menu when clicking outside
 		React.useEffect(() => {
 			const handleClickOutside = (event: MouseEvent) => {
-				if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+				if (isOpen && containerRef.current && !containerRef.current.contains(event.target as Node)) {
 					handleClose()
 				}
 			}
 
-			if (isOpen) {
-				document.addEventListener('mousedown', handleClickOutside)
-			}
+			// Add a small delay to prevent immediate closing when opening
+			const timeoutId = setTimeout(() => {
+				if (isOpen) {
+					document.addEventListener('mousedown', handleClickOutside)
+				}
+			}, 100)
 
 			return () => {
+				clearTimeout(timeoutId)
 				document.removeEventListener('mousedown', handleClickOutside)
 			}
 		}, [isOpen])
@@ -55,7 +59,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		// Close menu when pressing Esc
 		React.useEffect(() => {
 			const handleEscapeKey = (event: KeyboardEvent) => {
-				if (event.key === 'Escape') {
+				if (isOpen && event.key === 'Escape') {
 					handleClose()
 				}
 			}
@@ -80,6 +84,9 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		}, [isOpen, focusedField])
 
 		const handleFieldClick = (field: EditableField) => {
+			// Prevent event bubbling to avoid immediate close
+			event?.preventDefault()
+			event?.stopPropagation()
 			setFocusedField(field)
 			setIsOpen(true)
 		}
