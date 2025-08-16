@@ -1,4 +1,15 @@
-import { Navbar } from './Navbar'
+import { User, Settings, LogOut } from 'lucide-react'
+
+import { Logo } from '../../atoms/Logo'
+import { 
+	Navbar, 
+	NavbarLeft, 
+	NavbarRight, 
+	NavbarLink, 
+	NavbarAccountDropdown,
+	NavbarDropdownItem,
+	NavbarDropdownDivider
+} from './Navbar'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
@@ -10,34 +21,8 @@ const meta: Meta<typeof Navbar> = {
 		docs: {
 			description: {
 				component:
-					'A responsive navigation bar component with logo and authentication. Supports both logged out (login/signup links) and logged in (account dropdown) states.',
+					'A composable navigation bar system with individual atoms and molecules that can be assembled to create different navbar states and layouts.',
 			},
-		},
-	},
-	argTypes: {
-		isLoggedIn: {
-			control: { type: 'boolean' },
-			description: 'Whether the user is logged in',
-		},
-		username: {
-			control: { type: 'text' },
-			description: 'Username to display in the account dropdown',
-		},
-		onProfileClick: {
-			action: 'profile clicked',
-			description: 'Callback when profile is clicked',
-		},
-		onSettingsClick: {
-			action: 'settings clicked',
-			description: 'Callback when settings is clicked',
-		},
-		onLogoutClick: {
-			action: 'logout clicked',
-			description: 'Callback when logout is clicked',
-		},
-		className: {
-			control: { type: 'text' },
-			description: 'Additional CSS classes',
 		},
 	},
 	tags: ['autodocs'],
@@ -46,40 +31,76 @@ const meta: Meta<typeof Navbar> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// Default logged out state
+// Logged out state composition
 export const LoggedOut: Story = {
-	args: {
-		isLoggedIn: false,
-	},
+	render: () => (
+		<Navbar>
+			<NavbarLeft>
+				<Logo size="sm" />
+			</NavbarLeft>
+			<NavbarRight>
+				<NavbarLink href="/login">Login</NavbarLink>
+				<NavbarLink href="/sign-up" variant="primary">Sign Up</NavbarLink>
+			</NavbarRight>
+		</Navbar>
+	),
 	parameters: {
 		docs: {
 			description: {
-				story: 'Default navbar state for logged out users with login and signup buttons.',
+				story: 'Navbar composed for logged out users with login and signup links.',
 			},
 		},
 	},
 }
 
-// Logged in state
+// Logged in state composition
 export const LoggedIn: Story = {
-	args: {
-		isLoggedIn: true,
-		username: 'John Doe',
-	},
+	render: () => (
+		<Navbar>
+			<NavbarLeft>
+				<Logo size="sm" />
+			</NavbarLeft>
+			<NavbarRight>
+				<NavbarAccountDropdown username="John Doe">
+					<NavbarDropdownItem>
+						<User className="w-4 h-4" />
+						Profile
+					</NavbarDropdownItem>
+					<NavbarDropdownItem>
+						<Settings className="w-4 h-4" />
+						Settings
+					</NavbarDropdownItem>
+					<NavbarDropdownDivider />
+					<NavbarDropdownItem variant="destructive">
+						<LogOut className="w-4 h-4" />
+						Logout
+					</NavbarDropdownItem>
+				</NavbarAccountDropdown>
+			</NavbarRight>
+		</Navbar>
+	),
 	parameters: {
 		docs: {
 			description: {
-				story: 'Navbar state for logged in users with account dropdown containing profile, settings, and logout options.',
+				story: 'Navbar composed for logged in users with account dropdown containing profile, settings, and logout options.',
 			},
 		},
 	},
 }
 
-// With page content below
+// With page content
 export const WithPageContent: Story = {
-	render: (args) => (
+	render: () => (
 		<div className="min-h-screen bg-background">
-			<Navbar {...args} />
+			<Navbar>
+				<NavbarLeft>
+					<Logo size="sm" />
+				</NavbarLeft>
+				<NavbarRight>
+					<NavbarLink href="/login">Login</NavbarLink>
+					<NavbarLink href="/sign-up" variant="primary">Sign Up</NavbarLink>
+				</NavbarRight>
+			</Navbar>
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 				<div className="text-center space-y-6">
 					<h1 className="text-4xl font-bold text-foreground">Welcome to PartyPlanner</h1>
@@ -99,9 +120,6 @@ export const WithPageContent: Story = {
 			</div>
 		</div>
 	),
-	args: {
-		isLoggedIn: false,
-	},
 	parameters: {
 		docs: {
 			description: {
@@ -111,16 +129,38 @@ export const WithPageContent: Story = {
 	},
 }
 
-// Interactive playground
-export const Playground: Story = {
-	args: {
-		isLoggedIn: false,
-		username: 'Jane Smith',
-	},
+// Custom composition example
+export const CustomComposition: Story = {
+	render: () => (
+		<Navbar>
+			<NavbarLeft>
+				<Logo size="sm" />
+			</NavbarLeft>
+			<NavbarRight>
+				<NavbarLink href="/events">Events</NavbarLink>
+				<NavbarLink href="/pricing">Pricing</NavbarLink>
+				<NavbarAccountDropdown username="Jane Smith">
+					<NavbarDropdownItem>
+						<User className="w-4 h-4" />
+						My Profile
+					</NavbarDropdownItem>
+					<NavbarDropdownItem>
+						<Settings className="w-4 h-4" />
+						Account Settings
+					</NavbarDropdownItem>
+					<NavbarDropdownDivider />
+					<NavbarDropdownItem variant="destructive">
+						<LogOut className="w-4 h-4" />
+						Sign Out
+					</NavbarDropdownItem>
+				</NavbarAccountDropdown>
+			</NavbarRight>
+		</Navbar>
+	),
 	parameters: {
 		docs: {
 			description: {
-				story: 'Interactive playground to test navbar functionality.',
+				story: 'Example of custom navbar composition with additional navigation links and customized dropdown text.',
 			},
 		},
 	},
