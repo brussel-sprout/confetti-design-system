@@ -38,21 +38,21 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		// Close menu when clicking outside
 		React.useEffect(() => {
 			const handleClickOutside = (event: MouseEvent) => {
-				if (isOpen && containerRef.current && !containerRef.current.contains(event.target as Node)) {
+				if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
 					handleClose()
 				}
 			}
 
-			// Add a small delay to prevent immediate closing when opening
-			const timeoutId = setTimeout(() => {
-				if (isOpen) {
+			if (isOpen) {
+				// Add a longer delay to prevent immediate closing when opening
+				const timeoutId = setTimeout(() => {
 					document.addEventListener('mousedown', handleClickOutside)
-				}
-			}, 100)
+				}, 200)
 
-			return () => {
-				clearTimeout(timeoutId)
-				document.removeEventListener('mousedown', handleClickOutside)
+				return () => {
+					clearTimeout(timeoutId)
+					document.removeEventListener('mousedown', handleClickOutside)
+				}
 			}
 		}, [isOpen])
 
@@ -144,7 +144,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				{/* Compact Display */}
 				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full">
 					<button
-						onClick={() => handleFieldClick('name')}
+						onClick={(e) => handleFieldClickWrapper('name', e)}
 						className={cn(
 							'font-semibold text-foreground hover:text-primary transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -158,7 +158,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={() => handleFieldClick('date')}
+						onClick={(e) => handleFieldClickWrapper('date', e)}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -172,7 +172,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={() => handleFieldClick('time')}
+						onClick={(e) => handleFieldClickWrapper('time', e)}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -186,7 +186,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={() => handleFieldClick('headCount')}
+						onClick={(e) => handleFieldClickWrapper('headCount', e)}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
@@ -200,7 +200,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<span className="text-muted-foreground flex-shrink-0">•</span>
 
 					<button
-						onClick={() => handleFieldClick('address')}
+						onClick={(e) => handleFieldClickWrapper('address', e)}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
 							'whitespace-nowrap text-left truncate min-w-0',
@@ -301,9 +301,18 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									</Button>
 								</div>
 							</form>
-						</motion.div>
-					)}
-				</AnimatePresence>
+		return (event: React.MouseEvent) => {
+			// Prevent event bubbling to avoid immediate close
+			event.preventDefault()
+			event.stopPropagation()
+			setFocusedField(field)
+			setIsOpen(true)
+		}
+	}
+
+	const handleFieldClickWrapper = (field: EditableField, event: React.MouseEvent) => {
+		event.preventDefault()
+		event.stopPropagation()
 			</div>
 		)
 	}
