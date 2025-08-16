@@ -139,6 +139,13 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			return address
 		}
 
+		const handleFieldClickWrapper = (field: EditableField, event: React.MouseEvent) => {
+			event.preventDefault()
+			event.stopPropagation()
+			setFocusedField(field)
+			setIsOpen(true)
+		}
+
 		return (
 			<div ref={containerRef} className={cn('relative', className)} {...props}>
 				{/* Compact Display */}
@@ -301,18 +308,9 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									</Button>
 								</div>
 							</form>
-		return (event: React.MouseEvent) => {
-			// Prevent event bubbling to avoid immediate close
-			event.preventDefault()
-			event.stopPropagation()
-			setFocusedField(field)
-			setIsOpen(true)
-		}
-	}
-
-	const handleFieldClickWrapper = (field: EditableField, event: React.MouseEvent) => {
-		event.preventDefault()
-		event.stopPropagation()
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</div>
 		)
 	}
