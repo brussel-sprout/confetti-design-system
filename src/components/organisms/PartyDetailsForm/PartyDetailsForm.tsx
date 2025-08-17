@@ -285,11 +285,12 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						className={cn(
 							'absolute top-full left-0 right-0 mt-2 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
-							'p-6 mw-800',
+							'p-6',
 							isClosing ? 'animate-scale-out' : 'animate-scale-in'
 						)}
 						style={{
-							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`
+							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`,
+              maxWidth: '800px'
 						}}
 					>
 						<div className="flex items-center justify-between mb-6">
