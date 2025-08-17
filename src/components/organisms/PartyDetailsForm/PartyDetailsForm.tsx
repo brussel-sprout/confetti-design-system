@@ -291,6 +291,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							'w-full md:max-w-[800px]',
 							'h-screen md:h-auto overflow-y-auto md:overflow-visible',
 							'md:rounded-xl rounded-none'
+						)}
 						style={{
 							transformOrigin: window.innerWidth >= 768 ? `${clickOrigin.x}px ${clickOrigin.y}px` : 'center center'
 						}}
