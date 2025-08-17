@@ -283,15 +283,16 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<div
 						ref={formRef}
 						className={cn(
-							'absolute top-full left-0 right-0 mt-2 z-50',
+							'absolute md:absolute fixed md:top-full top-0 left-0 right-0 md:mt-2 mt-0 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
-							'p-6',
+							'p-4 md:p-6',
 							isClosing ? 'animate-scale-out' : 'animate-scale-in',
-							'perspective-1000'
-						)}
+							'perspective-1000 md:perspective-1000',
+							'w-full md:max-w-[800px]',
+							'h-screen md:h-auto overflow-y-auto md:overflow-visible',
+							'md:rounded-xl rounded-none'
 						style={{
-							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`,
-							maxWidth: '800px'
+							transformOrigin: window.innerWidth >= 768 ? `${clickOrigin.x}px ${clickOrigin.y}px` : 'center center'
 						}}
 					>
 						<div className="flex items-center justify-between mb-6">
