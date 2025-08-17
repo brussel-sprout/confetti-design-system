@@ -286,7 +286,8 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							'absolute top-full left-0 right-0 mt-2 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
 							'p-6',
-							isClosing ? 'animate-scale-out' : 'animate-scale-in'
+							isClosing ? 'animate-scale-out' : 'animate-scale-in',
+							'perspective-1000'
 						)}
 						style={{
 							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`,
