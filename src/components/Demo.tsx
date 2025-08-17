@@ -3,9 +3,80 @@ import React from 'react'
 import { Badge } from './atoms/Badge'
 import { Button } from './atoms/Button'
 import { Input } from './atoms/Input'
+import { TextInput } from './atoms/TextInput'
+import { EmailInput } from './atoms/EmailInput'
+import { PasswordInput } from './atoms/PasswordInput'
+import { NumberInput } from './atoms/NumberInput'
+import { SearchInput } from './atoms/SearchInput'
+import { TextArea } from './atoms/TextArea'
+import { Select } from './atoms/Select'
+import { Checkbox } from './atoms/Checkbox'
+import { RadioButton } from './atoms/RadioButton'
+import { DatePicker } from './atoms/DatePicker'
+import { Icon } from './atoms/Icon'
+import { StatusBadge } from './atoms/StatusBadge'
+import { FeatureList } from './atoms/FeatureList'
 import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
+import { PartyCard } from './molecules/PartyCard'
+import { PartySelector } from './organisms/PartySelector'
+import { PartySelectionLayout } from './organisms/PartySelectionLayout'
+import type { PartyOption } from './organisms/PartySelector'
 
 export const Demo: React.FC = () => {
+	const partyOptions: PartyOption[] = [
+		{
+			id: 'birthday',
+			title: 'Birthday Party',
+			description: 'Celebrate another year of life with cake, balloons, and unforgettable memories',
+			icon: 'cake',
+			features: [
+				'Birthday cake & candles',
+				'Age-appropriate decorations',
+				'Party games & activities',
+				'Photo opportunities'
+			],
+			status: 'active',
+			badge: {
+				text: 'Most Popular',
+				variant: 'popular'
+			}
+		},
+		{
+			id: 'baby-shower',
+			title: 'Baby Shower',
+			description: 'Welcome the new arrival with sweet celebrations and precious moments',
+			icon: 'baby',
+			features: [
+				'Gender reveal options',
+				'Baby-themed decorations',
+				'Gift opening setup',
+				'Keepsake activities'
+			],
+			status: 'inactive',
+			badge: {
+				text: 'Coming Soon',
+				variant: 'coming-soon'
+			}
+		},
+		{
+			id: 'dinner-party',
+			title: 'Dinner Party',
+			description: 'Host an elegant evening with fine dining and sophisticated ambiance',
+			icon: 'dinner',
+			features: [
+				'Elegant table settings',
+				'Menu planning assistance',
+				'Ambient lighting',
+				'Wine pairing suggestions'
+			],
+			status: 'inactive',
+			badge: {
+				text: 'Coming Soon',
+				variant: 'coming-soon'
+			}
+		}
+	]
+
 	return (
 		<div className="min-h-screen bg-background p-8">
 			<div className="max-w-6xl mx-auto space-y-12">
@@ -16,6 +87,139 @@ export const Demo: React.FC = () => {
 						A comprehensive component library for the Confetti application
 					</p>
 				</div>
+
+				{/* Party Selector Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Party Selection Layout (Full Screen)</h2>
+					<div className="border border-border rounded-lg overflow-hidden">
+						<PartySelectionLayout
+							options={partyOptions}
+							onSelect={(id) => console.log('Selected:', id)}
+							onBack={() => console.log('Back clicked')}
+							onContinue={(id) => console.log('Continue with:', id)}
+							className="min-h-[600px]"
+						/>
+					</div>
+				</section>
+
+				{/* Original Party Selector Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Party Selector Component</h2>
+					<PartySelector
+						title="Alternative Layout Version"
+						subtitle="This is the original component version with different styling."
+						options={partyOptions}
+						onSelect={(id) => console.log('Selected:', id)}
+						onBack={() => console.log('Back clicked')}
+						onContinue={(id) => console.log('Continue with:', id)}
+					/>
+				</section>
+
+				{/* New Atoms Section */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">New Atoms</h2>
+
+					{/* Icons */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Icon Component</h3>
+							<p className="text-muted-foreground">Scalable icons for various use cases</p>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<div className="space-y-3">
+								<h4 className="font-medium">Sizes</h4>
+								<div className="flex items-center gap-4">
+									<Icon name="cake" size="sm" />
+									<Icon name="cake" size="md" />
+									<Icon name="cake" size="lg" />
+									<Icon name="cake" size="xl" />
+								</div>
+							</div>
+							<div className="space-y-3">
+								<h4 className="font-medium">Different Icons</h4>
+								<div className="flex items-center gap-4">
+									<Icon name="cake" size="lg" />
+									<Icon name="baby" size="lg" />
+									<Icon name="dinner" size="lg" />
+								</div>
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* Status Badges */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Status Badge Component</h3>
+							<p className="text-muted-foreground">Status indicators for different states</p>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<div className="space-y-3">
+								<h4 className="font-medium">Variants</h4>
+								<div className="flex flex-wrap gap-3">
+									<StatusBadge variant="popular">Most Popular</StatusBadge>
+									<StatusBadge variant="coming-soon">Coming Soon</StatusBadge>
+									<StatusBadge variant="new">New</StatusBadge>
+									<StatusBadge variant="featured">Featured</StatusBadge>
+								</div>
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* Feature Lists */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Feature List Component</h3>
+							<p className="text-muted-foreground">Lists with active and inactive states</p>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<h4 className="font-medium mb-3">Active State</h4>
+									<FeatureList
+										variant="active"
+										items={[
+											'Birthday cake & candles',
+											'Age-appropriate decorations',
+											'Party games & activities',
+											'Photo opportunities'
+										]}
+									/>
+								</div>
+								<div>
+									<h4 className="font-medium mb-3">Inactive State</h4>
+									<FeatureList
+										variant="inactive"
+										items={[
+											'Gender reveal options',
+											'Baby-themed decorations',
+											'Gift opening setup',
+											'Keepsake activities'
+										]}
+									/>
+								</div>
+							</div>
+						</CardContent>
+					</Card>
+				</section>
+
+				{/* Individual Party Cards */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Party Card States</h2>
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+						{partyOptions.map((option) => (
+							<PartyCard
+								key={option.id}
+								title={option.title}
+								description={option.description}
+								icon={option.icon}
+								features={option.features}
+								status={option.status}
+								badge={option.badge}
+								onClick={() => console.log('Clicked:', option.id)}
+							/>
+						))}
+					</div>
+				</section>
 
 				{/* Atoms Section */}
 				<section className="space-y-8">
@@ -61,7 +265,7 @@ export const Demo: React.FC = () => {
 					{/* Inputs */}
 					<Card>
 						<CardHeader>
-							<h3 className="text-xl font-semibold">Input Component</h3>
+							<h3 className="text-xl font-semibold">Original Input Component</h3>
 							<p className="text-muted-foreground">
 								Form inputs with labels, validation, and icons
 							</p>
@@ -80,6 +284,92 @@ export const Demo: React.FC = () => {
 									error="Password is required"
 								/>
 								<Input label="Disabled" placeholder="This is disabled" disabled />
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* New Input Components */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Specialized Input Components</h3>
+							<p className="text-muted-foreground">
+								Dedicated input components for specific use cases
+							</p>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<TextInput 
+									label="Text Input" 
+									placeholder="Enter text..." 
+									helperText="Basic text input"
+								/>
+								<EmailInput 
+									label="Email Input" 
+									placeholder="Enter email..." 
+									helperText="Built-in email validation"
+								/>
+								<PasswordInput 
+									label="Password Input" 
+									placeholder="Enter password..." 
+									helperText="Toggle visibility"
+								/>
+								<NumberInput 
+									label="Number Input" 
+									placeholder="Enter number..." 
+									helperText="With stepper controls"
+									value="10"
+									min={0}
+									max={100}
+								/>
+								<SearchInput 
+									label="Search Input" 
+									placeholder="Search..." 
+									helperText="With clear button"
+									value="search term"
+								/>
+								<Select
+									label="Select Input"
+									placeholder="Choose option..."
+									helperText="Dropdown selection"
+									options={[
+										{ value: 'option1', label: 'Option 1' },
+										{ value: 'option2', label: 'Option 2' },
+										{ value: 'option3', label: 'Option 3' },
+									]}
+								/>
+							</div>
+							
+							<div className="space-y-4">
+								<TextArea
+									label="Text Area"
+									placeholder="Enter long text..."
+									helperText="Multi-line text input"
+									rows={3}
+								/>
+								
+								<Checkbox
+									label="Checkbox Input"
+									helperText="Single checkbox option"
+								/>
+								
+								<RadioButton
+									label="Radio Button Group"
+									helperText="Choose one option"
+									options={[
+										{ value: 'option1', label: 'Option 1', helperText: 'First choice' },
+										{ value: 'option2', label: 'Option 2', helperText: 'Second choice' },
+										{ value: 'option3', label: 'Option 3', helperText: 'Third choice' },
+									]}
+									name="demo-radio"
+								/>
+							</div>
+							
+							<div className="space-y-4">
+								<DatePicker
+									label="Date Picker"
+									placeholder="Select date..."
+									helperText="Modern date picker with calendar"
+								/>
 							</div>
 						</CardContent>
 					</Card>
