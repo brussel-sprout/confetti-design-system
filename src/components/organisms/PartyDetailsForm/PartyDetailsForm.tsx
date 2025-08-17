@@ -24,6 +24,7 @@ type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
 	({ partyDetails, onSave, className = '', ...props }, ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
+		const [isClosing, setIsClosing] = React.useState(false)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
 		const [clickOrigin, setClickOrigin] = React.useState({ x: 0, y: 0 })
 		const [focusField, setFocusField] = React.useState<EditableField | null>(null)
@@ -148,10 +149,18 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		}
 
 		const handleClose = () => {
-			setIsOpen(false)
-			setFocusField(null)
-			setIsOpening(false)
-			setFormData(partyDetails) // Reset form data
+			if (isClosing) return // Prevent multiple close calls
+			
+			setIsClosing(true)
+			
+			// Wait for animation to complete before actually closing
+			setTimeout(() => {
+				setIsOpen(false)
+				setIsClosing(false)
+				setFocusField(null)
+				setIsOpening(false)
+				setFormData(partyDetails) // Reset form data
+			}, 200) // Match the animation duration
 		}
 
 		const handleSave = () => {
@@ -277,7 +286,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							'absolute top-full left-0 right-0 mt-2 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
 							'p-6',
-							'animate-scale-in'
+							isClosing ? 'animate-scale-out' : 'animate-scale-in'
 						)}
 						style={{
 							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`
