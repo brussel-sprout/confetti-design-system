@@ -27,7 +27,9 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
 		const [clickOrigin, setClickOrigin] = React.useState({ x: 0, y: 0 })
 		const [focusField, setFocusField] = React.useState<EditableField | null>(null)
+		const [isOpening, setIsOpening] = React.useState(false)
 		const containerRef = React.useRef<HTMLDivElement>(null)
+		const formRef = React.useRef<HTMLDivElement>(null)
 		
 		// Refs for each input field
 		const nameInputRef = React.useRef<HTMLInputElement>(null)
@@ -67,7 +69,63 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			}
 		}, [isOpen, focusField])
 
+		// Handle click outside to close
+		React.useEffect(() => {
+			if (!isOpen) return
+
+			const handleClickOutside = (event: MouseEvent) => {
+				// Don't close if we're in the opening phase
+				if (isOpening) return
+				
+				// Don't close if clicking inside the form
+				if (formRef.current && formRef.current.contains(event.target as Node)) {
+					return
+				}
+				
+				// Don't close if clicking on any of the trigger buttons
+				if (containerRef.current) {
+					const buttons = containerRef.current.querySelectorAll('button')
+					for (const button of buttons) {
+						if (button.contains(event.target as Node)) {
+							return
+						}
+					}
+				}
+				
+				handleClose()
+			}
+
+			// Add listener with a small delay to avoid immediate closing
+			const timeoutId = setTimeout(() => {
+				document.addEventListener('mousedown', handleClickOutside)
+			}, 100)
+
+			return () => {
+				clearTimeout(timeoutId)
+				document.removeEventListener('mousedown', handleClickOutside)
+			}
+		}, [isOpen, isOpening])
+
+		// Handle escape key to close
+		React.useEffect(() => {
+			if (!isOpen) return
+
+			const handleEscapeKey = (event: KeyboardEvent) => {
+				if (event.key === 'Escape') {
+					handleClose()
+				}
+			}
+
+			document.addEventListener('keydown', handleEscapeKey)
+
+			return () => {
+				document.removeEventListener('keydown', handleEscapeKey)
+			}
+		}, [isOpen])
+
 		const handleFieldClick = (event: React.MouseEvent, field: EditableField) => {
+			setIsOpening(true)
+			
 			// Calculate the click position relative to the container
 			if (containerRef.current) {
 				const containerRect = containerRef.current.getBoundingClientRect()
@@ -82,11 +140,17 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			
 			setFocusField(field)
 			setIsOpen(true)
+			
+			// Clear the opening flag after a short delay
+			setTimeout(() => {
+				setIsOpening(false)
+			}, 150)
 		}
 
 		const handleClose = () => {
 			setIsOpen(false)
 			setFocusField(null)
+			setIsOpening(false)
 			setFormData(partyDetails) // Reset form data
 		}
 
@@ -208,6 +272,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				{/* Mega Menu Form */}
 				{isOpen && (
 					<div
+						ref={formRef}
 						className={cn(
 							'absolute top-full left-0 right-0 mt-2 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
