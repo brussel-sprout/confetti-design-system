@@ -291,7 +291,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						)}
 						style={{
 							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`,
-              maxWidth: '800px'
+							maxWidth: '800px'
 						}}
 					>
 						<div className="flex items-center justify-between mb-6">
