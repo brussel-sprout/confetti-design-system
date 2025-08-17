@@ -160,7 +160,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				setFocusField(null)
 				setIsOpening(false)
 				setFormData(partyDetails) // Reset form data
-			}, 200) // Match the animation duration
+			}, 150) // Shorter duration for fade out
 		}
 
 		const handleSave = () => {
