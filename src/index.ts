@@ -55,6 +55,9 @@ export type {
 export { DatePicker } from "./components/atoms/DatePicker";
 export type { DatePickerProps } from "./components/atoms/DatePicker";
 
+export { ProgressBar } from "./components/atoms/ProgressBar";
+export type { ProgressBarProps } from "./components/atoms/ProgressBar";
+
 // Molecules
 export {
   Card,
@@ -68,6 +71,9 @@ export type {
   CardContentProps,
   CardFooterProps,
 } from "./components/molecules/Card";
+
+export { ProgressStep } from "./components/molecules/ProgressStep";
+export type { ProgressStepProps } from "./components/molecules/ProgressStep";
 
 // Molecules - Dropdown
 export {
@@ -123,6 +129,13 @@ export type {
 
 export { PartySelectionLayout } from "./components/organisms/PartySelectionLayout";
 export type { PartySelectionLayoutProps } from "./components/organisms/PartySelectionLayout";
+
+export { ProgressTracker } from "./components/organisms/ProgressTracker";
+export type { 
+  ProgressTrackerProps, 
+  ProgressStepData, 
+  ProgressCategory 
+} from "./components/organisms/ProgressTracker";
 
 // Demo
 export { Demo } from "./components/Demo";
