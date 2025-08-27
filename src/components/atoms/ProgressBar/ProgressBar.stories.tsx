@@ -46,6 +46,34 @@ const meta: Meta<typeof ProgressBar> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const AnimatedProgressBar = () => {
+	const [progress, setProgress] = useState(0)
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setProgress(prev => {
+				if (prev >= 100) return 0
+				return prev + 2
+			})
+		}, 100)
+
+		return () => clearInterval(interval)
+	}, [])
+
+	return (
+		<div className="w-80">
+			<ProgressBar
+				progress={progress}
+				variant="default"
+				size="md"
+				label="Animated Progress"
+				showPercentage
+				animated
+			/>
+		</div>
+	)
+}
+
 export const Default: Story = {
 	args: {
 		progress: 65,
@@ -78,37 +106,7 @@ export const AllSizes: Story = {
 }
 
 export const AnimatedDemo: Story = {
-	render: (args) => {
-		const AnimatedProgressBar = () => {
-			const [progress, setProgress] = useState(0)
-
-			useEffect(() => {
-				const interval = setInterval(() => {
-					setProgress(prev => {
-						if (prev >= 100) return 0
-						return prev + 2
-					})
-				}, 100)
-
-				return () => clearInterval(interval)
-			}, [])
-
-			return (
-				<div className="w-80">
-					<ProgressBar
-						progress={progress}
-						variant="default"
-						size="md"
-						label="Animated Progress"
-						showPercentage
-						animated
-					/>
-				</div>
-			)
-		}
-
-		return <AnimatedProgressBar />
-	},
+	render: () => <AnimatedProgressBar />,
 	parameters: {
 		docs: {
 			story: {
