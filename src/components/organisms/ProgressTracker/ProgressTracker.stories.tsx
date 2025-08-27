@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ProgressTracker } from './ProgressTracker'
 import type { ProgressCategory } from './ProgressTracker'
+import { userEvent, within } from '@storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
@@ -127,94 +128,106 @@ export const Default: Story = {
 }
 
 export const Interactive: Story = {
-	render: () => {
-		const [isOpen, setIsOpen] = useState(false)
-		const [categories, setCategories] = useState<ProgressCategory[]>(mockCategories)
+	render: (args) => {
+		const InteractiveProgressTracker = () => {
+			const [isOpen, setIsOpen] = useState(false)
+			const [categories, setCategories] = useState<ProgressCategory[]>(mockCategories)
 
-		// Simulate progress updates
-		useEffect(() => {
-			if (!isOpen) return
+			// Simulate progress updates
+			useEffect(() => {
+				if (!isOpen) return
 
-			const interval = setInterval(() => {
-				setCategories(prev => {
-					const newCategories = [...prev]
-					
-					// Find the first running or pending step
-					for (let catIndex = 0; catIndex < newCategories.length; catIndex++) {
-						const category = newCategories[catIndex]
-						for (let stepIndex = 0; stepIndex < category.steps.length; stepIndex++) {
-							const step = category.steps[stepIndex]
-							
-							if (step.status === 'running') {
-								// Increment progress
-								if (step.progress < 100) {
-									step.progress = Math.min(100, step.progress + 5)
-								} else {
-									// Mark as completed and move to next
-									step.status = 'completed'
-									step.progress = 100
-									
-									// Start next step
-									const nextStepIndex = stepIndex + 1
-									if (nextStepIndex < category.steps.length) {
-										category.steps[nextStepIndex].status = 'running'
+				const interval = setInterval(() => {
+					setCategories(prev => {
+						const newCategories = [...prev]
+						
+						// Find the first running or pending step
+						for (let catIndex = 0; catIndex < newCategories.length; catIndex++) {
+							const category = newCategories[catIndex]
+							for (let stepIndex = 0; stepIndex < category.steps.length; stepIndex++) {
+								const step = category.steps[stepIndex]
+								
+								if (step.status === 'running') {
+									// Increment progress
+									if (step.progress < 100) {
+										step.progress = Math.min(100, step.progress + 5)
 									} else {
-										// Mark category as completed and start next category
-										category.status = 'completed'
-										const nextCatIndex = catIndex + 1
-										if (nextCatIndex < newCategories.length) {
-											newCategories[nextCatIndex].status = 'running'
-											newCategories[nextCatIndex].steps[0].status = 'running'
+										// Mark as completed and move to next
+										step.status = 'completed'
+										step.progress = 100
+										
+										// Start next step
+										const nextStepIndex = stepIndex + 1
+										if (nextStepIndex < category.steps.length) {
+											category.steps[nextStepIndex].status = 'running'
+										} else {
+											// Mark category as completed and start next category
+											category.status = 'completed'
+											const nextCatIndex = catIndex + 1
+											if (nextCatIndex < newCategories.length) {
+												newCategories[nextCatIndex].status = 'running'
+												newCategories[nextCatIndex].steps[0].status = 'running'
+											}
 										}
 									}
+									return newCategories
+								} else if (step.status === 'pending' && catIndex === 0 && stepIndex === 0) {
+									// Start the first step
+									step.status = 'running'
+									category.status = 'running'
+									return newCategories
 								}
-								return newCategories
-							} else if (step.status === 'pending' && catIndex === 0 && stepIndex === 0) {
-								// Start the first step
-								step.status = 'running'
-								category.status = 'running'
-								return newCategories
 							}
 						}
-					}
-					
-					return newCategories
-				})
-			}, 800)
+						
+						return newCategories
+					})
+				}, 800)
 
-			return () => clearInterval(interval)
-		}, [isOpen])
+				return () => clearInterval(interval)
+			}, [isOpen])
 
-		return (
-			<div className="p-8">
-				<button
-					onClick={() => {
-						setIsOpen(true)
-						// Reset progress
-						setCategories(mockCategories.map(cat => ({
-							...cat,
-							status: cat.id === 'theme-analysis' ? 'pending' : 'pending',
-							steps: cat.steps.map(step => ({
-								...step,
-								status: 'pending',
-								progress: 0,
-							}))
-						})))
-					}}
-					className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-				>
-					Start Party Creation
-				</button>
+			return (
+				<div className="p-8">
+					<button
+						onClick={() => {
+							setIsOpen(true)
+							// Reset progress
+							setCategories(mockCategories.map(cat => ({
+								...cat,
+								status: cat.id === 'theme-analysis' ? 'pending' : 'pending',
+								steps: cat.steps.map(step => ({
+									...step,
+									status: 'pending',
+									progress: 0,
+								}))
+							})))
+						}}
+						className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+					>
+						Start Party Creation
+					</button>
 
-				<ProgressTracker
-					isOpen={isOpen}
-					categories={categories}
-					onClose={() => setIsOpen(false)}
-					onComplete={() => console.log('Party creation completed!')}
-					allowClose={false}
-				/>
-			</div>
-		)
+					<ProgressTracker
+						isOpen={isOpen}
+						categories={categories}
+						onClose={() => setIsOpen(false)}
+						onComplete={() => console.log('Party creation completed!')}
+						allowClose={false}
+					/>
+				</div>
+			)
+		}
+
+		return <InteractiveProgressTracker />
+	},
+	parameters: {
+		docs: {
+			story: {
+				inline: false,
+				iframeHeight: 600,
+			},
+		},
 	},
 }
 

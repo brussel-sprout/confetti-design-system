@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ProgressBar } from './ProgressBar'
+import { userEvent, within } from '@storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
@@ -77,32 +78,44 @@ export const AllSizes: Story = {
 }
 
 export const AnimatedDemo: Story = {
-	render: () => {
-		const [progress, setProgress] = useState(0)
+	render: (args) => {
+		const AnimatedProgressBar = () => {
+			const [progress, setProgress] = useState(0)
 
-		useEffect(() => {
-			const interval = setInterval(() => {
-				setProgress(prev => {
-					if (prev >= 100) return 0
-					return prev + 2
-				})
-			}, 100)
+			useEffect(() => {
+				const interval = setInterval(() => {
+					setProgress(prev => {
+						if (prev >= 100) return 0
+						return prev + 2
+					})
+				}, 100)
 
-			return () => clearInterval(interval)
-		}, [])
+				return () => clearInterval(interval)
+			}, [])
 
-		return (
-			<div className="w-80">
-				<ProgressBar
-					progress={progress}
-					variant="default"
-					size="md"
-					label="Animated Progress"
-					showPercentage
-					animated
-				/>
-			</div>
-		)
+			return (
+				<div className="w-80">
+					<ProgressBar
+						progress={progress}
+						variant="default"
+						size="md"
+						label="Animated Progress"
+						showPercentage
+						animated
+					/>
+				</div>
+			)
+		}
+
+		return <AnimatedProgressBar />
+	},
+	parameters: {
+		docs: {
+			story: {
+				inline: false,
+				iframeHeight: 200,
+			},
+		},
 	},
 }
 
