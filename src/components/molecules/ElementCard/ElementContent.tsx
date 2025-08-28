@@ -45,13 +45,14 @@ export const ElementContent: React.FC<ElementContentProps> = ({
 	return (
 		<div className={contentClasses}>
 			{/* Title */}
-			<h3 className={cn(
-				'font-semibold text-foreground mb-1 line-clamp-2',
-				layout === 'list' ? 'text-base' : 'text-sm',
-				isSelected && 'text-primary font-bold'
-			)}>
-				{element.element_name}
-			</h3>
+			{!isSelected && (
+				<h3 className={cn(
+					'font-semibold text-foreground mb-1 line-clamp-2',
+					layout === 'list' ? 'text-base' : 'text-sm'
+				)}>
+					{element.element_name}
+				</h3>
+			)}
 
 			{/* Description */}
 			{contentVariant === 'detailed' && element.description && (
