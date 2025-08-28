@@ -137,6 +137,21 @@ export type {
   ProgressCategory 
 } from "./components/organisms/ProgressTracker";
 
+// Molecules - ElementCard
+export {
+  ElementCard,
+  ActionButtons,
+  CategoryBadge,
+  ElementContent,
+  ElementImage,
+} from "./components/molecules/ElementCard";
+export type {
+  ElementCardProps,
+  Element,
+  Layout,
+  Mode,
+} from "./components/molecules/ElementCard";
+
 // Demo
 export { Demo } from "./components/Demo";
 
