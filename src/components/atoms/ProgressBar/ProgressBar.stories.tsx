@@ -115,6 +115,10 @@ export const AnimatedDemo: Story = {
 			},
 		},
 	},
+	play: async () => {
+		// Allow time for the animation to run and state updates to settle
+		await new Promise(resolve => setTimeout(resolve, 500));
+	},
 }
 
 export const WithoutAnimation: Story = {

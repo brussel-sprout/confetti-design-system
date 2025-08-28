@@ -229,6 +229,16 @@ export const Interactive: Story = {
 			},
 		},
 	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const startButton = canvas.getByText('Start Party Creation');
+		
+		// Simulate clicking the start button
+		await userEvent.click(startButton);
+		
+		// Allow time for the progress simulation to advance and state updates to be processed
+		await new Promise(resolve => setTimeout(resolve, 3000));
+	},
 }
 
 export const Completed: Story = {
