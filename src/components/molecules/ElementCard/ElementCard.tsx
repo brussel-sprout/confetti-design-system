@@ -63,7 +63,7 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 			whileTap={{ scale: 0.98 }}
 			className={`relative overflow-hidden rounded-xl bg-background border border-border hover:border-primary/30 transition-all duration-300 cursor-pointer touch-manipulation group mobile-touch-target w-full max-w-full ${
 				isSelected
-					? 'ring-2 ring-primary shadow-xl border-primary scale-[1.02]'
+					? 'ring-1 ring-primary/50 shadow-lg border-primary/30'
 					: 'hover:shadow-lg hover:border-primary/20'
 			} ${getCardLayoutClass()} ${className}`}
 			onClick={handleCardClick}
