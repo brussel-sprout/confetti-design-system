@@ -56,9 +56,6 @@ export const Completed: Story = {
 		description: 'Found the best local vendors and suppliers for your party materials',
 		status: 'completed',
 	},
-	play: async () => {
-		await new Promise(resolve => setTimeout(resolve, 100));
-	},
 }
 
 export const Failed: Story = {

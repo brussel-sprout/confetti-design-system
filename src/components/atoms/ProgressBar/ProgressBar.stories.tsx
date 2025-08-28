@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { ProgressBar } from './ProgressBar'
-import { userEvent, within } from '@storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
@@ -114,10 +113,6 @@ export const AnimatedDemo: Story = {
 				iframeHeight: 200,
 			},
 		},
-	},
-	play: async () => {
-		// Allow time for the animation to run and state updates to settle
-		await new Promise(resolve => setTimeout(resolve, 500));
 	},
 }
 
