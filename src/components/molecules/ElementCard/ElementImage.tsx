@@ -6,9 +6,10 @@ import type { Element } from './types'
 interface ElementImageProps {
 	element: Element
 	layout: 'grid' | 'list'
+	isSelected?: boolean
 }
 
-export const ElementImage: React.FC<ElementImageProps> = ({ element, layout }) => {
+export const ElementImage: React.FC<ElementImageProps> = ({ element, layout, isSelected }) => {
 	const [imageError, setImageError] = React.useState(false)
 	const [imageLoading, setImageLoading] = React.useState(true)
 
@@ -45,8 +46,9 @@ export const ElementImage: React.FC<ElementImageProps> = ({ element, layout }) =
 				src={element.image_url}
 				alt={element.element_name}
 				className={cn(
-					'w-full h-full object-cover transition-opacity duration-300',
-					imageLoading ? 'opacity-0' : 'opacity-100'
+					'w-full h-full object-cover transition-all duration-300',
+					imageLoading ? 'opacity-0' : 'opacity-100',
+					isSelected && 'blur-sm scale-105'
 				)}
 				onLoad={handleImageLoad}
 				onError={handleImageError}

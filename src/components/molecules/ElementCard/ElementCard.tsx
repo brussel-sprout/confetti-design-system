@@ -63,7 +63,7 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 			whileTap={{ scale: 0.98 }}
 			className={`relative overflow-hidden rounded-xl bg-background border border-border hover:border-primary/30 transition-all duration-300 cursor-pointer touch-manipulation group mobile-touch-target w-full max-w-full ${
 				isSelected
-					? 'ring-1 ring-primary/50 shadow-lg border-primary/30'
+					? 'ring-2 ring-primary shadow-xl border-primary scale-[1.02]'
 					: 'hover:shadow-lg hover:border-primary/20'
 			} ${getCardLayoutClass()} ${className}`}
 			onClick={handleCardClick}
@@ -84,14 +84,27 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
-						className="absolute inset-0 bg-primary/10 backdrop-blur-[2px] z-[1] pointer-events-none"
+						className="absolute inset-0 bg-primary/20 backdrop-blur-sm z-[1] pointer-events-none flex items-center justify-center"
+					>
+						<motion.div
+							initial={{ scale: 0, opacity: 0 }}
+							animate={{ scale: 1, opacity: 1 }}
+							exit={{ scale: 0, opacity: 0 }}
+							transition={{ delay: 0.1, duration: 0.2 }}
+							className="bg-primary text-primary-foreground px-3 py-1.5 rounded-full text-sm font-medium shadow-lg flex items-center gap-2"
+						>
+							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+							</svg>
+							Selected
+						</motion.div>
 					/>
 				)}
 			</AnimatePresence>
 
 			{/* Image Container */}
 			<div className={getImageContainerClass()}>
-				<ElementImage element={element} layout={layout.type} />
+				<ElementImage element={element} layout={layout.type} isSelected={isSelected} />
 
 				{/* Category Badge - Top Left */}
 				{contentVariant !== 'minimal' && element.category && (

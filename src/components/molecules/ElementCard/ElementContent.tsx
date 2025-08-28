@@ -47,7 +47,8 @@ export const ElementContent: React.FC<ElementContentProps> = ({
 			{/* Title */}
 			<h3 className={cn(
 				'font-semibold text-foreground mb-1 line-clamp-2',
-				layout === 'list' ? 'text-base' : 'text-sm'
+				layout === 'list' ? 'text-base' : 'text-sm',
+				isSelected && 'text-primary font-bold'
 			)}>
 				{element.element_name}
 			</h3>
