@@ -86,33 +86,19 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 						exit={{ opacity: 0 }}
 						className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1] pointer-events-none flex flex-col items-center justify-center"
 					>
-						{/* Selected Badge */}
+						{/* Title Overlay - Centered */}
 						<motion.div
-							initial={{ scale: 0, opacity: 0 }}
-							animate={{ scale: 1, opacity: 1 }}
-							exit={{ scale: 0, opacity: 0 }}
-							transition={{ delay: 0.1, duration: 0.2 }}
-							className="bg-primary text-primary-foreground px-2 py-1 rounded-full text-xs font-medium shadow-lg flex items-center gap-1 mb-2"
-						>
-							<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-							</svg>
-							Selected
-						</motion.div>
-						
-						{/* Title Overlay */}
-						<motion.div
-							initial={{ y: 20, opacity: 0 }}
+							initial={{ scale: 0.8, opacity: 0 }}
 							animate={{ y: 0, opacity: 1 }}
-							exit={{ y: 20, opacity: 0 }}
-							transition={{ delay: 0.2, duration: 0.3 }}
+							exit={{ scale: 0.8, opacity: 0 }}
+							transition={{ delay: 0.1, duration: 0.3 }}
 							className="text-center px-4"
 						>
-							<h3 className="text-white font-bold text-lg leading-tight drop-shadow-lg">
+							<h3 className="text-white font-bold text-xl leading-tight drop-shadow-lg mb-1">
 								{element.element_name}
 							</h3>
 							{element.category && (
-								<p className="text-white/80 text-sm mt-1 drop-shadow-md">
+								<p className="text-white/90 text-sm drop-shadow-md">
 									{element.category}
 								</p>
 							)}
