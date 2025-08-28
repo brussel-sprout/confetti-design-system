@@ -98,7 +98,7 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 							</svg>
 							Selected
 						</motion.div>
-					/>
+					</motion.div>
 				)}
 			</AnimatePresence>
 
