@@ -23,8 +23,10 @@ import { PartySelectionLayout } from './organisms/PartySelectionLayout'
 import { ProgressTracker } from './organisms/ProgressTracker'
 import { ProgressBar } from './atoms/ProgressBar'
 import { ProgressStep } from './molecules/ProgressStep'
+import { ProgressStepper } from './molecules/ProgressStepper'
 import type { PartyOption } from './organisms/PartySelector'
 import type { ProgressCategory } from './organisms/ProgressTracker'
+import type { ProgressStepperStep } from './molecules/ProgressStepper'
 
 export const Demo: React.FC = () => {
 	const [showProgressTracker, setShowProgressTracker] = React.useState(false)
@@ -76,6 +78,34 @@ export const Demo: React.FC = () => {
 			],
 		},
 	])
+
+	const stepperSteps: ProgressStepperStep[] = [
+		{
+			id: 'party-type',
+			label: 'Party Type',
+			status: 'completed',
+		},
+		{
+			id: 'theme',
+			label: 'Theme',
+			status: 'current',
+		},
+		{
+			id: 'elements',
+			label: 'Elements',
+			status: 'upcoming',
+		},
+		{
+			id: 'details',
+			label: 'Details',
+			status: 'upcoming',
+		},
+		{
+			id: 'review',
+			label: 'Review',
+			status: 'upcoming',
+		},
+	]
 
 	const partyOptions: PartyOption[] = [
 		{
@@ -217,6 +247,16 @@ export const Demo: React.FC = () => {
 					</Card>
 
 					{/* Progress Steps */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Progress Stepper Component</h3>
+							<p className="text-muted-foreground">Horizontal stepper for multi-step processes</p>
+						</CardHeader>
+						<CardContent>
+							<ProgressStepper steps={stepperSteps} />
+						</CardContent>
+					</Card>
+
 					<Card>
 						<CardHeader>
 							<h3 className="text-xl font-semibold">Progress Step Component</h3>

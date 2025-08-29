@@ -75,6 +75,10 @@ export type {
 export { ProgressStep } from "./components/molecules/ProgressStep";
 export type { ProgressStepProps } from "./components/molecules/ProgressStep";
 
+// Molecules - ProgressStepper
+export { ProgressStepper } from "./components/molecules/ProgressStepper";
+export type { ProgressStepperProps, ProgressStepperStep } from "./components/molecules/ProgressStepper";
+
 // Molecules - Dropdown
 export {
   Dropdown,
