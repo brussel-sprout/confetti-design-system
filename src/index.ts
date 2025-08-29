@@ -141,6 +141,10 @@ export type {
   ProgressCategory 
 } from "./components/organisms/ProgressTracker";
 
+// Organisms - ThemeSelectionHeader
+export { ThemeSelectionHeader } from "./components/organisms/ThemeSelectionHeader";
+export type { ThemeSelectionHeaderProps } from "./components/organisms/ThemeSelectionHeader";
+
 // Molecules - ElementCard
 export {
   ElementCard,

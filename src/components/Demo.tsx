@@ -24,6 +24,7 @@ import { ProgressTracker } from './organisms/ProgressTracker'
 import { ProgressBar } from './atoms/ProgressBar'
 import { ProgressStep } from './molecules/ProgressStep'
 import { ProgressStepper } from './molecules/ProgressStepper'
+import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
 import type { PartyOption } from './organisms/PartySelector'
 import type { ProgressCategory } from './organisms/ProgressTracker'
 import type { ProgressStepperStep } from './molecules/ProgressStepper'
@@ -314,6 +315,18 @@ export const Demo: React.FC = () => {
 							</Button>
 						</CardContent>
 					</Card>
+				</section>
+
+				{/* Theme Selection Header Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Theme Selection Header</h2>
+					<div className="border border-border rounded-lg overflow-hidden bg-background p-8">
+						<ThemeSelectionHeader
+							currentStep={2}
+							title="Choose Your Theme"
+							subtitle="Perfect themes for your birthday"
+						/>
+					</div>
 				</section>
 
 				{/* Party Selector Demo */}
