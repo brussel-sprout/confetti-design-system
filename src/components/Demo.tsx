@@ -32,6 +32,45 @@ import type { ProgressCategory } from './organisms/ProgressTracker'
 import type { ProgressStepperStep } from './molecules/ProgressStepper'
 import type { TimelineEvent } from './molecules/TimelineItem'
 
+const sampleTimelineEvents: TimelineEvent[] = [
+	{
+		id: '1',
+		title: 'Setup Decorations',
+		description: 'Hang balloons, streamers, and set up photo booth area',
+		startTime: '14:00',
+		endTime: '15:30',
+		location: 'Main Party Room',
+		attendees: 3,
+		category: 'setup',
+		priority: 'high',
+		assignedTo: ['Sarah', 'Mike'],
+		notes: 'Remember to test the photo booth lighting'
+	},
+	{
+		id: '2',
+		title: 'Guest Arrival',
+		description: 'Welcome guests and direct them to party area',
+		startTime: '16:00',
+		endTime: '16:30',
+		location: 'Front Entrance',
+		attendees: 25,
+		category: 'activity',
+		priority: 'medium',
+		assignedTo: ['Dad', 'Sarah'],
+	},
+	{
+		id: '3',
+		title: 'Birthday Song & Cake',
+		description: 'Sing happy birthday and cut the cake',
+		startTime: '17:30',
+		endTime: '18:00',
+		location: 'Main Party Room',
+		attendees: 25,
+		category: 'meal',
+		priority: 'critical',
+	},
+]
+
 export const Demo: React.FC = () => {
 	const [showProgressTracker, setShowProgressTracker] = React.useState(false)
 	const [progressCategories, setProgressCategories] = React.useState<ProgressCategory[]>([
