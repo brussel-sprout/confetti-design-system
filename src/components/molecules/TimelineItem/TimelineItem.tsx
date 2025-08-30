@@ -15,6 +15,7 @@ export interface TimelineEvent {
 	attendees?: number
 	category: 'setup' | 'activity' | 'meal' | 'cleanup' | 'other'
 	priority: 'low' | 'medium' | 'high' | 'critical'
+	status?: 'pending' | 'in-progress' | 'completed' | 'cancelled'
 	assignedTo?: string[]
 	notes?: string
 }
@@ -25,11 +26,12 @@ export interface TimelineItemProps {
 	isLast?: boolean
 	onEdit?: (event: TimelineEvent) => void
 	onDelete?: (eventId: string) => void
+	onStatusChange?: (eventId: string, status: string) => void
 	className?: string
 }
 
 const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
-	({ event, isFirst = false, isLast = false, onEdit, onDelete, className = '', ...props }, ref) => {
+	({ event, isFirst = false, isLast = false, onEdit, onDelete, onStatusChange, className = '', ...props }, ref) => {
 		const getCategoryColor = (category: TimelineEvent['category']) => {
 			switch (category) {
 				case 'setup':
@@ -58,8 +60,17 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 			}
 		}
 
-		const getStatusIcon = () => {
-			return <Clock className="w-4 h-4 text-muted-foreground" />
+		const getStatusIcon = (status: TimelineEvent['status']) => {
+			switch (status) {
+				case 'completed':
+					return <CheckCircle className="w-4 h-4 text-success" />
+				case 'in-progress':
+					return <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+				case 'cancelled':
+					return <AlertCircle className="w-4 h-4 text-destructive" />
+				default:
+					return <Clock className="w-4 h-4 text-muted-foreground" />
+			}
 		}
 
 		const formatTime = (time: string) => {
@@ -103,7 +114,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 					)}>
 						{formatTime(event.startTime).split(' ')[0]}
 					</div>
-					
+
 					{/* Bottom connector */}
 					{!isLast && (
 						<div className="w-0.5 flex-1 min-h-6 bg-border" />
@@ -210,6 +221,32 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 								<p className="text-xs text-muted-foreground italic">
 									Note: {event.notes}
 								</p>
+							</div>
+						)}
+
+						{/* Status Actions */}
+						{onStatusChange && event.status !== 'completed' && event.status !== 'cancelled' && (
+							<div className="mt-3 pt-3 border-t border-border flex gap-2">
+								{event.status === 'pending' && (
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => onStatusChange(event.id, 'in-progress')}
+										className="text-xs"
+									>
+										Start Task
+									</Button>
+								)}
+								{event.status === 'in-progress' && (
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => onStatusChange(event.id, 'completed')}
+										className="text-xs"
+									>
+										Mark Complete
+									</Button>
+								)}
 							</div>
 						)}
 					</div>
