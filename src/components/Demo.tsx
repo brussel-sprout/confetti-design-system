@@ -320,6 +320,18 @@ export const Demo: React.FC = () => {
 					</Card>
 				</section>
 
+				{/* Event Timeline Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Event Timeline</h2>
+					<EventTimeline
+						events={sampleTimelineEvents}
+						onAddEvent={() => console.log('Add event clicked')}
+						onEditEvent={(event) => console.log('Edit event:', event)}
+						onDeleteEvent={(id) => console.log('Delete event:', id)}
+						onStatusChange={(id, status) => console.log('Status change:', id, status)}
+					/>
+				</section>
+
 				{/* Theme Selection Header Demo */}
 				<section className="space-y-8">
 					<h2 className="text-3xl font-semibold text-foreground">Theme Selection Header</h2>
