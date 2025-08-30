@@ -15,9 +15,9 @@ export interface TimelineEvent {
 	attendees?: number
 	category: 'setup' | 'activity' | 'meal' | 'cleanup' | 'other'
 	priority: 'low' | 'medium' | 'high' | 'critical'
-	status?: 'pending' | 'in-progress' | 'completed' | 'cancelled'
 	assignedTo?: string[]
 	notes?: string
+	status?: 'pending' | 'in-progress' | 'completed' | 'cancelled'
 }
 
 export interface TimelineItemProps {
@@ -26,7 +26,7 @@ export interface TimelineItemProps {
 	isLast?: boolean
 	onEdit?: (event: TimelineEvent) => void
 	onDelete?: (eventId: string) => void
-	onStatusChange?: (eventId: string, status: TimelineEvent['status']) => void
+	onStatusChange?: (eventId: string, status: string) => void
 	className?: string
 }
 
@@ -125,7 +125,10 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 				<div className="flex-1 pb-8">
 					<div className={cn(
 						'bg-background border border-border rounded-xl p-4 transition-all duration-200',
-						'hover:shadow-md hover:border-primary/30'
+						'hover:shadow-md hover:border-primary/30',
+						event.status === 'completed' && 'bg-success/5 border-success/20',
+						event.status === 'in-progress' && 'bg-primary/5 border-primary/20',
+						event.status === 'cancelled' && 'bg-destructive/5 border-destructive/20'
 					)}>
 						{/* Header */}
 						<div className="flex items-start justify-between mb-3">
@@ -200,14 +203,17 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 								</span>
 							)}
 							{event.attendees && (
-								<span className="flex items-center gap-1">
+								<span className={cn(
+									'flex items-center gap-1',
+									'font-semibold text-foreground'
+								)}>
 									<Users className="w-3 h-3" />
 									{event.attendees} people
 								</span>
 							)}
-							{event.assignedTo && event.assignedTo.length > 0 && (
-								<span>
-									Assigned to: {event.assignedTo.join(', ')}
+							{getDuration() && (
+								<span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
+									{getDuration()}
 								</span>
 							)}
 						</div>
@@ -229,19 +235,12 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 										variant="outline"
 										size="sm"
 										onClick={() => onStatusChange(event.id, 'in-progress')}
-										className="text-xs"
+										className={cn(
+											'text-sm text-muted-foreground mb-3',
+											'text-xs'
+										)}
 									>
 										Start Task
-									</Button>
-								)}
-								{event.status === 'in-progress' && (
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={() => onStatusChange(event.id, 'completed')}
-										className="text-xs"
-									>
-										Mark Complete
 									</Button>
 								)}
 							</div>
