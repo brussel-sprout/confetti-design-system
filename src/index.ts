@@ -141,6 +141,14 @@ export type {
   ProgressCategory 
 } from "./components/organisms/ProgressTracker";
 
+// Organisms - EventTimeline
+export { EventTimeline } from "./components/organisms/EventTimeline";
+export type { EventTimelineProps, TimeFilter } from "./components/organisms/EventTimeline";
+
+// Molecules - TimelineItem
+export { TimelineItem } from "./components/molecules/TimelineItem";
+export type { TimelineItemProps, TimelineEvent } from "./components/molecules/TimelineItem";
+
 // Organisms - ThemeSelectionHeader
 export { ThemeSelectionHeader } from "./components/organisms/ThemeSelectionHeader";
 export type { ThemeSelectionHeaderProps } from "./components/organisms/ThemeSelectionHeader";

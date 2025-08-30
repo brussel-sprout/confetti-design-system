@@ -25,9 +25,12 @@ import { ProgressBar } from './atoms/ProgressBar'
 import { ProgressStep } from './molecules/ProgressStep'
 import { ProgressStepper } from './molecules/ProgressStepper'
 import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
+import { EventTimeline } from './organisms/EventTimeline'
+import { TimelineItem } from './molecules/TimelineItem'
 import type { PartyOption } from './organisms/PartySelector'
 import type { ProgressCategory } from './organisms/ProgressTracker'
 import type { ProgressStepperStep } from './molecules/ProgressStepper'
+import type { TimelineEvent } from './molecules/TimelineItem'
 
 export const Demo: React.FC = () => {
 	const [showProgressTracker, setShowProgressTracker] = React.useState(false)
