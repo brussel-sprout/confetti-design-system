@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion'
 import React from 'react'
 
 import { ActionButtons } from './ActionButtons'
@@ -57,11 +56,8 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 	}
 
 	return (
-		<motion.div
-			layout
-			whileHover={{ scale: layout.type === 'list' ? 1.01 : 1.02 }}
-			whileTap={{ scale: 0.98 }}
-			className={`relative overflow-hidden rounded-xl bg-background border border-border hover:border-primary/30 transition-all duration-300 cursor-pointer touch-manipulation group mobile-touch-target w-full max-w-full ${
+		<div
+			className={`relative overflow-hidden rounded-xl bg-background border border-border hover:border-primary/30 transition-all duration-300 cursor-pointer touch-manipulation group mobile-touch-target w-full max-w-full hover-scale ${
 				isSelected
 					? 'ring-1 ring-primary/50 shadow-lg border-primary/30'
 					: 'hover:shadow-lg hover:border-primary/20'
@@ -78,34 +74,21 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 			aria-label={`${mode.type === 'selection' ? 'Select' : 'View'} ${element.element_name}`}
 		>
 			{/* Selection Overlay - Subtle overlay for selected state */}
-			<AnimatePresence>
-				{isSelected && (
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1] pointer-events-none flex flex-col items-center justify-center"
-					>
-						{/* Title Overlay - Centered */}
-						<motion.div
-							initial={{ scale: 0.8, opacity: 0 }}
-							animate={{ y: 0, opacity: 1 }}
-							exit={{ scale: 0.8, opacity: 0 }}
-							transition={{ delay: 0.1, duration: 0.3 }}
-							className="text-center px-4"
-						>
-							<h3 className="text-white font-bold text-xl leading-tight drop-shadow-lg mb-1">
-								{element.element_name}
-							</h3>
-							{element.category && (
-								<p className="text-white/90 text-sm drop-shadow-md">
-									{element.category}
-								</p>
-							)}
-						</motion.div>
-					</motion.div>
-				)}
-			</AnimatePresence>
+			{isSelected && (
+				<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1] pointer-events-none flex flex-col items-center justify-center animate-fade-in">
+					{/* Title Overlay - Centered */}
+					<div className="text-center px-4 animate-bounce-in" style={{ animationDelay: '0.1s' }}>
+						<h3 className="text-white font-bold text-xl leading-tight drop-shadow-lg mb-1">
+							{element.element_name}
+						</h3>
+						{element.category && (
+							<p className="text-white/90 text-sm drop-shadow-md">
+								{element.category}
+							</p>
+						)}
+					</div>
+				</div>
+			)}
 
 			{/* Image Container */}
 			<div className={getImageContainerClass()}>
@@ -139,6 +122,6 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 				onDelete={onDelete}
 				contentVariant={contentVariant}
 			/>
-		</motion.div>
+		</div>
 	)
 }

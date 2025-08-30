@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '../../../utils/cn'
 import { PartyCard } from '../../molecules/PartyCard'
 import { Button } from '../../atoms/Button'
@@ -59,43 +58,26 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 		const canContinue = currentSelectedId && options.find(opt => opt.id === currentSelectedId)?.status === 'active'
 
 		return (
-			<motion.div 
-				ref={ref} 
-				className={cn('min-h-screen bg-background flex flex-col', className)} 
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ duration: 0.3, delay: 0.2, ease: "easeOut" }}
-			>
+			<div ref={ref} className={cn('min-h-screen bg-background flex flex-col animate-fade-in', className)} {...props}>
 				{/* Main Content Container */}
 				<div className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-6 py-12">
 					{/* Header Section */}
-					<motion.div 
-						className="text-center mb-16"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6 }}
-					>
+					<div className="text-center mb-16 animate-slide-in-right">
 						<h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
 							{title}
 						</h1>
 						<p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
 							{subtitle}
 						</p>
-					</motion.div>
+					</div>
 
 					{/* Party Cards Grid */}
-					<motion.div 
-						className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						transition={{ duration: 0.8, delay: 0.2 }}
-					>
+					<div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
 						{options.map((option, index) => (
-							<motion.div
+							<div
 								key={option.id}
-								initial={{ opacity: 0, y: 30 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.6, delay: 0.1 * index }}
+								className="animate-slide-in-right"
+								style={{ animationDelay: `${0.1 * index}s` }}
 							>
 								<PartyCard
 									title={option.title}
@@ -112,25 +94,17 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 											: ''
 									)}
 								/>
-							</motion.div>
+							</div>
 						))}
-					</motion.div>
+					</div>
 				</div>
 
 				{/* Footer Navigation */}
-				<motion.div 
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.6, delay: 0.4 }}
-				>
+				<div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
 					<div className="max-w-7xl mx-auto px-6 py-6">
 						<div className="flex items-center justify-between">
 							{/* Back Button */}
-							<motion.div
-								initial={{ opacity: 0, y: 5 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
-							>
+							<div className="animate-slide-in-left" style={{ animationDelay: '0.1s' }}>
 								<Button
 									variant="ghost"
 									onClick={onBack}
@@ -141,7 +115,7 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 									</svg>
 									Back
 								</Button>
-							</motion.div>
+							</div>
 
 							{/* Status Text */}
 							<div className="hidden md:flex items-center text-muted-foreground">
@@ -156,15 +130,7 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 							</div>
 
 							{/* Continue Button */}
-							<motion.div
-								initial={{ opacity: 0, y: 10 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ 
-									duration: 0.3, 
-									delay: 0.1,
-									ease: "easeOut"
-								}}
-							>
+							<div className="animate-slide-in-right" style={{ animationDelay: '0.1s' }}>
 								<Button
 									onClick={handleContinue}
 									disabled={!canContinue}
@@ -186,8 +152,8 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 							</motion.div>
 						</div>
 					</div>
-				</motion.div>
-			</motion.div>
+				</div>
+			</div>
 		)
 	}
 )

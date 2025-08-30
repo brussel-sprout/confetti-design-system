@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '../../../utils/cn'
 import { ProgressStepper } from '../../molecules/ProgressStepper'
 import type { ProgressStepperStep } from '../../molecules/ProgressStepper'
@@ -53,22 +52,12 @@ const ThemeSelectionHeader = React.forwardRef<HTMLDivElement, ThemeSelectionHead
 		return (
 			<div ref={ref} className={cn('w-full', className)} {...props}>
 				{/* Progress Stepper */}
-				<motion.div
-					className="mb-16"
-					initial={{ opacity: 0, y: -20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.6, ease: 'easeOut' }}
-				>
+				<div className="mb-16 animate-slide-down">
 					<ProgressStepper steps={steps} />
-				</motion.div>
+				</div>
 
 				{/* Main Content */}
-				<motion.div
-					className="text-center space-y-4"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-				>
+				<div className="text-center space-y-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
 					{/* Main Title with Gradient */}
 					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent leading-tight">
 						{title}
@@ -78,7 +67,7 @@ const ThemeSelectionHeader = React.forwardRef<HTMLDivElement, ThemeSelectionHead
 					<p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
 						{subtitle}
 					</p>
-				</motion.div>
+				</div>
 			</div>
 		)
 	}

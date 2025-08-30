@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '../../../utils/cn'
 
 export interface ProgressBarProps {
@@ -66,32 +65,18 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
 						backgroundClasses[variant]
 					)}
 				>
-					<motion.div
+					<div
 						className={cn(
 							'h-full rounded-full transition-colors duration-200',
 							variantClasses[variant],
-							animated && 'relative overflow-hidden'
+							animated && 'relative overflow-hidden transition-all duration-700 ease-out'
 						)}
-						initial={{ width: 0 }}
-						animate={{ width: `${clampedProgress}%` }}
-						transition={{
-							duration: animated ? 0.8 : 0,
-							ease: 'easeOut',
-						}}
+						style={{ width: `${clampedProgress}%` }}
 					>
 						{animated && clampedProgress > 0 && (
-							<motion.div
-								className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-								initial={{ x: '-100%' }}
-								animate={{ x: '100%' }}
-								transition={{
-									duration: 1.5,
-									repeat: Infinity,
-									ease: 'linear',
-								}}
-							/>
+							<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
 						)}
-					</motion.div>
+					</div>
 				</div>
 			</div>
 		)

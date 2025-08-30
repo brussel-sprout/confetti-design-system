@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Check, Clock, AlertCircle, Loader2 } from 'lucide-react'
 import { cn } from '../../../utils/cn'
 import { ProgressBar } from '../../atoms/ProgressBar'
@@ -69,47 +68,33 @@ const ProgressStep = React.forwardRef<HTMLDivElement, ProgressStepProps>(
 			<div ref={ref} className={cn('relative flex gap-4', className)} {...props}>
 				{/* Status Icon */}
 				<div className="flex flex-col items-center">
-					<motion.div
+					<div
 						className={cn(
 							'w-10 h-10 rounded-full border-2 flex items-center justify-center',
-							'transition-all duration-300',
+							'transition-all duration-300 animate-bounce-in',
 							getStatusColor()
 						)}
-						initial={{ scale: 0.8, opacity: 0 }}
-						animate={{ scale: 1, opacity: 1 }}
-						transition={{ duration: 0.3 }}
 					>
-						<AnimatePresence mode="wait">
-							<motion.div
-								key={status}
-								initial={{ scale: 0, rotate: -180 }}
-								animate={{ scale: 1, rotate: 0 }}
-								exit={{ scale: 0, rotate: 180 }}
-								transition={{ duration: 0.2 }}
-							>
-								{getStatusIcon()}
-							</motion.div>
-						</AnimatePresence>
-					</motion.div>
+						<div className="animate-fade-in">
+							{getStatusIcon()}
+						</div>
+					</div>
 
 					{/* Connector Line */}
 					{!isLast && (
-						<motion.div
-							className={cn('w-0.5 h-16 mt-2', getConnectorColor())}
-							initial={{ height: 0 }}
-							animate={{ height: status === 'completed' ? 64 : 32 }}
-							transition={{ duration: 0.5, delay: 0.2 }}
+						<div
+							className={cn('w-0.5 mt-2 transition-all duration-500', getConnectorColor())}
+							style={{ 
+								height: status === 'completed' ? '64px' : '32px',
+								animationDelay: '0.2s'
+							}}
 						/>
 					)}
 				</div>
 
 				{/* Content */}
 				<div className="flex-1 pb-8">
-					<motion.div
-						initial={{ opacity: 0, x: -20 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.3, delay: 0.1 }}
-					>
+					<div className="animate-slide-in-right" style={{ animationDelay: '0.1s' }}>
 						<div className="flex items-center justify-between mb-2">
 							<h3
 								className={cn(
@@ -142,25 +127,18 @@ const ProgressStep = React.forwardRef<HTMLDivElement, ProgressStepProps>(
 						</p>
 
 						{/* Progress Bar for Running Status */}
-						<AnimatePresence>
-							{status === 'running' && (
-								<motion.div
-									initial={{ opacity: 0, height: 0 }}
-									animate={{ opacity: 1, height: 'auto' }}
-									exit={{ opacity: 0, height: 0 }}
-									transition={{ duration: 0.3 }}
-								>
-									<ProgressBar
-										progress={progress}
-										variant="default"
-										size="sm"
-										animated
-										showPercentage
-									/>
-								</motion.div>
-							)}
-						</AnimatePresence>
-					</motion.div>
+						{status === 'running' && (
+							<div className="animate-slide-down">
+								<ProgressBar
+									progress={progress}
+									variant="default"
+									size="sm"
+									animated
+									showPercentage
+								/>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		)

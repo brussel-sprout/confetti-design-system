@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Check, Heart, Trash2 } from 'lucide-react'
 import { cn } from '../../../utils/cn'
 import type { Element } from './types'
@@ -65,12 +64,10 @@ export const ElementContent: React.FC<ElementContentProps> = ({
 			{layout === 'list' && (
 				<div className="flex items-center gap-2 mt-2">
 					{mode === 'selection' && onToggle && (
-						<motion.button
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
+						<button
 							onClick={handleToggle}
 							className={cn(
-								'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200',
+								'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 hover-scale',
 								isSelected
 									? 'bg-primary text-primary-foreground'
 									: 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
@@ -84,16 +81,14 @@ export const ElementContent: React.FC<ElementContentProps> = ({
 							) : (
 								'Select'
 							)}
-						</motion.button>
+						</button>
 					)}
 
 					{mode === 'view' && onToggle && (
-						<motion.button
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
+						<button
 							onClick={handleToggle}
 							className={cn(
-								'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200',
+								'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 hover-scale',
 								isSelected
 									? 'bg-destructive text-destructive-foreground'
 									: 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
@@ -101,19 +96,17 @@ export const ElementContent: React.FC<ElementContentProps> = ({
 						>
 							<Heart className={cn('w-4 h-4', isSelected && 'fill-current')} />
 							{isSelected ? 'Favorited' : 'Favorite'}
-						</motion.button>
+						</button>
 					)}
 
 					{mode === 'edit' && onDelete && (
-						<motion.button
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
+						<button
 							onClick={handleDelete}
-							className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 transition-all duration-200"
+							className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 transition-all duration-200 hover-scale"
 						>
 							<Trash2 className="w-4 h-4" />
 							Delete
-						</motion.button>
+						</button>
 					)}
 				</div>
 			)}

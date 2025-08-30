@@ -164,6 +164,29 @@ body {
 	animation: flipScaleOut 0.2s ease-in;
 }
 
+.animate-pulse-dot {
+	animation: pulseDot 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+	animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.animate-bounce-in {
+	animation: bounceIn 0.4s ease-out;
+}
+
+.animate-slide-in-right {
+	animation: slideInRight 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+	animation: slideInLeft 0.3s ease-out;
+}
+
+.animate-rotate {
+	animation: rotate 2s linear infinite;
+}
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -227,4 +250,94 @@ body {
 		opacity: 0;
 		transform: scale(1);
 	}
+}
+@keyframes pulseDot {
+	0%, 100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.5;
+		transform: scale(1.2);
+	}
+}
+
+@keyframes shimmer {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+@keyframes bounceIn {
+	0% {
+		opacity: 0;
+		transform: scale(0.3);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.05);
+	}
+	70% {
+		transform: scale(0.9);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes slideInRight {
+	0% {
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes slideInLeft {
+	0% {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Hover and interaction utilities */
+.hover-scale {
+	transition: transform 0.2s ease-out;
+}
+
+.hover-scale:hover {
+	transform: scale(1.02);
+}
+
+.hover-scale:active {
+	transform: scale(0.98);
+}
+
+.hover-lift {
+	transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.hover-lift:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }

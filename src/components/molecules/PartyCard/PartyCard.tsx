@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '../../../utils/cn'
 import { Card, CardContent, CardHeader } from '../Card'
 import { Icon } from '../../atoms/Icon'
@@ -26,7 +25,7 @@ const PartyCard = React.forwardRef<HTMLDivElement, PartyCardProps>(
 		const isClickable = isActive && onClick
 
 		const cardClasses = cn(
-			'relative transition-all duration-300 cursor-pointer',
+			'relative transition-all duration-300 cursor-pointer hover-lift',
 			isActive
 				? 'bg-background border-border shadow-lg hover:shadow-xl hover:scale-[1.02]'
 				: 'bg-muted/30 border-muted text-muted-foreground cursor-not-allowed',
@@ -49,41 +48,32 @@ const PartyCard = React.forwardRef<HTMLDivElement, PartyCardProps>(
 			isActive ? 'text-muted-foreground' : 'text-muted-foreground/70'
 		)
 
-		const motionProps = isClickable
-			? {
-					whileHover: { scale: 1.02 },
-					whileTap: { scale: 0.98 },
-					transition: { type: 'spring', stiffness: 300, damping: 20 },
-			  }
-			: {}
 
 		return (
-			<motion.div {...motionProps}>
-				<Card
-					ref={ref}
-					className={cardClasses}
-					onClick={isClickable ? onClick : undefined}
-					{...props}
-				>
-					{badge && (
-						<div className="absolute -top-2 left-4">
-							<StatusBadge variant={badge.variant}>{badge.text}</StatusBadge>
-						</div>
-					)}
+			<Card
+				ref={ref}
+				className={cardClasses}
+				onClick={isClickable ? onClick : undefined}
+				{...props}
+			>
+				{badge && (
+					<div className="absolute -top-2 left-4 animate-slide-in-left">
+						<StatusBadge variant={badge.variant}>{badge.text}</StatusBadge>
+					</div>
+				)}
 
-					<CardHeader className="pt-8 pb-4">
-						<div className={iconContainerClasses}>
-							<Icon name={icon} size="xl" />
-						</div>
-						<h3 className={titleClasses}>{title}</h3>
-						<p className={descriptionClasses}>{description}</p>
-					</CardHeader>
+				<CardHeader className="pt-8 pb-4">
+					<div className={iconContainerClasses}>
+						<Icon name={icon} size="xl" />
+					</div>
+					<h3 className={titleClasses}>{title}</h3>
+					<p className={descriptionClasses}>{description}</p>
+				</CardHeader>
 
-					<CardContent className="pt-0">
-						<FeatureList items={features} variant={isActive ? 'active' : 'inactive'} />
-					</CardContent>
-				</Card>
-			</motion.div>
+				<CardContent className="pt-0">
+					<FeatureList items={features} variant={isActive ? 'active' : 'inactive'} />
+				</CardContent>
+			</Card>
 		)
 	}
 )

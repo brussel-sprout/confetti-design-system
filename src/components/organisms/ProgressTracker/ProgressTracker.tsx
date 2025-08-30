@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { X, Sparkles, CheckCircle } from 'lucide-react'
 import { cn } from '../../../utils/cn'
 import { ProgressStep } from '../../molecules/ProgressStep'
@@ -81,41 +80,31 @@ const ProgressTracker = React.forwardRef<HTMLDivElement, ProgressTrackerProps>(
 		if (!isOpen) return null
 
 		return (
-			<AnimatePresence>
-				<motion.div
-					className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
+			<div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+				<div
+					ref={ref}
+					className={cn(
+						'w-full max-w-2xl max-h-[90vh] overflow-hidden',
+						'bg-background border border-border rounded-2xl shadow-2xl',
+						'animate-scale-in',
+						className
+					)}
+					{...props}
 				>
-					<motion.div
-						ref={ref}
-						className={cn(
-							'w-full max-w-2xl max-h-[90vh] overflow-hidden',
-							'bg-background border border-border rounded-2xl shadow-2xl',
-							className
-						)}
-						initial={{ scale: 0.9, opacity: 0, y: 20 }}
-						animate={{ scale: 1, opacity: 1, y: 0 }}
-						exit={{ scale: 0.9, opacity: 0, y: 20 }}
-						transition={{ duration: 0.3, ease: 'easeOut' }}
-						{...props}
-					>
 						{/* Header */}
 						<div className="p-6 border-b border-border">
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-3">
-									<motion.div
-										className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center"
-										animate={{ rotate: isCompleted ? 0 : 360 }}
-										transition={{ duration: 2, repeat: isCompleted ? 0 : Infinity, ease: 'linear' }}
-									>
+									<div className={cn(
+										'w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center',
+										!isCompleted && 'animate-rotate'
+									)}>
 										{isCompleted ? (
 											<CheckCircle className="w-5 h-5 text-success" />
 										) : (
 											<Sparkles className="w-5 h-5 text-primary" />
 										)}
-									</motion.div>
+									</div>
 									<div>
 										<h2 className="text-xl font-bold text-foreground">{title}</h2>
 										<p className="text-sm text-muted-foreground">{subtitle}</p>
@@ -141,34 +130,24 @@ const ProgressTracker = React.forwardRef<HTMLDivElement, ProgressTrackerProps>(
 							</div>
 
 							{/* Current Activity */}
-							<AnimatePresence mode="wait">
-								<motion.div
-									key={currentActivity}
-									className="mt-3 p-3 bg-muted/30 rounded-lg"
-									initial={{ opacity: 0, y: 10 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, y: -10 }}
-									transition={{ duration: 0.2 }}
-								>
-									<div className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-										<span className="text-sm text-foreground font-medium">
-											{currentActivity || 'Preparing...'}
-										</span>
-									</div>
-								</motion.div>
-							</AnimatePresence>
+							<div className="mt-3 p-3 bg-muted/30 rounded-lg animate-fade-in">
+								<div className="flex items-center gap-2">
+									<div className="w-2 h-2 bg-primary rounded-full animate-pulse-dot" />
+									<span className="text-sm text-foreground font-medium">
+										{currentActivity || 'Preparing...'}
+									</span>
+								</div>
+							</div>
 						</div>
 
 						{/* Progress Steps */}
 						<div className="p-6 max-h-96 overflow-y-auto">
 							<div className="space-y-6">
 								{categories.map((category, categoryIndex) => (
-									<motion.div
+									<div
 										key={category.id}
-										initial={{ opacity: 0, y: 20 }}
-										animate={{ opacity: 1, y: 0 }}
-										transition={{ duration: 0.3, delay: categoryIndex * 0.1 }}
+										className="animate-slide-in-right"
+										style={{ animationDelay: `${categoryIndex * 0.1}s` }}
 									>
 										<div className="mb-4">
 											<h3 className="font-semibold text-foreground mb-2">{category.name}</h3>
@@ -189,19 +168,14 @@ const ProgressTracker = React.forwardRef<HTMLDivElement, ProgressTrackerProps>(
 												))}
 											</div>
 										</div>
-									</motion.div>
+									</div>
 								))}
 							</div>
 						</div>
 
 						{/* Footer */}
 						{isCompleted && (
-							<motion.div
-								className="p-6 border-t border-border bg-success/5"
-								initial={{ opacity: 0, y: 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.3 }}
-							>
+							<div className="p-6 border-t border-border bg-success/5 animate-slide-up">
 								<div className="text-center">
 									<CheckCircle className="w-12 h-12 text-success mx-auto mb-3" />
 									<h3 className="text-lg font-semibold text-success mb-2">Party Created Successfully!</h3>
@@ -212,11 +186,10 @@ const ProgressTracker = React.forwardRef<HTMLDivElement, ProgressTrackerProps>(
 										Continue to Party Dashboard
 									</Button>
 								</div>
-							</motion.div>
+							</div>
 						)}
-					</motion.div>
-				</motion.div>
-			</AnimatePresence>
+				</div>
+			</div>
 		)
 	}
 )
