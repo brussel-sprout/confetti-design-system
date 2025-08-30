@@ -26,7 +26,7 @@ export interface TimelineItemProps {
 	isLast?: boolean
 	onEdit?: (event: TimelineEvent) => void
 	onDelete?: (eventId: string) => void
-	onStatusChange?: (eventId: string, status: string) => void
+	onStatusChange?: (eventId: string, status: TimelineEvent['status']) => void
 	className?: string
 }
 
@@ -114,7 +114,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 					)}>
 						{formatTime(event.startTime).split(' ')[0]}
 					</div>
-
+					
 					{/* Bottom connector */}
 					{!isLast && (
 						<div className="w-0.5 flex-1 min-h-6 bg-border" />
@@ -125,10 +125,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 				<div className="flex-1 pb-8">
 					<div className={cn(
 						'bg-background border border-border rounded-xl p-4 transition-all duration-200',
-						'hover:shadow-md hover:border-primary/30',
-						event.status === 'completed' && 'bg-success/5 border-success/20',
-						event.status === 'in-progress' && 'bg-primary/5 border-primary/20',
-						event.status === 'cancelled' && 'bg-destructive/5 border-destructive/20'
+						'hover:shadow-md hover:border-primary/30'
 					)}>
 						{/* Header */}
 						<div className="flex items-start justify-between mb-3">
