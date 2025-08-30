@@ -328,7 +328,6 @@ export const Demo: React.FC = () => {
 						onAddEvent={() => console.log('Add event clicked')}
 						onEditEvent={(event) => console.log('Edit event:', event)}
 						onDeleteEvent={(id) => console.log('Delete event:', id)}
-						onStatusChange={(id, status) => console.log('Status change:', id, status)}
 					/>
 				</section>
 

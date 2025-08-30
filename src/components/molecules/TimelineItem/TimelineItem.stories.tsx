@@ -44,7 +44,6 @@ const sampleEvent: TimelineEvent = {
 	attendees: 3,
 	category: 'setup',
 	priority: 'high',
-	status: 'pending',
 	assignedTo: ['Sarah', 'Mike'],
 	notes: 'Remember to test the photo booth lighting'
 }
@@ -54,34 +53,30 @@ export const Pending: Story = {
 		event: sampleEvent,
 		onEdit: (event) => console.log('Edit:', event),
 		onDelete: (id) => console.log('Delete:', id),
-		onStatusChange: (id, status) => console.log('Status change:', id, status),
 	},
 }
 
-export const InProgress: Story = {
+export const WithDuration: Story = {
 	args: {
-		event: { ...sampleEvent, status: 'in-progress' },
+		event: { ...sampleEvent, duration: 90, endTime: undefined },
 		onEdit: (event) => console.log('Edit:', event),
 		onDelete: (id) => console.log('Delete:', id),
-		onStatusChange: (id, status) => console.log('Status change:', id, status),
 	},
 }
 
-export const Completed: Story = {
+export const WithNotes: Story = {
 	args: {
-		event: { ...sampleEvent, status: 'completed' },
+		event: { ...sampleEvent, notes: 'This is an important note about the event setup' },
 		onEdit: (event) => console.log('Edit:', event),
 		onDelete: (id) => console.log('Delete:', id),
-		onStatusChange: (id, status) => console.log('Status change:', id, status),
 	},
 }
 
-export const Cancelled: Story = {
+export const HighPriority: Story = {
 	args: {
-		event: { ...sampleEvent, status: 'cancelled' },
+		event: { ...sampleEvent, priority: 'critical' },
 		onEdit: (event) => console.log('Edit:', event),
 		onDelete: (id) => console.log('Delete:', id),
-		onStatusChange: (id, status) => console.log('Status change:', id, status),
 	},
 }
 
@@ -114,7 +109,6 @@ export const MinimalEvent: Story = {
 			startTime: '14:00',
 			category: 'other',
 			priority: 'low',
-			status: 'pending',
 		},
 	},
 }

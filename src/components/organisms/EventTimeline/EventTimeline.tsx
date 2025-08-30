@@ -68,11 +68,6 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 					return false
 				}
 
-				// Status filter
-				if (filters.status && filters.status !== 'all' && event.status !== filters.status) {
-					return false
-				}
-
 				// Priority filter
 				if (filters.priority && filters.priority !== 'all' && event.priority !== filters.priority) {
 					return false
@@ -94,9 +89,9 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 		// Calculate timeline stats
 		const stats = useMemo(() => {
 			const total = events.length
-			const completed = events.filter(e => e.status === 'completed').length
-			const inProgress = events.filter(e => e.status === 'in-progress').length
-			const pending = events.filter(e => e.status === 'pending').length
+			const setupEvents = events.filter(e => e.category === 'setup').length
+			const activityEvents = events.filter(e => e.category === 'activity').length
+			const mealEvents = events.filter(e => e.category === 'meal').length
 			const totalDuration = events.reduce((acc, event) => {
 				if (event.duration) return acc + event.duration
 				if (event.endTime) {
@@ -107,7 +102,7 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 				return acc + 30 // Default 30 minutes
 			}, 0)
 
-			return { total, completed, inProgress, pending, totalDuration }
+			return { total, setupEvents, activityEvents, mealEvents, totalDuration }
 		}, [events])
 
 		const handleFilterChange = (key: keyof TimeFilter, value: string) => {
@@ -116,6 +111,10 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 
 		const clearSearch = () => {
 			setSearchQuery('')
+		}
+
+		const handlePrint = () => {
+			window.print()
 		}
 
 		return (
@@ -127,12 +126,22 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 							<h2 className="text-2xl font-bold text-foreground">{title}</h2>
 							<p className="text-muted-foreground">{subtitle}</p>
 						</div>
-						{showAddButton && onAddEvent && (
-							<Button onClick={onAddEvent} className="flex items-center gap-2">
-								<Plus className="w-4 h-4" />
-								Add Event
-							</Button>
-						)}
+						<div className="flex items-center gap-3">
+							{showPrintButton && (
+								<Button variant="outline" onClick={handlePrint} className="flex items-center gap-2">
+									<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+									</svg>
+									Print Schedule
+								</Button>
+							)}
+							{showAddButton && onAddEvent && (
+								<Button onClick={onAddEvent} className="flex items-center gap-2">
+									<Plus className="w-4 h-4" />
+									Add Event
+								</Button>
+							)}
+						</div>
 					</div>
 
 					{/* Stats Cards */}
@@ -145,20 +154,20 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 						</Card>
 						<Card className="p-4">
 							<div className="text-center">
-								<div className="text-2xl font-bold text-success">{stats.completed}</div>
-								<div className="text-sm text-muted-foreground">Completed</div>
+								<div className="text-2xl font-bold text-info">{stats.setupEvents}</div>
+								<div className="text-sm text-muted-foreground">Setup Tasks</div>
 							</div>
 						</Card>
 						<Card className="p-4">
 							<div className="text-center">
-								<div className="text-2xl font-bold text-primary">{stats.inProgress}</div>
-								<div className="text-sm text-muted-foreground">In Progress</div>
+								<div className="text-2xl font-bold text-primary">{stats.activityEvents}</div>
+								<div className="text-sm text-muted-foreground">Activities</div>
 							</div>
 						</Card>
 						<Card className="p-4">
 							<div className="text-center">
-								<div className="text-2xl font-bold text-foreground">{Math.round(stats.totalDuration / 60)}h</div>
-								<div className="text-sm text-muted-foreground">Total Time</div>
+								<div className="text-2xl font-bold text-warning">{stats.mealEvents}</div>
+								<div className="text-sm text-muted-foreground">Meals</div>
 							</div>
 						</Card>
 					</div>
@@ -192,19 +201,6 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 												{ value: 'meal', label: 'Meal' },
 												{ value: 'cleanup', label: 'Cleanup' },
 												{ value: 'other', label: 'Other' },
-											]}
-											size="sm"
-										/>
-										<Select
-											placeholder="Status"
-											value={filters.status}
-											onChange={(e) => handleFilterChange('status', e.target.value)}
-											options={[
-												{ value: 'all', label: 'All Status' },
-												{ value: 'pending', label: 'Pending' },
-												{ value: 'in-progress', label: 'In Progress' },
-												{ value: 'completed', label: 'Completed' },
-												{ value: 'cancelled', label: 'Cancelled' },
 											]}
 											size="sm"
 										/>
@@ -259,9 +255,6 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 									isLast={index === filteredEvents.length - 1}
 									onEdit={onEditEvent}
 									onDelete={onDeleteEvent}
-									onStatusChange={onStatusChange}
-									className="animate-fade-in"
-									style={{ animationDelay: `${index * 0.05}s` }}
 								/>
 							))}
 						</div>
@@ -275,33 +268,8 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 							<div className="text-muted-foreground">
 								Showing {filteredEvents.length} of {events.length} events
 							</div>
-							<div className="flex items-center gap-4">
-								{onStatusChange && (
-									<>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => {
-												const pendingEvents = filteredEvents.filter(e => e.status === 'pending')
-												pendingEvents.forEach(e => onStatusChange(e.id, 'in-progress'))
-											}}
-											disabled={!filteredEvents.some(e => e.status === 'pending')}
-										>
-											Start All Pending
-										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => {
-												const inProgressEvents = filteredEvents.filter(e => e.status === 'in-progress')
-												inProgressEvents.forEach(e => onStatusChange(e.id, 'completed'))
-											}}
-											disabled={!filteredEvents.some(e => e.status === 'in-progress')}
-										>
-											Complete All
-										</Button>
-									</>
-								)}
+							<div className="text-muted-foreground">
+								Total Duration: {Math.round(stats.totalDuration / 60)}h {stats.totalDuration % 60}m
 							</div>
 						</div>
 					</Card>

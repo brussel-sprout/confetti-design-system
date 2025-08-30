@@ -33,7 +33,6 @@ const sampleEvents: TimelineEvent[] = [
 		attendees: 3,
 		category: 'setup',
 		priority: 'high',
-		status: 'completed',
 		assignedTo: ['Sarah', 'Mike'],
 		notes: 'Remember to test the photo booth lighting'
 	},
@@ -46,7 +45,6 @@ const sampleEvents: TimelineEvent[] = [
 		location: 'Kitchen',
 		category: 'meal',
 		priority: 'critical',
-		status: 'in-progress',
 		assignedTo: ['Mom'],
 	},
 	{
@@ -59,7 +57,6 @@ const sampleEvents: TimelineEvent[] = [
 		attendees: 25,
 		category: 'activity',
 		priority: 'medium',
-		status: 'pending',
 		assignedTo: ['Dad', 'Sarah'],
 	},
 	{
@@ -72,7 +69,6 @@ const sampleEvents: TimelineEvent[] = [
 		attendees: 25,
 		category: 'activity',
 		priority: 'medium',
-		status: 'pending',
 		notes: 'Have backup indoor games ready in case of rain'
 	},
 	{
@@ -85,7 +81,6 @@ const sampleEvents: TimelineEvent[] = [
 		attendees: 25,
 		category: 'meal',
 		priority: 'critical',
-		status: 'pending',
 	},
 	{
 		id: '6',
@@ -97,7 +92,6 @@ const sampleEvents: TimelineEvent[] = [
 		attendees: 25,
 		category: 'activity',
 		priority: 'medium',
-		status: 'pending',
 	},
 	{
 		id: '7',
@@ -109,7 +103,6 @@ const sampleEvents: TimelineEvent[] = [
 		attendees: 5,
 		category: 'cleanup',
 		priority: 'low',
-		status: 'pending',
 		assignedTo: ['Everyone'],
 	},
 ]
@@ -120,7 +113,6 @@ export const Default: Story = {
 		onAddEvent: () => console.log('Add event clicked'),
 		onEditEvent: (event) => console.log('Edit event:', event),
 		onDeleteEvent: (id) => console.log('Delete event:', id),
-		onStatusChange: (id, status) => console.log('Status change:', id, status),
 	},
 }
 
@@ -128,12 +120,6 @@ export const Interactive: Story = {
 	render: () => {
 		const InteractiveTimeline = () => {
 			const [events, setEvents] = useState<TimelineEvent[]>(sampleEvents)
-
-			const handleStatusChange = (eventId: string, newStatus: TimelineEvent['status']) => {
-				setEvents(prev => prev.map(event => 
-					event.id === eventId ? { ...event, status: newStatus } : event
-				))
-			}
 
 			const handleDeleteEvent = (eventId: string) => {
 				setEvents(prev => prev.filter(event => event.id !== eventId))
@@ -146,7 +132,6 @@ export const Interactive: Story = {
 						onAddEvent={() => console.log('Add event clicked')}
 						onEditEvent={(event) => console.log('Edit event:', event)}
 						onDeleteEvent={handleDeleteEvent}
-						onStatusChange={handleStatusChange}
 					/>
 				</div>
 			)
@@ -177,7 +162,6 @@ export const FilteredView: Story = {
 		onAddEvent: () => console.log('Add event clicked'),
 		onEditEvent: (event) => console.log('Edit event:', event),
 		onDeleteEvent: (id) => console.log('Delete event:', id),
-		onStatusChange: (id, status) => console.log('Status change:', id, status),
 	},
 }
 
