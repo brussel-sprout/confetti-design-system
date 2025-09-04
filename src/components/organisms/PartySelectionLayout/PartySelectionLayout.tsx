@@ -71,7 +71,6 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 						</p>
 					</div>
 
-					</div>
 					<div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
 						{options.map((option, index) => (
 							<div
@@ -149,7 +148,7 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
 									</svg>
 								</Button>
-							</motion.div>
+							</div>
 						</div>
 					</div>
 				</div>
