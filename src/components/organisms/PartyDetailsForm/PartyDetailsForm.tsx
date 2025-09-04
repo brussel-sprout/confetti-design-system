@@ -296,8 +296,6 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 
 				{/* Mega Menu Form */}
 				{isOpen && (
-					)
-					}
 					<div
 						ref={formRef}
 						className={cn(
