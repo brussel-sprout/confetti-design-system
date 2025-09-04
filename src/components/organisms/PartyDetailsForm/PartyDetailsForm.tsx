@@ -393,7 +393,6 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							</div>
 						</form>
 					</div>
-				)}
 			</div>
 		)
 	}
