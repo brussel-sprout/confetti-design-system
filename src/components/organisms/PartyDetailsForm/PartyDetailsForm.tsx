@@ -296,6 +296,8 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 
 				{/* Mega Menu Form */}
 				{isOpen && (
+					)
+					}
 					<div
 						ref={formRef}
 						className={cn(
@@ -401,3 +403,4 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 PartyDetailsForm.displayName = 'PartyDetailsForm'
 
 export { PartyDetailsForm }
+)
