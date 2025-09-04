@@ -30,12 +30,12 @@ export interface PartySelectionLayoutProps {
 const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayoutProps>(({ 
 		title = "What type of party are you planning?",
 		subtitle = "Choose your party type to get personalized themes and recommendations tailored just for you.",
-		options, 
-		selectedId, 
-		onSelect, 
-		onBack, 
-		onContinue, 
-		className = '', 
+		options,
+		selectedId,
+		onSelect,
+		onBack,
+		onContinue,
+		className = '',
 		...props 
 	}, ref) => {
 		const [internalSelectedId, setInternalSelectedId] = useState<string | undefined>(selectedId)
