@@ -84,6 +84,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					}
 				}, 100)
 			}
+		}, [isOpen, internalFocusField, focusField])
 
 		// Handle click outside to close
 		React.useEffect(() => {
@@ -154,7 +155,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				setClickOrigin({ x: buttonCenterX, y: buttonCenterY })
 			}
 			
-			setFocusField(field)
+			setInternalFocusField(field)
 			setIsOpen(true)
 			
 			// Clear the opening flag after a short delay
