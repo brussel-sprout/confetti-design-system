@@ -84,7 +84,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					}
 				}, 100)
 			}
-		}, [isOpen, internalFocusField, focusField])
+		}, [isOpen, focusField, internalFocusField])
 
 		// Handle click outside to close
 		React.useEffect(() => {
