@@ -20,9 +20,136 @@ import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
 import { PartyCard } from './molecules/PartyCard'
 import { PartySelector } from './organisms/PartySelector'
 import { PartySelectionLayout } from './organisms/PartySelectionLayout'
+import { ProgressTracker } from './organisms/ProgressTracker'
+import { ProgressBar } from './atoms/ProgressBar'
+import { ProgressStep } from './molecules/ProgressStep'
+import { ProgressStepper } from './molecules/ProgressStepper'
+import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
+import { EventTimeline } from './organisms/EventTimeline'
+import { TimelineItem } from './molecules/TimelineItem'
 import type { PartyOption } from './organisms/PartySelector'
+import type { ProgressCategory } from './organisms/ProgressTracker'
+import type { ProgressStepperStep } from './molecules/ProgressStepper'
+import type { TimelineEvent } from './molecules/TimelineItem'
+
+const sampleTimelineEvents: TimelineEvent[] = [
+	{
+		id: '1',
+		title: 'Setup Decorations',
+		description: 'Hang balloons, streamers, and set up photo booth area',
+		startTime: '14:00',
+		endTime: '15:30',
+		location: 'Main Party Room',
+		attendees: 3,
+		category: 'setup',
+		priority: 'high',
+		assignedTo: ['Sarah', 'Mike'],
+		notes: 'Remember to test the photo booth lighting'
+	},
+	{
+		id: '2',
+		title: 'Guest Arrival',
+		description: 'Welcome guests and direct them to party area',
+		startTime: '16:00',
+		endTime: '16:30',
+		location: 'Front Entrance',
+		attendees: 25,
+		category: 'activity',
+		priority: 'medium',
+		assignedTo: ['Dad', 'Sarah'],
+	},
+	{
+		id: '3',
+		title: 'Birthday Song & Cake',
+		description: 'Sing happy birthday and cut the cake',
+		startTime: '17:30',
+		endTime: '18:00',
+		location: 'Main Party Room',
+		attendees: 25,
+		category: 'meal',
+		priority: 'critical',
+	},
+]
 
 export const Demo: React.FC = () => {
+	const [showProgressTracker, setShowProgressTracker] = React.useState(false)
+	const [progressCategories, setProgressCategories] = React.useState<ProgressCategory[]>([
+		{
+			id: 'theme-analysis',
+			name: 'Theme Analysis & Customization',
+			status: 'pending',
+			steps: [
+				{
+					id: 'analyze-preferences',
+					title: 'Analyzing Preferences',
+					description: 'Processing your party style and theme preferences',
+					status: 'pending',
+					progress: 0,
+					estimatedTime: '30 sec',
+				},
+				{
+					id: 'customize-theme',
+					title: 'Customizing Theme',
+					description: 'Tailoring the theme to match your vision',
+					status: 'pending',
+					progress: 0,
+					estimatedTime: '45 sec',
+				},
+			],
+		},
+		{
+			id: 'element-generation',
+			name: 'Element Generation & AI Creation',
+			status: 'pending',
+			steps: [
+				{
+					id: 'generate-elements',
+					title: 'Generating Elements',
+					description: 'Creating personalized party elements and decorations',
+					status: 'pending',
+					progress: 0,
+					estimatedTime: '2 min',
+				},
+				{
+					id: 'ai-images',
+					title: 'AI Image Creation',
+					description: 'Generating custom images for your party theme',
+					status: 'pending',
+					progress: 0,
+					estimatedTime: '1 min',
+				},
+			],
+		},
+	])
+
+	const stepperSteps: ProgressStepperStep[] = [
+		{
+			id: 'party-type',
+			label: 'Party Type',
+			status: 'completed',
+		},
+		{
+			id: 'theme',
+			label: 'Theme',
+			status: 'current',
+		},
+		{
+			id: 'elements',
+			label: 'Elements',
+			status: 'upcoming',
+		},
+		{
+			id: 'details',
+			label: 'Details',
+			status: 'upcoming',
+		},
+		{
+			id: 'review',
+			label: 'Review',
+			status: 'upcoming',
+		},
+	]
+
 	const partyOptions: PartyOption[] = [
 		{
 			id: 'birthday',
@@ -77,6 +204,60 @@ export const Demo: React.FC = () => {
 		}
 	]
 
+	// Simulate progress updates
+	React.useEffect(() => {
+		if (!showProgressTracker) return
+
+		const interval = setInterval(() => {
+			setProgressCategories(prev => {
+				const newCategories = [...prev]
+				
+				// Find the first running or pending step
+				for (let catIndex = 0; catIndex < newCategories.length; catIndex++) {
+					const category = newCategories[catIndex]
+					for (let stepIndex = 0; stepIndex < category.steps.length; stepIndex++) {
+						const step = category.steps[stepIndex]
+						
+						if (step.status === 'running') {
+							// Increment progress
+							if (step.progress < 100) {
+								step.progress = Math.min(100, step.progress + 8)
+							} else {
+								// Mark as completed and move to next
+								step.status = 'completed'
+								step.progress = 100
+								
+								// Start next step
+								const nextStepIndex = stepIndex + 1
+								if (nextStepIndex < category.steps.length) {
+									category.steps[nextStepIndex].status = 'running'
+								} else {
+									// Mark category as completed and start next category
+									category.status = 'completed'
+									const nextCatIndex = catIndex + 1
+									if (nextCatIndex < newCategories.length) {
+										newCategories[nextCatIndex].status = 'running'
+										newCategories[nextCatIndex].steps[0].status = 'running'
+									}
+								}
+							}
+							return newCategories
+						} else if (step.status === 'pending' && catIndex === 0 && stepIndex === 0) {
+							// Start the first step
+							step.status = 'running'
+							category.status = 'running'
+							return newCategories
+						}
+					}
+				}
+				
+				return newCategories
+			})
+		}, 600)
+
+		return () => clearInterval(interval)
+	}, [showProgressTracker])
+
 	return (
 		<div className="min-h-screen bg-background p-8">
 			<div className="max-w-6xl mx-auto space-y-12">
@@ -87,6 +268,119 @@ export const Demo: React.FC = () => {
 						A comprehensive component library for the Confetti application
 					</p>
 				</div>
+
+				{/* Progress Components Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Progress Components</h2>
+
+					{/* Progress Bars */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Progress Bar Component</h3>
+							<p className="text-muted-foreground">Animated progress bars with multiple variants</p>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							<div className="space-y-4">
+								<ProgressBar progress={75} variant="default" label="Party Setup" showPercentage />
+								<ProgressBar progress={100} variant="success" label="Theme Analysis" showPercentage />
+								<ProgressBar progress={45} variant="warning" label="Vendor Search" showPercentage />
+								<ProgressBar progress={25} variant="error" label="Payment Processing" showPercentage />
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* Progress Steps */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Progress Stepper Component</h3>
+							<p className="text-muted-foreground">Horizontal stepper for multi-step processes</p>
+						</CardHeader>
+						<CardContent>
+							<ProgressStepper steps={stepperSteps} />
+						</CardContent>
+					</Card>
+
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Progress Step Component</h3>
+							<p className="text-muted-foreground">Individual progress steps with status indicators</p>
+						</CardHeader>
+						<CardContent>
+							<div className="space-y-4">
+								<ProgressStep
+									title="Theme Analysis"
+									description="Analyzing your party preferences and style choices"
+									status="completed"
+								/>
+								<ProgressStep
+									title="AI Image Generation"
+									description="Creating personalized decorations and elements"
+									status="running"
+									progress={65}
+									estimatedTime="2 min"
+								/>
+								<ProgressStep
+									title="Vendor Recommendations"
+									description="Finding the best local suppliers"
+									status="pending"
+									estimatedTime="1 min"
+									isLast
+								/>
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* Progress Tracker Demo */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Progress Tracker Modal</h3>
+							<p className="text-muted-foreground">Complete progress tracking experience</p>
+						</CardHeader>
+						<CardContent>
+							<Button
+								onClick={() => {
+									setShowProgressTracker(true)
+									// Reset progress
+									setProgressCategories(prev => prev.map(cat => ({
+										...cat,
+										status: 'pending',
+										steps: cat.steps.map(step => ({
+											...step,
+											status: 'pending',
+											progress: 0,
+										}))
+									})))
+								}}
+								className="w-full"
+							>
+								Start Party Creation Demo
+							</Button>
+						</CardContent>
+					</Card>
+				</section>
+
+				{/* Event Timeline Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Event Timeline</h2>
+					<EventTimeline
+						events={sampleTimelineEvents}
+						onAddEvent={() => console.log('Add event clicked')}
+						onEditEvent={(event) => console.log('Edit event:', event)}
+						onDeleteEvent={(id) => console.log('Delete event:', id)}
+					/>
+				</section>
+
+				{/* Theme Selection Header Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">Theme Selection Header</h2>
+					<div className="border border-border rounded-lg overflow-hidden bg-background p-8">
+						<ThemeSelectionHeader
+							currentStep={2}
+							title="Choose Your Theme"
+							subtitle="Perfect themes for your birthday"
+						/>
+					</div>
+				</section>
 
 				{/* Party Selector Demo */}
 				<section className="space-y-8">
@@ -453,6 +747,19 @@ export const Demo: React.FC = () => {
 					<p>Confetti Design System v0.1.0</p>
 					<p className="text-sm mt-2">Built with React, TypeScript, and Tailwind CSS</p>
 				</footer>
+
+				{/* Progress Tracker Modal */}
+				<ProgressTracker
+					isOpen={showProgressTracker}
+					categories={progressCategories}
+					onClose={() => setShowProgressTracker(false)}
+					onComplete={() => {
+						console.log('Party creation completed!')
+						setTimeout(() => setShowProgressTracker(false), 3000)
+					}}
+					title="Creating Your Dream Party"
+					subtitle="Our AI is working behind the scenes to make your party perfect"
+				/>
 			</div>
 		</div>
 	)

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@storybook/test'
+import { fireEvent, render, screen, act } from '@storybook/test'
 import { describe, expect, it, vi } from 'vitest'
 
 import { Button } from './Button'
@@ -56,7 +56,9 @@ describe('Button', () => {
 		const handleClick = vi.fn()
 		render(<Button onClick={handleClick}>Click me</Button>)
 
-		fireEvent.click(screen.getByRole('button'))
+		act(() => {
+			fireEvent.click(screen.getByRole('button'))
+		})
 		expect(handleClick).toHaveBeenCalledTimes(1)
 	})
 
@@ -68,7 +70,9 @@ describe('Button', () => {
 			</Button>
 		)
 
-		fireEvent.click(screen.getByRole('button'))
+		act(() => {
+			fireEvent.click(screen.getByRole('button'))
+		})
 		expect(handleClick).not.toHaveBeenCalled()
 	})
 
@@ -80,7 +84,9 @@ describe('Button', () => {
 			</Button>
 		)
 
-		fireEvent.click(screen.getByRole('button'))
+		act(() => {
+			fireEvent.click(screen.getByRole('button'))
+		})
 		expect(handleClick).not.toHaveBeenCalled()
 	})
 

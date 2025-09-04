@@ -22,16 +22,15 @@
 		"test": "vitest",
 		"test:ui": "vitest --ui",
 		"type-check": "tsc --noEmit",
-    "postinstall": "npx tsc"
+		"postinstall": "npx tsc"
 	},
 	"dependencies": {
 		"clsx": "2.1.0",
-		"framer-motion": "12.12.2",
 		"lucide-react": "0.511.0",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"tailwind-merge": "2.5.4",
-    "typescript": "5.8.3"
+		"typescript": "5.8.3"
 	},
 	"devDependencies": {
 		"@storybook/addon-essentials": "8.6.14",

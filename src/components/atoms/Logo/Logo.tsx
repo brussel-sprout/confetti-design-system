@@ -62,7 +62,7 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
 			>
 				{iconElement}
 				{variant !== 'minimal' && (
-					<span className={cn('text-foreground', currentSize.text)}>Party Planner</span>
+					<span className={cn('text-foreground hidden sm:inline', currentSize.text)}>Party Planner</span>
 				)}
 			</div>
 		)

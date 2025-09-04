@@ -1,10 +1,8 @@
-import { motion } from 'framer-motion'
 import React from 'react'
-import type { HTMLMotionProps } from 'framer-motion'
 
 import { cn } from '../../../utils/cn'
 
-export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart' | 'onAnimationEnd' | 'onAnimationIteration'> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive'
 	size?: 'sm' | 'md' | 'lg'
 	children: React.ReactNode
@@ -34,7 +32,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			'disabled:opacity-50 disabled:cursor-not-allowed',
 			'rounded-lg backdrop-blur-sm',
 			'border-2',
-			'cursor-pointer'
+			'cursor-pointer hover-scale'
 		)
 
 		const sizeClasses = {
@@ -78,22 +76,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className)
 
-		const motionProps = {
-			ref,
-			className: classes,
-			disabled: disabled || loading,
-			whileHover: !disabled && !loading ? { scale: 1.02 } : {},
-			whileTap: !disabled && !loading ? { scale: 0.98 } : {},
-			...props,
-		}
-
 		return (
-			<motion.button {...motionProps}>
+			<button
+				ref={ref}
+				className={classes}
+				disabled={disabled || loading}
+				{...props}
+			>
 				{loading && (
 					<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
 				)}
 				{children}
-			</motion.button>
+			</button>
 		)
 	}
 )

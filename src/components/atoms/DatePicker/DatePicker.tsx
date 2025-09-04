@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '../../../utils/cn'
 
 export interface DatePickerProps {
@@ -232,14 +231,12 @@ const Calendar: React.FC<CalendarProps> = ({
 					const currentMonthDate = isCurrentMonth(date)
 
 					return (
-						<motion.button
+						<button
 							key={index}
 							onClick={() => handleDateClick(date)}
 							disabled={disabled}
-							whileHover={!disabled ? { scale: 1.05 } : {}}
-							whileTap={!disabled ? { scale: 0.95 } : {}}
 							className={cn(
-								'p-2 text-sm rounded-lg transition-all duration-200 relative',
+								'p-2 text-sm rounded-lg transition-all duration-200 relative hover-scale',
 								'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1',
 								currentMonthDate ? 'text-foreground' : 'text-muted-foreground',
 								selected && 'bg-primary text-primary-foreground font-semibold',
@@ -254,7 +251,7 @@ const Calendar: React.FC<CalendarProps> = ({
 							{todayDate && !selected && (
 								<div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full" />
 							)}
-						</motion.button>
+						</button>
 					)
 				})}
 			</div>
@@ -364,19 +361,16 @@ const Calendar: React.FC<CalendarProps> = ({
 	}
 
 	return (
-		<motion.div
+		<div
 			ref={calendarRef}
-			initial={{ opacity: 0, y: 10 }}
-			animate={{ opacity: 1, y: 0 }}
-			exit={{ opacity: 0, y: 10 }}
-			className="bg-background border border-border rounded-xl shadow-lg p-4 w-80"
+			className="bg-background border border-border rounded-xl shadow-lg p-4 w-80 animate-scale-in"
 			role="dialog"
 			aria-label="Date picker"
 		>
 			{viewMode === 'days' && renderDaysView()}
 			{viewMode === 'months' && renderMonthsView()}
 			{viewMode === 'years' && renderYearsView()}
-		</motion.div>
+		</div>
 	)
 }
 
@@ -541,19 +535,17 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 						</div>
 					</div>
 
-					<AnimatePresence>
-						{isOpen && (
-							<div className="absolute top-full left-0 z-50 mt-2">
-								<Calendar
-									selectedDate={internalValue || undefined}
-									onDateSelect={handleDateSelect}
-									minDate={minDate}
-									maxDate={maxDate}
-									onClose={() => setIsOpen(false)}
-								/>
-							</div>
-						)}
-					</AnimatePresence>
+					{isOpen && (
+						<div className="absolute top-full left-0 z-50 mt-2">
+							<Calendar
+								selectedDate={internalValue || undefined}
+								onDateSelect={handleDateSelect}
+								minDate={minDate}
+								maxDate={maxDate}
+								onClose={() => setIsOpen(false)}
+							/>
+						</div>
+					)}
 				</div>
 
 				{error && <p className="mt-1 text-sm text-destructive">{error}</p>}

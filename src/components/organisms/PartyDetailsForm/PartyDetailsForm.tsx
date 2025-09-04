@@ -16,18 +16,19 @@ export interface PartyDetails {
 export interface PartyDetailsFormProps {
 	partyDetails: PartyDetails
 	onSave: (details: PartyDetails) => void
+	focusField?: 'name' | 'date' | 'time' | 'headCount' | 'address' | null
 	className?: string
 }
 
 type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
-	({ partyDetails, onSave, className = '', ...props }, ref) => {
+	({ partyDetails, onSave, focusField = null, className = '', ...props }, ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [isClosing, setIsClosing] = React.useState(false)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
 		const [clickOrigin, setClickOrigin] = React.useState({ x: 0, y: 0 })
-		const [focusField, setFocusField] = React.useState<EditableField | null>(null)
+		const [internalFocusField, setInternalFocusField] = React.useState<EditableField | null>(null)
 		const [isOpening, setIsOpening] = React.useState(false)
 		const containerRef = React.useRef<HTMLDivElement>(null)
 		const formRef = React.useRef<HTMLDivElement>(null)
@@ -44,12 +45,27 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			setFormData(partyDetails)
 		}, [partyDetails])
 
+		// Handle external focusField prop
+		React.useEffect(() => {
+			if (focusField) {
+				setIsOpening(true)
+				setInternalFocusField(focusField)
+				setIsOpen(true)
+				
+				// Clear the opening flag after a short delay
+				setTimeout(() => {
+					setIsOpening(false)
+				}, 150)
+			}
+		}, [focusField])
+
 		// Focus the appropriate input when form opens
 		React.useEffect(() => {
-			if (isOpen && focusField) {
+			const currentFocusField = focusField || internalFocusField
+			if (isOpen && currentFocusField) {
 				// Small delay to ensure the form is fully rendered
 				setTimeout(() => {
-					switch (focusField) {
+					switch (currentFocusField) {
 						case 'name':
 							nameInputRef.current?.focus()
 							break
@@ -68,7 +84,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					}
 				}, 100)
 			}
-		}, [isOpen, focusField])
+		}, [isOpen, focusField, internalFocusField])
 
 		// Handle click outside to close
 		React.useEffect(() => {
@@ -139,7 +155,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				setClickOrigin({ x: buttonCenterX, y: buttonCenterY })
 			}
 			
-			setFocusField(field)
+			setInternalFocusField(field)
 			setIsOpen(true)
 			
 			// Clear the opening flag after a short delay
@@ -157,10 +173,10 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			setTimeout(() => {
 				setIsOpen(false)
 				setIsClosing(false)
-				setFocusField(null)
+				setInternalFocusField(null)
 				setIsOpening(false)
 				setFormData(partyDetails) // Reset form data
-			}, 200) // Match the animation duration
+			}, 150) // Shorter duration for fade out
 		}
 
 		const handleSave = () => {
@@ -280,16 +296,22 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 
 				{/* Mega Menu Form */}
 				{isOpen && (
+					)
+					}
 					<div
 						ref={formRef}
 						className={cn(
-							'absolute top-full left-0 right-0 mt-2 z-50',
+							'absolute md:absolute fixed md:top-full top-0 left-0 right-0 md:mt-2 mt-0 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
-							'p-6',
-							isClosing ? 'animate-scale-out' : 'animate-scale-in'
+							'p-4 md:p-6',
+							isClosing ? 'animate-scale-out' : 'animate-scale-in',
+							'perspective-1000 md:perspective-1000',
+							'w-full md:max-w-[800px]',
+							'h-screen md:h-auto overflow-y-auto md:overflow-visible',
+							'md:rounded-xl rounded-none'
 						)}
 						style={{
-							transformOrigin: `${clickOrigin.x}px ${clickOrigin.y}px`
+							transformOrigin: window.innerWidth >= 768 ? `${clickOrigin.x}px ${clickOrigin.y}px` : 'center center'
 						}}
 					>
 						<div className="flex items-center justify-between mb-6">
@@ -373,7 +395,6 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							</div>
 						</form>
 					</div>
-				)}
 			</div>
 		)
 	}
@@ -382,3 +403,4 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 PartyDetailsForm.displayName = 'PartyDetailsForm'
 
 export { PartyDetailsForm }
+)

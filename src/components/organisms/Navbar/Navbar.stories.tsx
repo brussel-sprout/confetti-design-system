@@ -115,7 +115,7 @@ export const LoggedInWithPartyDetails: Story = {
 				<NavbarLeft>
 					<Logo size="sm" />
 				</NavbarLeft>
-				<div className="flex-1 max-w-2xl mx-8 min-w-0">
+				<div className="flex-1 mx-8 min-w-0">
 					<PartyDetailsForm
 						partyDetails={samplePartyDetails}
 						onSave={(details) => console.log('Saved:', details)}
@@ -158,7 +158,7 @@ export const LoggedInWithLongPartyDetails: Story = {
 				<NavbarLeft>
 					<Logo size="sm" />
 				</NavbarLeft>
-				<div className="flex-1 max-w-2xl mx-8 min-w-0">
+				<div className="flex-1 mx-8 min-w-0">
 					<PartyDetailsForm
 						partyDetails={longPartyDetails}
 						onSave={(details) => console.log('Saved:', details)}

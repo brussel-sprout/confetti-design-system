@@ -55,6 +55,9 @@ export type {
 export { DatePicker } from "./components/atoms/DatePicker";
 export type { DatePickerProps } from "./components/atoms/DatePicker";
 
+export { ProgressBar } from "./components/atoms/ProgressBar";
+export type { ProgressBarProps } from "./components/atoms/ProgressBar";
+
 // Molecules
 export {
   Card,
@@ -68,6 +71,13 @@ export type {
   CardContentProps,
   CardFooterProps,
 } from "./components/molecules/Card";
+
+export { ProgressStep } from "./components/molecules/ProgressStep";
+export type { ProgressStepProps } from "./components/molecules/ProgressStep";
+
+// Molecules - ProgressStepper
+export { ProgressStepper } from "./components/molecules/ProgressStepper";
+export type { ProgressStepperProps, ProgressStepperStep } from "./components/molecules/ProgressStepper";
 
 // Molecules - Dropdown
 export {
@@ -123,6 +133,40 @@ export type {
 
 export { PartySelectionLayout } from "./components/organisms/PartySelectionLayout";
 export type { PartySelectionLayoutProps } from "./components/organisms/PartySelectionLayout";
+
+export { ProgressTracker } from "./components/organisms/ProgressTracker";
+export type { 
+  ProgressTrackerProps, 
+  ProgressStepData, 
+  ProgressCategory 
+} from "./components/organisms/ProgressTracker";
+
+// Organisms - EventTimeline
+export { EventTimeline } from "./components/organisms/EventTimeline";
+export type { EventTimelineProps, TimeFilter } from "./components/organisms/EventTimeline";
+
+// Molecules - TimelineItem
+export { TimelineItem } from "./components/molecules/TimelineItem";
+export type { TimelineItemProps, TimelineEvent } from "./components/molecules/TimelineItem";
+
+// Organisms - ThemeSelectionHeader
+export { ThemeSelectionHeader } from "./components/organisms/ThemeSelectionHeader";
+export type { ThemeSelectionHeaderProps } from "./components/organisms/ThemeSelectionHeader";
+
+// Molecules - ElementCard
+export {
+  ElementCard,
+  ActionButtons,
+  CategoryBadge,
+  ElementContent,
+  ElementImage,
+} from "./components/molecules/ElementCard";
+export type {
+  ElementCardProps,
+  Element,
+  Layout,
+  Mode,
+} from "./components/molecules/ElementCard";
 
 // Demo
 export { Demo } from "./components/Demo";
