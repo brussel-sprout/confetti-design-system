@@ -16,18 +16,19 @@ export interface PartyDetails {
 export interface PartyDetailsFormProps {
 	partyDetails: PartyDetails
 	onSave: (details: PartyDetails) => void
+	focusField?: 'name' | 'date' | 'time' | 'headCount' | 'address' | null
 	className?: string
 }
 
 type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
-	({ partyDetails, onSave, className = '', ...props }, ref) => {
+	({ partyDetails, onSave, focusField = null, className = '', ...props }, ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [isClosing, setIsClosing] = React.useState(false)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
 		const [clickOrigin, setClickOrigin] = React.useState({ x: 0, y: 0 })
-		const [focusField, setFocusField] = React.useState<EditableField | null>(null)
+		const [internalFocusField, setInternalFocusField] = React.useState<EditableField | null>(null)
 		const [isOpening, setIsOpening] = React.useState(false)
 		const containerRef = React.useRef<HTMLDivElement>(null)
 		const formRef = React.useRef<HTMLDivElement>(null)
@@ -44,12 +45,27 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			setFormData(partyDetails)
 		}, [partyDetails])
 
+		// Handle external focusField prop
+		React.useEffect(() => {
+			if (focusField) {
+				setIsOpening(true)
+				setInternalFocusField(focusField)
+				setIsOpen(true)
+				
+				// Clear the opening flag after a short delay
+				setTimeout(() => {
+					setIsOpening(false)
+				}, 150)
+			}
+		}, [focusField])
+
 		// Focus the appropriate input when form opens
 		React.useEffect(() => {
-			if (isOpen && focusField) {
+			const currentFocusField = focusField || internalFocusField
+			if (isOpen && currentFocusField) {
 				// Small delay to ensure the form is fully rendered
 				setTimeout(() => {
-					switch (focusField) {
+					switch (currentFocusField) {
 						case 'name':
 							nameInputRef.current?.focus()
 							break
@@ -68,7 +84,6 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					}
 				}, 100)
 			}
-		}, [isOpen, focusField])
 
 		// Handle click outside to close
 		React.useEffect(() => {
@@ -157,7 +172,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			setTimeout(() => {
 				setIsOpen(false)
 				setIsClosing(false)
-				setFocusField(null)
+				setInternalFocusField(null)
 				setIsOpening(false)
 				setFormData(partyDetails) // Reset form data
 			}, 150) // Shorter duration for fade out
