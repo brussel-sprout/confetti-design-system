@@ -1,0 +1,14 @@
+{
+  "branch": "bolt",
+  "defaultBranch": "bolt",
+  "repository": {
+    "owner": "brussel-sprout",
+    "name": "confetti-design-system",
+    "branch": "bolt"
+  },
+  "settings": {
+    "autoCommit": true,
+    "commitMessage": "feat: update from bolt.new",
+    "pushToOrigin": true
+  }
+}
