@@ -1,3 +1,4 @@
+@import 'tailwindcss';
 /* CSS Custom Properties for Theme */
 @theme {
 	/* Primary Brand Colors */
@@ -467,6 +468,59 @@ body {
 }
 
 @keyframes modalMobile {
+	from {
+		transform: translateY(100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+/* Drawer animations */
+.animate-drawer-slide-in-left {
+	animation: drawerSlideInLeft 0.3s ease-out;
+}
+
+.animate-drawer-slide-in-right {
+	animation: drawerSlideInRight 0.3s ease-out;
+}
+
+.animate-drawer-slide-in-top {
+	animation: drawerSlideInTop 0.3s ease-out;
+}
+
+.animate-drawer-slide-in-bottom {
+	animation: drawerSlideInBottom 0.3s ease-out;
+}
+
+@keyframes drawerSlideInLeft {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes drawerSlideInRight {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes drawerSlideInTop {
+	from {
+		transform: translateY(-100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+@keyframes drawerSlideInBottom {
 	from {
 		transform: translateY(100%);
 	}

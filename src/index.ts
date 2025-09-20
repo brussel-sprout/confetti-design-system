@@ -58,6 +58,12 @@ export type { DatePickerProps } from "./components/atoms/DatePicker";
 export { ProgressBar } from "./components/atoms/ProgressBar";
 export type { ProgressBarProps } from "./components/atoms/ProgressBar";
 
+export { Modal } from "./components/atoms/Modal";
+export type { ModalProps } from "./components/atoms/Modal";
+
+export { Drawer } from "./components/atoms/Drawer";
+export type { DrawerProps } from "./components/atoms/Drawer";
+
 // Molecules
 export {
   Card,

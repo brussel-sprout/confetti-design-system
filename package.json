@@ -8,17 +8,14 @@
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
 		},
-		"./styles": "./src/styles/base.css"
+		"./styles/base.css": "./src/styles/base.css"
 	},
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"scripts": {
 		"build": "tsc && vite build",
-		"build-storybook": "storybook build",
-		"dev": "npm run storybook",
 		"lint": "eslint src --ext .ts,.tsx",
-		"storybook": "storybook dev -p 6006",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
 		"type-check": "tsc --noEmit",
@@ -30,16 +27,10 @@
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"tailwind-merge": "2.5.4",
+		"tailwindcss": "4.1.5",
 		"typescript": "5.8.3"
 	},
 	"devDependencies": {
-		"@storybook/addon-essentials": "8.6.14",
-		"@storybook/addon-interactions": "8.6.14",
-		"@storybook/addon-links": "8.6.14",
-		"@storybook/blocks": "8.6.14",
-		"@storybook/react": "8.6.14",
-		"@storybook/react-vite": "8.6.14",
-		"@storybook/test": "8.6.14",
 		"@tailwindcss/node": "^4.1.12",
 		"@tailwindcss/vite": "^4.1.12",
 		"@types/react": "19.0.1",
@@ -48,7 +39,6 @@
 		"@typescript-eslint/parser": "^6.21.0",
 		"@vitejs/plugin-react": "4.5.2",
 		"eslint": "^8.57.0",
-		"storybook": "8.6.14",
 		"vite": "6.3.4",
 		"vitest": "3.2.4"
 	},
