@@ -23,7 +23,7 @@ export interface PartyDetailsFormProps {
 type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
-	({ partyDetails, onSave, focusField = null, className = '', ...props }, ref) => {
+	({ partyDetails, onSave, focusField = null, className = '', ...props }) => {
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [isClosing, setIsClosing] = React.useState(false)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
