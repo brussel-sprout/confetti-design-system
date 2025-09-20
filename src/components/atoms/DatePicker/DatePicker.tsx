@@ -15,7 +15,6 @@ export interface DatePickerProps {
 	onChange?: (date: Date | null) => void
 	minDate?: Date
 	maxDate?: Date
-	mode?: 'single' | 'range'
 	className?: string
 	id?: string
 }
@@ -63,7 +62,6 @@ const Calendar: React.FC<CalendarProps> = ({
 	// Generate calendar days
 	const getDaysInMonth = () => {
 		const firstDay = new Date(currentYear, currentMonthIndex, 1)
-		const lastDay = new Date(currentYear, currentMonthIndex + 1, 0)
 		const startDate = new Date(firstDay)
 		startDate.setDate(startDate.getDate() - firstDay.getDay())
 
@@ -419,7 +417,6 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 			onChange,
 			minDate,
 			maxDate,
-			mode = 'single',
 			...props
 		},
 		ref

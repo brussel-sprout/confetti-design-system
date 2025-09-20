@@ -47,7 +47,7 @@ const useDropdown = () => {
 
 // Main Dropdown Container
 const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
-	({ children, className = '', ...props }, ref) => {
+	({ children, className = '', ...props }, _ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
 		const dropdownRef = React.useRef<HTMLDivElement>(null)
 

@@ -3,12 +3,22 @@
 > @repo/confetti-design-system@0.1.0 check:lint /Users/victoria/myrepos/confetti/packages/confetti-design-system
 > run-eslint-workers
 
-
-Oops! Something went wrong! :(
-
-ESLint: 8.57.0
-
-No files matching the pattern "." were found.
-Please check for typing mistakes in the pattern.
-
-[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 2.[39m
+[0m[0m
+[0m[4m/Users/victoria/myrepos/confetti/packages/confetti-design-system/src/components/atoms/DatePicker/DatePicker.tsx[24m[0m
+[0m   [2m66:9[22m  [33mwarning[39m  'lastDay' is assigned a value but never used. Allowed unused vars must match /^_/u  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m422:4[22m  [33mwarning[39m  'mode' is assigned a value but never used. Allowed unused vars must match /^_/u     [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/Users/victoria/myrepos/confetti/packages/confetti-design-system/src/components/molecules/Dropdown/Dropdown.tsx[24m[0m
+[0m  [2m50:43[22m  [33mwarning[39m  'ref' is defined but never used. Allowed unused args must match /^_/u  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/Users/victoria/myrepos/confetti/packages/confetti-design-system/src/components/organisms/Navbar/Navbar.tsx[24m[0m
+[0m  [2m124:53[22m  [33mwarning[39m  'ref' is defined but never used. Allowed unused args must match /^_/u  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/Users/victoria/myrepos/confetti/packages/confetti-design-system/src/components/organisms/PartyDetailsForm/PartyDetailsForm.tsx[24m[0m
+[0m  [2m26:74[22m  [33mwarning[39m  'ref' is defined but never used. Allowed unused args must match /^_/u  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/Users/victoria/myrepos/confetti/packages/confetti-design-system/src/components/organisms/PartySelector/PartySelector.tsx[24m[0m
+[0m  [2m42:9[22m  [33mwarning[39m  'handleContinue' is assigned a value but never used. Allowed unused vars must match /^_/u  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 6 problems (0 errors, 6 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
