@@ -1,7 +1,13 @@
 import React from 'react'
 
-import { Dropdown, DropdownTrigger, DropdownContent, DropdownItem, DropdownDivider } from '../../molecules/Dropdown'
 import { cn } from '../../../utils/cn'
+import {
+	Dropdown,
+	DropdownContent,
+	DropdownDivider,
+	DropdownItem,
+	DropdownTrigger,
+} from '../../molecules/Dropdown'
 
 export interface NavbarProps {
 	children: React.ReactNode
@@ -57,9 +63,7 @@ const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
 				{...props}
 			>
 				<div className="px-4 sm:px-6 lg:px-8">
-					<div className="flex items-center justify-between h-16">
-						{children}
-					</div>
+					<div className="flex items-center justify-between h-16">{children}</div>
 				</div>
 			</nav>
 		)
@@ -108,12 +112,7 @@ const NavbarLink = React.forwardRef<HTMLAnchorElement, NavbarLinkProps>(
 		}
 
 		return (
-			<a
-				ref={ref}
-				href={href}
-				className={cn(variantClasses[variant], className)}
-				{...props}
-			>
+			<a ref={ref} href={href} className={cn(variantClasses[variant], className)} {...props}>
 				{children}
 			</a>
 		)
@@ -137,9 +136,7 @@ const NavbarAccountDropdown = React.forwardRef<HTMLDivElement, NavbarAccountDrop
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
 					</svg>
 				</DropdownTrigger>
-				<DropdownContent>
-					{children}
-				</DropdownContent>
+				<DropdownContent>{children}</DropdownContent>
 			</Dropdown>
 		)
 	}
@@ -148,18 +145,14 @@ const NavbarAccountDropdown = React.forwardRef<HTMLDivElement, NavbarAccountDrop
 // Navbar-specific dropdown item (wrapper around generic DropdownItem)
 const NavbarDropdownItem = React.forwardRef<HTMLButtonElement, NavbarDropdownItemProps>(
 	(props, ref) => {
-		return (
-			<DropdownItem ref={ref} {...props} />
-		)
+		return <DropdownItem ref={ref} {...props} />
 	}
 )
 
 // Navbar-specific dropdown divider (wrapper around generic DropdownDivider)
 const NavbarDropdownDivider = React.forwardRef<HTMLHRElement, NavbarDropdownDividerProps>(
 	(props, ref) => {
-		return (
-			<DropdownDivider ref={ref} {...props} />
-		)
+		return <DropdownDivider ref={ref} {...props} />
 	}
 )
 
@@ -171,12 +164,12 @@ NavbarAccountDropdown.displayName = 'NavbarAccountDropdown'
 NavbarDropdownItem.displayName = 'NavbarDropdownItem'
 NavbarDropdownDivider.displayName = 'NavbarDropdownDivider'
 
-export { 
-	Navbar, 
-	NavbarLeft, 
-	NavbarRight, 
-	NavbarLink, 
+export {
+	Navbar,
+	NavbarLeft,
+	NavbarRight,
+	NavbarLink,
 	NavbarAccountDropdown,
 	NavbarDropdownItem,
-	NavbarDropdownDivider
+	NavbarDropdownDivider,
 }

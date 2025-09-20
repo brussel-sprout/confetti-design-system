@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+
 import { cn } from '../../../utils/cn'
 
 export interface DatePickerProps {
@@ -28,18 +29,28 @@ interface CalendarProps {
 }
 
 const MONTHS = [
-	'January', 'February', 'March', 'April', 'May', 'June',
-	'July', 'August', 'September', 'October', 'November', 'December'
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
 ]
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-const Calendar: React.FC<CalendarProps> = ({ 
-	selectedDate, 
-	onDateSelect, 
-	minDate, 
-	maxDate, 
-	onClose 
+const Calendar: React.FC<CalendarProps> = ({
+	selectedDate,
+	onDateSelect,
+	minDate,
+	maxDate,
+	onClose,
 }) => {
 	const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date())
 	const [viewMode, setViewMode] = useState<'days' | 'months' | 'years'>('days')
@@ -183,7 +194,12 @@ const Calendar: React.FC<CalendarProps> = ({
 					aria-label="Previous month"
 				>
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M15 19l-7-7 7-7"
+						/>
 					</svg>
 				</button>
 
@@ -267,7 +283,12 @@ const Calendar: React.FC<CalendarProps> = ({
 					aria-label="Previous year"
 				>
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M15 19l-7-7 7-7"
+						/>
 					</svg>
 				</button>
 
@@ -319,11 +340,18 @@ const Calendar: React.FC<CalendarProps> = ({
 						aria-label="Previous decade"
 					>
 						<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M15 19l-7-7 7-7"
+							/>
 						</svg>
 					</button>
 
-					<h3 className="font-semibold text-lg">{startYear} - {startYear + 9}</h3>
+					<h3 className="font-semibold text-lg">
+						{startYear} - {startYear + 9}
+					</h3>
 
 					<button
 						onClick={() => {
@@ -448,7 +476,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 			return date.toLocaleDateString('en-US', {
 				year: 'numeric',
 				month: 'short',
-				day: 'numeric'
+				day: 'numeric',
 			})
 		}
 
@@ -524,13 +552,23 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 								aria-label="Clear date"
 							>
 								<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M6 18L18 6M6 6l12 12"
+									/>
 								</svg>
 							</button>
 						)}
 						<div className="text-muted-foreground">
 							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+								/>
 							</svg>
 						</div>
 					</div>

@@ -1,0 +1,14 @@
+
+
+> @repo/confetti-design-system@0.1.0 check:lint /Users/victoria/myrepos/confetti/packages/confetti-design-system
+> run-eslint-workers
+
+
+Oops! Something went wrong! :(
+
+ESLint: 8.57.0
+
+No files matching the pattern "." were found.
+Please check for typing mistakes in the pattern.
+
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 2.[39m

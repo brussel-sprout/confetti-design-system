@@ -104,10 +104,7 @@ const DropdownTrigger = React.forwardRef<HTMLButtonElement, DropdownTriggerProps
 			<button
 				ref={ref}
 				onClick={() => setIsOpen(!isOpen)}
-				className={cn(
-					'focus:outline-none focus:ring-2 focus:ring-primary/20',
-					className
-				)}
+				className={cn('focus:outline-none focus:ring-2 focus:ring-primary/20', className)}
 				{...props}
 			>
 				{children}
@@ -186,9 +183,7 @@ const DropdownItem = React.forwardRef<HTMLButtonElement, DropdownItemProps>(
 // Dropdown Divider
 const DropdownDivider = React.forwardRef<HTMLHRElement, DropdownDividerProps>(
 	({ className = '', ...props }, ref) => {
-		return (
-			<hr ref={ref} className={cn('my-1 border-border', className)} {...props} />
-		)
+		return <hr ref={ref} className={cn('my-1 border-border', className)} {...props} />
 	}
 )
 

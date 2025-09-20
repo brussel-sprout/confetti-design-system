@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react'
-import { Plus, Filter, Calendar, Clock, Users, Search } from 'lucide-react'
+import { Calendar, Plus } from 'lucide-react'
+import React, { useMemo, useState } from 'react'
+
 import { cn } from '../../../utils/cn'
 import { Button } from '../../atoms/Button'
 import { SearchInput } from '../../atoms/SearchInput'
 import { Select } from '../../atoms/Select'
-import { Card, CardContent, CardHeader } from '../../molecules/Card'
+import { Card } from '../../molecules/Card'
 import { TimelineItem } from '../../molecules/TimelineItem'
+
 import type { TimelineEvent } from '../../molecules/TimelineItem'
 
 export interface TimeFilter {
@@ -29,34 +31,36 @@ export interface EventTimelineProps {
 }
 
 const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
-	({
-		events,
-		onAddEvent,
-		onEditEvent,
-		onDeleteEvent,
-		onStatusChange,
-		title = 'Event Timeline',
-		subtitle = 'Manage your party schedule and tasks',
-		showFilters = true,
-		showSearch = true,
-		showAddButton = true,
-		className = '',
-		...props
-	}, ref) => {
+	(
+		{
+			events,
+			onAddEvent,
+			onEditEvent,
+			onDeleteEvent,
+			title = 'Event Timeline',
+			subtitle = 'Manage your party schedule and tasks',
+			showFilters = true,
+			showSearch = true,
+			showAddButton = true,
+			className = '',
+			...props
+		},
+		ref
+	) => {
 		const [searchQuery, setSearchQuery] = useState('')
 		const [filters, setFilters] = useState<TimeFilter>({
 			category: 'all',
 			status: 'all',
-			priority: 'all'
+			priority: 'all',
 		})
 
 		// Filter and sort events
 		const filteredEvents = useMemo(() => {
-			let filtered = events.filter(event => {
+			const filtered = events.filter((event) => {
 				// Search filter
 				if (searchQuery) {
 					const query = searchQuery.toLowerCase()
-					const matchesSearch = 
+					const matchesSearch =
 						event.title.toLowerCase().includes(query) ||
 						event.description?.toLowerCase().includes(query) ||
 						event.location?.toLowerCase().includes(query)
@@ -89,9 +93,9 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 		// Calculate timeline stats
 		const stats = useMemo(() => {
 			const total = events.length
-			const setupEvents = events.filter(e => e.category === 'setup').length
-			const activityEvents = events.filter(e => e.category === 'activity').length
-			const mealEvents = events.filter(e => e.category === 'meal').length
+			const setupEvents = events.filter((e) => e.category === 'setup').length
+			const activityEvents = events.filter((e) => e.category === 'activity').length
+			const mealEvents = events.filter((e) => e.category === 'meal').length
 			const totalDuration = events.reduce((acc, event) => {
 				if (event.duration) return acc + event.duration
 				if (event.endTime) {
@@ -106,7 +110,7 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 		}, [events])
 
 		const handleFilterChange = (key: keyof TimeFilter, value: string) => {
-			setFilters(prev => ({ ...prev, [key]: value }))
+			setFilters((prev) => ({ ...prev, [key]: value }))
 		}
 
 		const clearSearch = () => {
@@ -129,7 +133,12 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 						<div className="flex items-center gap-3">
 							<Button variant="outline" onClick={handlePrint} className="flex items-center gap-2">
 								<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+									/>
 								</svg>
 								Print Schedule
 							</Button>
@@ -230,10 +239,9 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 								<Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
 								<h3 className="text-lg font-semibold text-foreground mb-2">No Events Found</h3>
 								<p className="text-muted-foreground mb-4">
-									{searchQuery || Object.values(filters).some(f => f !== 'all')
+									{searchQuery || Object.values(filters).some((f) => f !== 'all')
 										? 'Try adjusting your search or filters'
-										: 'Start by adding your first event to the timeline'
-									}
+										: 'Start by adding your first event to the timeline'}
 								</p>
 								{showAddButton && onAddEvent && (
 									<Button onClick={onAddEvent} variant="outline">

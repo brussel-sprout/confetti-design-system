@@ -2,35 +2,35 @@ import React from 'react'
 
 import { Badge } from './atoms/Badge'
 import { Button } from './atoms/Button'
-import { Input } from './atoms/Input'
-import { TextInput } from './atoms/TextInput'
-import { EmailInput } from './atoms/EmailInput'
-import { PasswordInput } from './atoms/PasswordInput'
-import { NumberInput } from './atoms/NumberInput'
-import { SearchInput } from './atoms/SearchInput'
-import { TextArea } from './atoms/TextArea'
-import { Select } from './atoms/Select'
 import { Checkbox } from './atoms/Checkbox'
-import { RadioButton } from './atoms/RadioButton'
 import { DatePicker } from './atoms/DatePicker'
-import { Icon } from './atoms/Icon'
-import { StatusBadge } from './atoms/StatusBadge'
+import { EmailInput } from './atoms/EmailInput'
 import { FeatureList } from './atoms/FeatureList'
+import { Icon } from './atoms/Icon'
+import { Input } from './atoms/Input'
+import { NumberInput } from './atoms/NumberInput'
+import { PasswordInput } from './atoms/PasswordInput'
+import { ProgressBar } from './atoms/ProgressBar'
+import { RadioButton } from './atoms/RadioButton'
+import { SearchInput } from './atoms/SearchInput'
+import { Select } from './atoms/Select'
+import { StatusBadge } from './atoms/StatusBadge'
+import { TextArea } from './atoms/TextArea'
+import { TextInput } from './atoms/TextInput'
 import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
 import { PartyCard } from './molecules/PartyCard'
-import { PartySelector } from './organisms/PartySelector'
-import { PartySelectionLayout } from './organisms/PartySelectionLayout'
-import { ProgressTracker } from './organisms/ProgressTracker'
-import { ProgressBar } from './atoms/ProgressBar'
 import { ProgressStep } from './molecules/ProgressStep'
 import { ProgressStepper } from './molecules/ProgressStepper'
-import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
 import { EventTimeline } from './organisms/EventTimeline'
-import { TimelineItem } from './molecules/TimelineItem'
-import type { PartyOption } from './organisms/PartySelector'
-import type { ProgressCategory } from './organisms/ProgressTracker'
+import { PartySelectionLayout } from './organisms/PartySelectionLayout'
+import { PartySelector } from './organisms/PartySelector'
+import { ProgressTracker } from './organisms/ProgressTracker'
+import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
+
 import type { ProgressStepperStep } from './molecules/ProgressStepper'
 import type { TimelineEvent } from './molecules/TimelineItem'
+import type { PartyOption } from './organisms/PartySelector'
+import type { ProgressCategory } from './organisms/ProgressTracker'
 
 const sampleTimelineEvents: TimelineEvent[] = [
 	{
@@ -44,7 +44,7 @@ const sampleTimelineEvents: TimelineEvent[] = [
 		category: 'setup',
 		priority: 'high',
 		assignedTo: ['Sarah', 'Mike'],
-		notes: 'Remember to test the photo booth lighting'
+		notes: 'Remember to test the photo booth lighting',
 	},
 	{
 		id: '2',
@@ -160,13 +160,13 @@ export const Demo: React.FC = () => {
 				'Birthday cake & candles',
 				'Age-appropriate decorations',
 				'Party games & activities',
-				'Photo opportunities'
+				'Photo opportunities',
 			],
 			status: 'active',
 			badge: {
 				text: 'Most Popular',
-				variant: 'popular'
-			}
+				variant: 'popular',
+			},
 		},
 		{
 			id: 'baby-shower',
@@ -177,13 +177,13 @@ export const Demo: React.FC = () => {
 				'Gender reveal options',
 				'Baby-themed decorations',
 				'Gift opening setup',
-				'Keepsake activities'
+				'Keepsake activities',
 			],
 			status: 'inactive',
 			badge: {
 				text: 'Coming Soon',
-				variant: 'coming-soon'
-			}
+				variant: 'coming-soon',
+			},
 		},
 		{
 			id: 'dinner-party',
@@ -194,14 +194,14 @@ export const Demo: React.FC = () => {
 				'Elegant table settings',
 				'Menu planning assistance',
 				'Ambient lighting',
-				'Wine pairing suggestions'
+				'Wine pairing suggestions',
 			],
 			status: 'inactive',
 			badge: {
 				text: 'Coming Soon',
-				variant: 'coming-soon'
-			}
-		}
+				variant: 'coming-soon',
+			},
+		},
 	]
 
 	// Simulate progress updates
@@ -209,15 +209,15 @@ export const Demo: React.FC = () => {
 		if (!showProgressTracker) return
 
 		const interval = setInterval(() => {
-			setProgressCategories(prev => {
+			setProgressCategories((prev) => {
 				const newCategories = [...prev]
-				
+
 				// Find the first running or pending step
 				for (let catIndex = 0; catIndex < newCategories.length; catIndex++) {
 					const category = newCategories[catIndex]
 					for (let stepIndex = 0; stepIndex < category.steps.length; stepIndex++) {
 						const step = category.steps[stepIndex]
-						
+
 						if (step.status === 'running') {
 							// Increment progress
 							if (step.progress < 100) {
@@ -226,7 +226,7 @@ export const Demo: React.FC = () => {
 								// Mark as completed and move to next
 								step.status = 'completed'
 								step.progress = 100
-								
+
 								// Start next step
 								const nextStepIndex = stepIndex + 1
 								if (nextStepIndex < category.steps.length) {
@@ -250,7 +250,7 @@ export const Demo: React.FC = () => {
 						}
 					}
 				}
-				
+
 				return newCategories
 			})
 		}, 600)
@@ -282,9 +282,19 @@ export const Demo: React.FC = () => {
 						<CardContent className="space-y-6">
 							<div className="space-y-4">
 								<ProgressBar progress={75} variant="default" label="Party Setup" showPercentage />
-								<ProgressBar progress={100} variant="success" label="Theme Analysis" showPercentage />
+								<ProgressBar
+									progress={100}
+									variant="success"
+									label="Theme Analysis"
+									showPercentage
+								/>
 								<ProgressBar progress={45} variant="warning" label="Vendor Search" showPercentage />
-								<ProgressBar progress={25} variant="error" label="Payment Processing" showPercentage />
+								<ProgressBar
+									progress={25}
+									variant="error"
+									label="Payment Processing"
+									showPercentage
+								/>
 							</div>
 						</CardContent>
 					</Card>
@@ -303,7 +313,9 @@ export const Demo: React.FC = () => {
 					<Card>
 						<CardHeader>
 							<h3 className="text-xl font-semibold">Progress Step Component</h3>
-							<p className="text-muted-foreground">Individual progress steps with status indicators</p>
+							<p className="text-muted-foreground">
+								Individual progress steps with status indicators
+							</p>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
@@ -341,15 +353,17 @@ export const Demo: React.FC = () => {
 								onClick={() => {
 									setShowProgressTracker(true)
 									// Reset progress
-									setProgressCategories(prev => prev.map(cat => ({
-										...cat,
-										status: 'pending',
-										steps: cat.steps.map(step => ({
-											...step,
+									setProgressCategories((prev) =>
+										prev.map((cat) => ({
+											...cat,
 											status: 'pending',
-											progress: 0,
+											steps: cat.steps.map((step) => ({
+												...step,
+												status: 'pending',
+												progress: 0,
+											})),
 										}))
-									})))
+									)
 								}}
 								className="w-full"
 							>
@@ -384,7 +398,9 @@ export const Demo: React.FC = () => {
 
 				{/* Party Selector Demo */}
 				<section className="space-y-8">
-					<h2 className="text-3xl font-semibold text-foreground">Party Selection Layout (Full Screen)</h2>
+					<h2 className="text-3xl font-semibold text-foreground">
+						Party Selection Layout (Full Screen)
+					</h2>
 					<div className="border border-border rounded-lg overflow-hidden">
 						<PartySelectionLayout
 							options={partyOptions}
@@ -475,7 +491,7 @@ export const Demo: React.FC = () => {
 											'Birthday cake & candles',
 											'Age-appropriate decorations',
 											'Party games & activities',
-											'Photo opportunities'
+											'Photo opportunities',
 										]}
 									/>
 								</div>
@@ -487,7 +503,7 @@ export const Demo: React.FC = () => {
 											'Gender reveal options',
 											'Baby-themed decorations',
 											'Gift opening setup',
-											'Keepsake activities'
+											'Keepsake activities',
 										]}
 									/>
 								</div>
@@ -592,32 +608,32 @@ export const Demo: React.FC = () => {
 						</CardHeader>
 						<CardContent className="space-y-6">
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-								<TextInput 
-									label="Text Input" 
-									placeholder="Enter text..." 
+								<TextInput
+									label="Text Input"
+									placeholder="Enter text..."
 									helperText="Basic text input"
 								/>
-								<EmailInput 
-									label="Email Input" 
-									placeholder="Enter email..." 
+								<EmailInput
+									label="Email Input"
+									placeholder="Enter email..."
 									helperText="Built-in email validation"
 								/>
-								<PasswordInput 
-									label="Password Input" 
-									placeholder="Enter password..." 
+								<PasswordInput
+									label="Password Input"
+									placeholder="Enter password..."
 									helperText="Toggle visibility"
 								/>
-								<NumberInput 
-									label="Number Input" 
-									placeholder="Enter number..." 
+								<NumberInput
+									label="Number Input"
+									placeholder="Enter number..."
 									helperText="With stepper controls"
 									value="10"
 									min={0}
 									max={100}
 								/>
-								<SearchInput 
-									label="Search Input" 
-									placeholder="Search..." 
+								<SearchInput
+									label="Search Input"
+									placeholder="Search..."
 									helperText="With clear button"
 									value="search term"
 								/>
@@ -632,7 +648,7 @@ export const Demo: React.FC = () => {
 									]}
 								/>
 							</div>
-							
+
 							<div className="space-y-4">
 								<TextArea
 									label="Text Area"
@@ -640,12 +656,9 @@ export const Demo: React.FC = () => {
 									helperText="Multi-line text input"
 									rows={3}
 								/>
-								
-								<Checkbox
-									label="Checkbox Input"
-									helperText="Single checkbox option"
-								/>
-								
+
+								<Checkbox label="Checkbox Input" helperText="Single checkbox option" />
+
 								<RadioButton
 									label="Radio Button Group"
 									helperText="Choose one option"
@@ -657,7 +670,7 @@ export const Demo: React.FC = () => {
 									name="demo-radio"
 								/>
 							</div>
-							
+
 							<div className="space-y-4">
 								<DatePicker
 									label="Date Picker"
