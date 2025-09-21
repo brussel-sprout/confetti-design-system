@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+
 import { cn } from '../../../utils/cn'
 import { Icon } from '../Icon'
 
@@ -9,7 +10,7 @@ export interface DrawerProps {
 	children: React.ReactNode
 	className?: string
 	position?: 'left' | 'right' | 'top' | 'bottom'
-	size?: 'sm' | 'md' | 'lg' | 'xl'
+	width?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
 	showCloseButton?: boolean
 	closeOnOverlayClick?: boolean
 	closeOnEscape?: boolean
@@ -22,7 +23,7 @@ const Drawer: React.FC<DrawerProps> = ({
 	children,
 	className = '',
 	position = 'right',
-	size = 'md',
+	width = 'md',
 	showCloseButton = true,
 	closeOnOverlayClick = true,
 	closeOnEscape = true,
@@ -65,11 +66,12 @@ const Drawer: React.FC<DrawerProps> = ({
 		bottom: 'bottom-0 left-0 w-full',
 	}
 
-	const sizeClasses = {
+	const widthClasses = {
 		sm: position === 'left' || position === 'right' ? 'w-80' : 'h-80',
 		md: position === 'left' || position === 'right' ? 'w-96' : 'h-96',
 		lg: position === 'left' || position === 'right' ? 'w-[28rem]' : 'h-[28rem]',
 		xl: position === 'left' || position === 'right' ? 'w-[32rem]' : 'h-[32rem]',
+		full: position === 'left' || position === 'right' ? 'w-full' : 'h-full',
 	}
 
 	const animationClasses = {
@@ -86,7 +88,7 @@ const Drawer: React.FC<DrawerProps> = ({
 		>
 			{/* Backdrop */}
 			<div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-modal-backdrop" />
-			
+
 			{/* Drawer Content */}
 			<div
 				ref={drawerRef}
@@ -94,7 +96,7 @@ const Drawer: React.FC<DrawerProps> = ({
 					'absolute bg-background shadow-xl border-border overflow-hidden',
 					'flex flex-col',
 					positionClasses[position],
-					sizeClasses[size],
+					widthClasses[width],
 					animationClasses[position],
 					className
 				)}
@@ -103,11 +105,7 @@ const Drawer: React.FC<DrawerProps> = ({
 				{/* Header */}
 				{(title || showCloseButton) && (
 					<div className="flex items-center justify-between p-4 border-b border-border">
-						{title && (
-							<h2 className="text-lg font-semibold text-foreground">
-								{title}
-							</h2>
-						)}
+						{title && <h2 className="text-lg font-semibold text-foreground">{title}</h2>}
 						{showCloseButton && (
 							<button
 								onClick={onClose}
@@ -121,9 +119,7 @@ const Drawer: React.FC<DrawerProps> = ({
 				)}
 
 				{/* Content */}
-				<div className="flex-1 overflow-y-auto">
-					{children}
-				</div>
+				<div className="flex-1 overflow-y-auto">{children}</div>
 			</div>
 		</div>
 	)
