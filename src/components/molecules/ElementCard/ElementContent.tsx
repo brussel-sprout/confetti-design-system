@@ -1,6 +1,8 @@
-import React from 'react'
 import { Check, Heart, Trash2 } from 'lucide-react'
+import React from 'react'
+
 import { cn } from '../../../utils/cn'
+
 import type { Element } from './types'
 
 interface ElementContentProps {
@@ -36,33 +38,30 @@ export const ElementContent: React.FC<ElementContentProps> = ({
 		return null
 	}
 
-	const contentClasses = cn(
-		'p-4',
-		layout === 'list' ? 'flex-1 flex flex-col justify-center' : ''
-	)
+	const contentClasses = cn(layout === 'list' ? 'flex-1 flex flex-col justify-center' : 'p-4')
 
 	return (
 		<div className={contentClasses}>
 			{/* Title */}
 			{!isSelected && (
-				<h3 className={cn(
-					'font-semibold text-foreground mb-1 line-clamp-2',
-					layout === 'list' ? 'text-base' : 'text-sm'
-				)}>
+				<h3
+					className={cn(
+						'font-semibold text-foreground mb-1 line-clamp-2',
+						layout === 'list' ? 'text-base' : 'text-sm'
+					)}
+				>
 					{element.element_name}
 				</h3>
 			)}
 
 			{/* Description */}
 			{contentVariant === 'detailed' && element.description && (
-				<p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-					{element.description}
-				</p>
+				<p className="text-sm text-muted-foreground mb-3 line-clamp-2">{element.description}</p>
 			)}
 
 			{/* List Layout Actions */}
 			{layout === 'list' && (
-				<div className="flex items-center gap-2 mt-2">
+				<div className="flex items-center gap-3 mt-3">
 					{mode === 'selection' && onToggle && (
 						<button
 							onClick={handleToggle}

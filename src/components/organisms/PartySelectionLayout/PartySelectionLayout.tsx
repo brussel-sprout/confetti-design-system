@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+
 import { cn } from '../../../utils/cn'
-import { PartyCard } from '../../molecules/PartyCard'
 import { Button } from '../../atoms/Button'
+import { PartyCard } from '../../molecules/PartyCard'
 
 export interface PartyOption {
 	id: string
@@ -27,21 +28,25 @@ export interface PartySelectionLayoutProps {
 	className?: string
 }
 
-const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayoutProps>(({ 
-		title = "What type of party are you planning?",
-		subtitle = "Choose your party type to get personalized themes and recommendations tailored just for you.",
-		options,
-		selectedId,
-		onSelect,
-		onBack,
-		onContinue,
-		className = '',
-		...props 
-	}, ref) => {
+const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayoutProps>(
+	(
+		{
+			title = 'What type of party are you planning?',
+			subtitle = 'Choose your party type to get personalized themes and recommendations tailored just for you.',
+			options,
+			selectedId,
+			onSelect,
+			onBack,
+			onContinue,
+			className = '',
+			...props
+		},
+		ref
+	) => {
 		const [internalSelectedId, setInternalSelectedId] = useState<string | undefined>(selectedId)
 
 		const handleCardClick = (id: string) => {
-			const option = options.find(opt => opt.id === id)
+			const option = options.find((opt) => opt.id === id)
 			if (option?.status === 'active') {
 				setInternalSelectedId(id)
 				onSelect?.(id)
@@ -55,23 +60,28 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 		}
 
 		const currentSelectedId = selectedId ?? internalSelectedId
-		const canContinue = currentSelectedId && options.find(opt => opt.id === currentSelectedId)?.status === 'active'
+		const canContinue =
+			currentSelectedId && options.find((opt) => opt.id === currentSelectedId)?.status === 'active'
 
 		return (
-			<div ref={ref} className={cn('min-h-screen bg-background flex flex-col animate-fade-in', className)} {...props}>
+			<div
+				ref={ref}
+				className={cn('min-h-screen bg-background flex flex-col animate-fade-in', className)}
+				{...props}
+			>
 				{/* Main Content Container */}
-				<div className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-6 py-12">
+				<div className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-6 py-8 md:py-12">
 					{/* Header Section */}
-					<div className="text-center mb-16 animate-slide-in-right">
-						<h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+					<div className="text-center mb-12 md:mb-16 animate-slide-in-right">
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 md:mb-6 leading-tight">
 							{title}
 						</h1>
-						<p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+						<p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4">
 							{subtitle}
 						</p>
 					</div>
 
-					<div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+					<div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
 						{options.map((option, index) => (
 							<div
 								key={option.id}
@@ -100,8 +110,8 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 
 				{/* Footer Navigation */}
 				<div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
-					<div className="max-w-7xl mx-auto px-6 py-6">
-						<div className="flex items-center justify-between">
+					<div className="max-w-7xl mx-auto px-6 py-4 md:py-6">
+						<div className="flex items-center justify-between gap-4">
 							{/* Back Button */}
 							<div className="animate-slide-in-left" style={{ animationDelay: '0.1s' }}>
 								<Button
@@ -110,18 +120,23 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 									className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
 								>
 									<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M15 19l-7-7 7-7"
+										/>
 									</svg>
 									Back
 								</Button>
 							</div>
 
 							{/* Status Text */}
-							<div className="hidden md:flex items-center text-muted-foreground">
+							<div className="hidden md:flex items-center text-muted-foreground text-sm">
 								{canContinue ? (
 									<span className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-success rounded-full"></div>
-										Select a party type to continue
+										<div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+										Ready to continue
 									</span>
 								) : (
 									'Select a party type to continue'
@@ -135,17 +150,25 @@ const PartySelectionLayout = React.forwardRef<HTMLDivElement, PartySelectionLayo
 									disabled={!canContinue}
 									className={cn(
 										'transition-all duration-300',
-										canContinue 
-											? 'bg-primary hover:bg-primary/90' 
+										canContinue
+											? 'bg-primary hover:bg-primary/90'
 											: 'bg-muted text-muted-foreground cursor-not-allowed',
-										canContinue 
-											? 'ring-2 ring-primary ring-offset-2 shadow-lg'
-											: ''
+										canContinue ? 'ring-2 ring-primary ring-offset-2 shadow-lg' : ''
 									)}
 								>
 									Continue
-									<svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+									<svg
+										className="w-4 h-4 ml-2"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M9 5l7 7-7 7"
+										/>
 									</svg>
 								</Button>
 							</div>

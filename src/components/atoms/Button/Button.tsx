@@ -36,9 +36,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		)
 
 		const sizeClasses = {
-			sm: 'px-3 py-2 text-sm',
-			md: 'px-4 py-2.5 text-base',
-			lg: 'px-6 py-3 text-lg',
+			sm: 'px-3 py-2 text-sm min-h-[36px]',
+			md: 'px-4 py-2.5 text-base min-h-[44px]',
+			lg: 'px-6 py-3 text-lg min-h-[52px]',
 		}
 
 		const variantClasses = {
@@ -77,12 +77,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className)
 
 		return (
-			<button
-				ref={ref}
-				className={classes}
-				disabled={disabled || loading}
-				{...props}
-			>
+			<button ref={ref} className={classes} disabled={disabled || loading} {...props}>
 				{loading && (
 					<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
 				)}
