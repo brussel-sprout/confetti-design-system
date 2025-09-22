@@ -18,14 +18,46 @@ export const PartyDetailsFormSchema = z.object({
 
 export type PartyDetails = z.infer<typeof PartyDetailsFormSchema>
 
+type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
+
+// Utility functions to convert between Date and separate date/time strings
+const getDateString = (date: Date | null): string => {
+	if (!date) return ''
+	// en-CA formats as YYYY-MM-DD which is suitable for input[type="date"]
+	return new Intl.DateTimeFormat('en-CA').format(date)
+}
+
+const getTimeString = (date: Date | null): string => {
+	if (!date) return ''
+	const hours = date.getHours().toString().padStart(2, '0')
+	const minutes = date.getMinutes().toString().padStart(2, '0')
+	return `${hours}:${minutes}` // HH:MM format
+}
+
+const createDateFromStrings = (dateString: string, timeString: string): Date | null => {
+	if (!dateString) return null
+
+	// If no time provided, default to 12:00 PM
+	const time = timeString || '12:00'
+	const dateTimeString = `${dateString}T${time}:00`
+	const date = new Date(dateString)
+	const [hours, minutes] = time.split(':').map(Number)
+	date.setHours(hours)
+	date.setMinutes(minutes)
+
+	try {
+		return new Date(dateTimeString)
+	} catch {
+		return null
+	}
+}
+
 export interface PartyDetailsFormProps {
 	partyDetails: PartyDetails
 	onSave: (details: PartyDetails) => void
 	focusField?: 'name' | 'date' | 'time' | 'headCount' | 'address' | null
 	className?: string
 }
-
-type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
 	({ partyDetails, onSave, focusField = null, className = '', ...props }) => {
@@ -352,9 +384,12 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									name="date"
 									label="Date"
 									type="date"
-									value={formData.party_date ? formData.party_date.toISOString().split('T')[0] : ''}
+									value={getDateString(formData.party_date)}
 									onChange={(e) => {
-										const newDate = e.target.value ? new Date(e.target.value) : null
+										const newDate = createDateFromStrings(
+											e.target.value,
+											getTimeString(formData.party_date)
+										)
 										handleInputChange('party_date', newDate)
 									}}
 									leftIcon={<Calendar className="w-4 h-4" />}
@@ -365,14 +400,13 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									name="time"
 									label="Time"
 									type="time"
-									value={formData.party_date ? formData.party_date.toTimeString().slice(0, 5) : ''}
+									value={getTimeString(formData.party_date)}
 									onChange={(e) => {
-										if (formData.party_date) {
-											const [hours, minutes] = e.target.value.split(':').map(Number)
-											const newDate = new Date(formData.party_date)
-											newDate.setHours(hours, minutes)
-											handleInputChange('party_date', newDate)
-										}
+										const newDate = createDateFromStrings(
+											getDateString(formData.party_date),
+											e.target.value
+										)
+										handleInputChange('party_date', newDate)
 									}}
 									leftIcon={<Clock className="w-4 h-4" />}
 								/>
