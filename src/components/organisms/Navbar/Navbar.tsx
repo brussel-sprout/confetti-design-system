@@ -1,13 +1,14 @@
 import React from 'react'
 
-import { cn } from '../../../utils/cn'
 import {
 	Dropdown,
 	DropdownContent,
 	DropdownDivider,
 	DropdownItem,
 	DropdownTrigger,
-} from '../../molecules/Dropdown'
+} from '@repo/confetti-design-system'
+
+import { cn } from '../../../utils/cn'
 
 export interface NavbarProps {
 	children: React.ReactNode
@@ -121,7 +122,7 @@ const NavbarLink = React.forwardRef<HTMLAnchorElement, NavbarLinkProps>(
 
 // Account Dropdown component
 const NavbarAccountDropdown = React.forwardRef<HTMLDivElement, NavbarAccountDropdownProps>(
-	({ username, children, className = '', ...props }) => {
+	({ username, children, className = '', ...props }, ref) => {
 		return (
 			<Dropdown className={className} {...props}>
 				<DropdownTrigger

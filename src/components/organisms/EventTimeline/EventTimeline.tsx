@@ -82,8 +82,9 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 
 			// Sort by start time
 			return filtered.sort((a, b) => {
-				const timeA = a.startTime.split(':').map(Number)
-				const timeB = b.startTime.split(':').map(Number)
+				// Handle missing startTime by treating as end of day (23:59)
+				const timeA = a.startTime ? a.startTime.split(':').map(Number) : [23, 59]
+				const timeB = b.startTime ? b.startTime.split(':').map(Number) : [23, 59]
 				const minutesA = timeA[0] * 60 + timeA[1]
 				const minutesB = timeB[0] * 60 + timeB[1]
 				return minutesA - minutesB
@@ -98,7 +99,7 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
 			const mealEvents = events.filter((e) => e.category === 'meal').length
 			const totalDuration = events.reduce((acc, event) => {
 				if (event.duration) return acc + event.duration
-				if (event.endTime) {
+				if (event.endTime && event.startTime) {
 					const start = new Date(`2000-01-01T${event.startTime}:00`)
 					const end = new Date(`2000-01-01T${event.endTime}:00`)
 					return acc + (end.getTime() - start.getTime()) / (1000 * 60)
