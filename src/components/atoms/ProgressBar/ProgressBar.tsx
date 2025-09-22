@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
 export interface ProgressBarProps {
@@ -57,7 +58,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
 						)}
 					</div>
 				)}
-				
+
 				<div
 					className={cn(
 						'w-full rounded-full overflow-hidden',

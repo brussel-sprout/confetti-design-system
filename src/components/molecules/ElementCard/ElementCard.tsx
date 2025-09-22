@@ -42,9 +42,9 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 	// Get card layout class
 	const getCardLayoutClass = () => {
 		if (layout.type === 'list') {
-			return 'flex flex-row items-center space-x-4 p-4'
+			return 'flex flex-row items-center gap-4 p-4'
 		}
-		return ''
+		return 'p-0'
 	}
 
 	// Get image container class
@@ -57,9 +57,9 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 
 	return (
 		<div
-			className={`relative overflow-hidden rounded-xl bg-background border border-border hover:border-primary/30 transition-all duration-300 cursor-pointer touch-manipulation group mobile-touch-target w-full max-w-full hover-scale ${
+			className={`relative overflow-hidden rounded-xl bg-background border border-border hover:border-primary/30 transition-all duration-300 cursor-pointer touch-manipulation group w-full max-w-full hover-scale ${
 				isSelected
-					? 'ring-1 ring-primary/50 shadow-lg border-primary/30'
+					? 'ring-2 ring-primary/50 shadow-lg border-primary/30'
 					: 'hover:shadow-lg hover:border-primary/20'
 			} ${getCardLayoutClass()} ${className}`}
 			onClick={handleCardClick}
@@ -82,9 +82,7 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 							{element.element_name}
 						</h3>
 						{element.category && (
-							<p className="text-white/90 text-sm drop-shadow-md">
-								{element.category}
-							</p>
+							<p className="text-white/90 text-sm drop-shadow-md">{element.category}</p>
 						)}
 					</div>
 				</div>

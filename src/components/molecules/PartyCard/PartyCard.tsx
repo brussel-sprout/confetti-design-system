@@ -1,9 +1,9 @@
 import React from 'react'
+
+import { FeatureList, Icon, StatusBadge } from '@repo/confetti-design-system'
+
 import { cn } from '../../../utils/cn'
 import { Card, CardContent, CardHeader } from '../Card'
-import { Icon } from '../../atoms/Icon'
-import { StatusBadge } from '../../atoms/StatusBadge'
-import { FeatureList } from '../../atoms/FeatureList'
 
 export interface PartyCardProps {
 	title: string
@@ -20,7 +20,20 @@ export interface PartyCardProps {
 }
 
 const PartyCard = React.forwardRef<HTMLDivElement, PartyCardProps>(
-	({ title, description, icon, features, status = 'active', badge, onClick, className = '', ...props }, ref) => {
+	(
+		{
+			title,
+			description,
+			icon,
+			features,
+			status = 'active',
+			badge,
+			onClick,
+			className = '',
+			...props
+		},
+		ref
+	) => {
 		const isActive = status === 'active'
 		const isClickable = isActive && onClick
 
@@ -47,7 +60,6 @@ const PartyCard = React.forwardRef<HTMLDivElement, PartyCardProps>(
 			'text-sm text-center mb-6 leading-relaxed',
 			isActive ? 'text-muted-foreground' : 'text-muted-foreground/70'
 		)
-
 
 		return (
 			<Card
