@@ -1,18 +1,18 @@
-export { 
-	Navbar, 
-	NavbarLeft, 
-	NavbarRight, 
-	NavbarLink, 
+export {
+	Navbar,
+	NavbarLeft,
+	NavbarRight,
+	NavbarLink,
 	NavbarAccountDropdown,
 	NavbarDropdownItem,
-	NavbarDropdownDivider
+	NavbarDropdownDivider,
 } from './Navbar'
-export type { 
-	NavbarProps, 
-	NavbarLeftProps, 
-	NavbarRightProps, 
-	NavbarLinkProps, 
+export type {
+	NavbarProps,
+	NavbarLeftProps,
+	NavbarRightProps,
+	NavbarLinkProps,
 	NavbarAccountDropdownProps,
 	NavbarDropdownItemProps,
-	NavbarDropdownDividerProps
+	NavbarDropdownDividerProps,
 } from './Navbar'

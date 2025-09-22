@@ -1,14 +1,13 @@
 import { Calendar, Clock, MapPin, Users, X } from 'lucide-react'
 import React from 'react'
 
+import { Button, Input } from '@repo/confetti-design-system'
+
 import { cn } from '../../../utils/cn'
-import { Button } from '../../atoms/Button'
-import { Input } from '../../atoms/Input'
 
 export interface PartyDetails {
 	name: string
-	date: string
-	time: string
+	party_date: Date
 	headCount: number
 	address: string
 }
@@ -22,8 +21,40 @@ export interface PartyDetailsFormProps {
 
 type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 
+// Utility functions to convert between Date and separate date/time strings
+const getDateString = (date: Date | null): string => {
+	if (!date) return ''
+	// en-CA formats as YYYY-MM-DD which is suitable for input[type="date"]
+	return new Intl.DateTimeFormat('en-CA').format(date)
+}
+
+const getTimeString = (date: Date | null): string => {
+	if (!date) return ''
+	const hours = date.getHours().toString().padStart(2, '0')
+	const minutes = date.getMinutes().toString().padStart(2, '0')
+	return `${hours}:${minutes}` // HH:MM format
+}
+
+const createDateFromStrings = (dateString: string, timeString: string): Date | null => {
+	if (!dateString) return null
+
+	// If no time provided, default to 12:00 PM
+	const time = timeString || '12:00'
+	const dateTimeString = `${dateString}T${time}:00`
+	const date = new Date(dateString)
+	const [hours, minutes] = time.split(':').map(Number)
+	date.setHours(hours)
+	date.setMinutes(minutes)
+
+	try {
+		return new Date(dateTimeString)
+	} catch {
+		return null
+	}
+}
+
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
-	({ partyDetails, onSave, focusField = null, className = '', ...props }) => {
+	({ partyDetails, onSave, focusField = null, className = '', ...props }, ref) => {
 		const [isOpen, setIsOpen] = React.useState(false)
 		const [isClosing, setIsClosing] = React.useState(false)
 		const [formData, setFormData] = React.useState<PartyDetails>(partyDetails)
@@ -189,16 +220,15 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			handleSave()
 		}
 
-		const handleInputChange = (field: keyof PartyDetails, value: string | number) => {
+		const handleInputChange = (field: keyof PartyDetails, value: string | number | Date | null) => {
 			setFormData((prev) => ({
 				...prev,
 				[field]: value,
 			}))
 		}
 
-		const formatDate = (dateString: string) => {
-			if (!dateString) return 'Add date'
-			const date = new Date(dateString)
+		const formatDate = (date: Date | null) => {
+			if (!date) return 'Add date'
 			return date.toLocaleDateString('en-US', {
 				month: 'short',
 				day: 'numeric',
@@ -206,9 +236,14 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			})
 		}
 
-		const formatTime = (timeString: string) => {
-			if (!timeString) return 'Add time'
-			return timeString
+		const formatTime = (date: Date | null) => {
+			if (!date) return 'Add time'
+			const hours = date.getHours()
+			const minutes = date.getMinutes()
+			const ampm = hours >= 12 ? 'PM' : 'AM'
+			const displayHours = hours % 12 || 12
+			const displayMinutes = minutes.toString().padStart(2, '0')
+			return `${displayHours}:${displayMinutes} ${ampm}`
 		}
 
 		const formatHeadCount = (count: number) => {
@@ -222,7 +257,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		}
 
 		return (
-			<div ref={containerRef} className={cn('relative', className)} {...props}>
+			<div ref={ref || containerRef} className={cn('relative', className)} {...props}>
 				{/* Compact Display */}
 				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full">
 					<button
@@ -246,9 +281,9 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
-						title={partyDetails.date || 'Add date'}
+						title={formatDate(partyDetails.party_date)}
 					>
-						{formatDate(partyDetails.date)}
+						{formatDate(partyDetails.party_date)}
 					</button>
 
 					<span className="text-muted-foreground flex-shrink-0">•</span>
@@ -260,9 +295,9 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
-						title={partyDetails.time || 'Add time'}
+						title={formatTime(partyDetails.party_date)}
 					>
-						{formatTime(partyDetails.time)}
+						{formatTime(partyDetails.party_date)}
 					</button>
 
 					<span className="text-muted-foreground flex-shrink-0">•</span>
@@ -299,7 +334,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<div
 						ref={formRef}
 						className={cn(
-							'absolute md:absolute fixed md:top-full top-0 left-0 right-0 md:mt-2 mt-0 z-50',
+							'fixed md:absolute md:top-full top-0 left-0 right-0 md:mt-2 mt-0 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
 							'p-4 md:p-6',
 							isClosing ? 'animate-scale-out' : 'animate-scale-in',
@@ -344,8 +379,14 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									name="date"
 									label="Date"
 									type="date"
-									value={formData.date}
-									onChange={(e) => handleInputChange('date', e.target.value)}
+									value={getDateString(formData.party_date)}
+									onChange={(e) => {
+										const newDate = createDateFromStrings(
+											e.target.value,
+											getTimeString(formData.party_date)
+										)
+										handleInputChange('party_date', newDate)
+									}}
 									leftIcon={<Calendar className="w-4 h-4" />}
 								/>
 
@@ -354,8 +395,14 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 									name="time"
 									label="Time"
 									type="time"
-									value={formData.time}
-									onChange={(e) => handleInputChange('time', e.target.value)}
+									value={getTimeString(formData.party_date)}
+									onChange={(e) => {
+										const newDate = createDateFromStrings(
+											getDateString(formData.party_date),
+											e.target.value
+										)
+										handleInputChange('party_date', newDate)
+									}}
 									leftIcon={<Clock className="w-4 h-4" />}
 								/>
 

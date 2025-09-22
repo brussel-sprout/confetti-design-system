@@ -89,6 +89,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 		}
 
 		const formatTime = (time: string) => {
+			if (!time || typeof time !== 'string') return '12:00 PM'
 			const [hours, minutes] = time.split(':')
 			const hour = parseInt(hours)
 			const ampm = hour >= 12 ? 'PM' : 'AM'
