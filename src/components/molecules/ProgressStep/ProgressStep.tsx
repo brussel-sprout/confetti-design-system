@@ -1,7 +1,9 @@
+import { AlertCircle, Check, Clock, Loader2 } from 'lucide-react'
 import React from 'react'
-import { Check, Clock, AlertCircle, Loader2 } from 'lucide-react'
+
+import { ProgressBar } from '@repo/confetti-design-system'
+
 import { cn } from '../../../utils/cn'
-import { ProgressBar } from '../../atoms/ProgressBar'
 
 export interface ProgressStepProps {
 	title: string
@@ -75,18 +77,16 @@ const ProgressStep = React.forwardRef<HTMLDivElement, ProgressStepProps>(
 							getStatusColor()
 						)}
 					>
-						<div className="animate-fade-in">
-							{getStatusIcon()}
-						</div>
+						<div className="animate-fade-in">{getStatusIcon()}</div>
 					</div>
 
 					{/* Connector Line */}
 					{!isLast && (
 						<div
 							className={cn('w-0.5 mt-2 transition-all duration-500', getConnectorColor())}
-							style={{ 
+							style={{
 								height: status === 'completed' ? '64px' : '32px',
-								animationDelay: '0.2s'
+								animationDelay: '0.2s',
 							}}
 						/>
 					)}
@@ -102,10 +102,10 @@ const ProgressStep = React.forwardRef<HTMLDivElement, ProgressStepProps>(
 									status === 'completed'
 										? 'text-success'
 										: status === 'running'
-										? 'text-primary'
-										: status === 'failed'
-										? 'text-destructive'
-										: 'text-muted-foreground'
+											? 'text-primary'
+											: status === 'failed'
+												? 'text-destructive'
+												: 'text-muted-foreground'
 								)}
 							>
 								{title}

@@ -1,8 +1,9 @@
+import { AlertCircle, CheckCircle, Clock, Edit3, MapPin, Trash2, Users } from 'lucide-react'
 import React from 'react'
-import { Clock, MapPin, Users, Edit3, Trash2, CheckCircle, AlertCircle } from 'lucide-react'
+
+import { Badge, Button } from '@repo/confetti-design-system'
+
 import { cn } from '../../../utils/cn'
-import { Badge } from '../../atoms/Badge'
-import { Button } from '../../atoms/Button'
 
 export interface TimelineEvent {
 	id: string
@@ -31,7 +32,19 @@ export interface TimelineItemProps {
 }
 
 const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
-	({ event, isFirst = false, isLast = false, onEdit, onDelete, onStatusChange, className = '', ...props }, ref) => {
+	(
+		{
+			event,
+			isFirst = false,
+			isLast = false,
+			onEdit,
+			onDelete,
+			onStatusChange,
+			className = '',
+			...props
+		},
+		ref
+	) => {
 		const getCategoryColor = (category: TimelineEvent['category']) => {
 			switch (category) {
 				case 'setup':
@@ -65,7 +78,9 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 				case 'completed':
 					return <CheckCircle className="w-4 h-4 text-success" />
 				case 'in-progress':
-					return <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+					return (
+						<div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+					)
 				case 'cancelled':
 					return <AlertCircle className="w-4 h-4 text-destructive" />
 				default:
@@ -99,37 +114,40 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 				{/* Timeline Line */}
 				<div className="flex flex-col items-center">
 					{/* Top connector */}
-					{!isFirst && (
-						<div className="w-0.5 h-6 bg-border" />
-					)}
-					
+					{!isFirst && <div className="w-0.5 h-6 bg-border" />}
+
 					{/* Time Circle */}
-					<div className={cn(
-						'w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold',
-						'border-2 bg-background transition-all duration-200',
-						event.status === 'completed' ? 'border-success bg-success/10 text-success' :
-						event.status === 'in-progress' ? 'border-primary bg-primary/10 text-primary' :
-						event.status === 'cancelled' ? 'border-destructive bg-destructive/10 text-destructive' :
-						'border-border text-muted-foreground'
-					)}>
+					<div
+						className={cn(
+							'w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold',
+							'border-2 bg-background transition-all duration-200',
+							event.status === 'completed'
+								? 'border-success bg-success/10 text-success'
+								: event.status === 'in-progress'
+									? 'border-primary bg-primary/10 text-primary'
+									: event.status === 'cancelled'
+										? 'border-destructive bg-destructive/10 text-destructive'
+										: 'border-border text-muted-foreground'
+						)}
+					>
 						{formatTime(event.startTime).split(' ')[0]}
 					</div>
-					
+
 					{/* Bottom connector */}
-					{!isLast && (
-						<div className="w-0.5 flex-1 min-h-6 bg-border" />
-					)}
+					{!isLast && <div className="w-0.5 flex-1 min-h-6 bg-border" />}
 				</div>
 
 				{/* Content */}
 				<div className="flex-1 pb-8">
-					<div className={cn(
-						'bg-background border border-border rounded-xl p-4 transition-all duration-200',
-						'hover:shadow-md hover:border-primary/30',
-						event.status === 'completed' && 'bg-success/5 border-success/20',
-						event.status === 'in-progress' && 'bg-primary/5 border-primary/20',
-						event.status === 'cancelled' && 'bg-destructive/5 border-destructive/20'
-					)}>
+					<div
+						className={cn(
+							'bg-background border border-border rounded-xl p-4 transition-all duration-200',
+							'hover:shadow-md hover:border-primary/30',
+							event.status === 'completed' && 'bg-success/5 border-success/20',
+							event.status === 'in-progress' && 'bg-primary/5 border-primary/20',
+							event.status === 'cancelled' && 'bg-destructive/5 border-destructive/20'
+						)}
+					>
 						{/* Header */}
 						<div className="flex items-start justify-between mb-3">
 							<div className="flex-1 min-w-0">
@@ -137,7 +155,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 									<h3 className="font-semibold text-foreground truncate">{event.title}</h3>
 									{getStatusIcon(event.status)}
 								</div>
-								
+
 								<div className="flex items-center gap-3 text-sm text-muted-foreground">
 									<span className="flex items-center gap-1">
 										<Clock className="w-3 h-3" />
@@ -203,10 +221,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 								</span>
 							)}
 							{event.attendees && (
-								<span className={cn(
-									'flex items-center gap-1',
-									'font-semibold text-foreground'
-								)}>
+								<span className={cn('flex items-center gap-1', 'font-semibold text-foreground')}>
 									<Users className="w-3 h-3" />
 									{event.attendees} people
 								</span>
@@ -221,9 +236,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 						{/* Notes */}
 						{event.notes && (
 							<div className="mt-3 pt-3 border-t border-border">
-								<p className="text-xs text-muted-foreground italic">
-									Note: {event.notes}
-								</p>
+								<p className="text-xs text-muted-foreground italic">Note: {event.notes}</p>
 							</div>
 						)}
 
@@ -235,10 +248,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
 										variant="outline"
 										size="sm"
 										onClick={() => onStatusChange(event.id, 'in-progress')}
-										className={cn(
-											'text-sm text-muted-foreground mb-3',
-											'text-xs'
-										)}
+										className={cn('text-sm text-muted-foreground mb-3', 'text-xs')}
 									>
 										Start Task
 									</Button>
