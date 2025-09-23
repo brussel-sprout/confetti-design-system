@@ -987,6 +987,7 @@ export const Demo: React.FC = () => {
                                         }}
                                         title="Creating Your Dream Party"
                                         subtitle="Our AI is working behind the scenes to make your party perfect"
+                                        allowClose={true}
                                 />
                         </div>
                 </div>
