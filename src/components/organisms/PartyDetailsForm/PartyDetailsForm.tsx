@@ -1,22 +1,23 @@
 import { Calendar, Clock, MapPin, Users, X } from 'lucide-react'
 import React from 'react'
 
-import { z } from 'zod'
+import { Button, Input } from '@repo/confetti-design-system'
 
 import { cn } from '../../../utils/cn'
-import { Button } from '../../atoms/Button'
-import { Input } from '../../atoms/Input'
 
-// Create a schema for the form data that matches the existing interface structure
-// but provides runtime validation and type safety
-export const PartyDetailsFormSchema = z.object({
-	name: z.string(),
-	party_date: z.coerce.date().nullable(),
-	headCount: z.number().min(0),
-	address: z.string(),
-})
+export interface PartyDetails {
+	name: string
+	party_date: Date
+	headCount: number
+	address: string
+}
 
-export type PartyDetails = z.infer<typeof PartyDetailsFormSchema>
+export interface PartyDetailsFormProps {
+	partyDetails: PartyDetails
+	onSave: (details: PartyDetails) => void
+	focusField?: 'name' | 'date' | 'time' | 'headCount' | 'address' | null
+	className?: string
+}
 
 type EditableField = 'name' | 'date' | 'time' | 'headCount' | 'address'
 
@@ -50,13 +51,6 @@ const createDateFromStrings = (dateString: string, timeString: string): Date | n
 	} catch {
 		return null
 	}
-}
-
-export interface PartyDetailsFormProps {
-	partyDetails: PartyDetails
-	onSave: (details: PartyDetails) => void
-	focusField?: 'name' | 'date' | 'time' | 'headCount' | 'address' | null
-	className?: string
 }
 
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
@@ -123,6 +117,21 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			}
 		}, [isOpen, focusField, internalFocusField])
 
+		const handleClose = React.useCallback(() => {
+			if (isClosing) return // Prevent multiple close calls
+
+			setIsClosing(true)
+
+			// Wait for animation to complete before actually closing
+			setTimeout(() => {
+				setIsOpen(false)
+				setIsClosing(false)
+				setInternalFocusField(null)
+				setIsOpening(false)
+				setFormData(partyDetails) // Reset form data
+			}, 150) // Shorter duration for fade out
+		}, [isClosing, partyDetails])
+
 		// Handle click outside to close
 		React.useEffect(() => {
 			if (!isOpen) return
@@ -158,7 +167,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				clearTimeout(timeoutId)
 				document.removeEventListener('mousedown', handleClickOutside)
 			}
-		}, [isOpen, isOpening])
+		}, [isOpen, isOpening, handleClose])
 
 		// Handle escape key to close
 		React.useEffect(() => {
@@ -175,7 +184,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			return () => {
 				document.removeEventListener('keydown', handleEscapeKey)
 			}
-		}, [isOpen])
+		}, [isOpen, handleClose])
 
 		const handleFieldClick = (event: React.MouseEvent, field: EditableField) => {
 			setIsOpening(true)
@@ -201,21 +210,6 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			}, 150)
 		}
 
-		const handleClose = () => {
-			if (isClosing) return // Prevent multiple close calls
-
-			setIsClosing(true)
-
-			// Wait for animation to complete before actually closing
-			setTimeout(() => {
-				setIsOpen(false)
-				setIsClosing(false)
-				setInternalFocusField(null)
-				setIsOpening(false)
-				setFormData(partyDetails) // Reset form data
-			}, 150) // Shorter duration for fade out
-		}
-
 		const handleSave = () => {
 			onSave(formData)
 			handleClose()
@@ -227,7 +221,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		}
 
 		const handleInputChange = (field: keyof PartyDetails, value: string | number | Date | null) => {
-			setFormData((prev: PartyDetails) => ({
+			setFormData((prev) => ({
 				...prev,
 				[field]: value,
 			}))
@@ -242,6 +236,16 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			})
 		}
 
+		// const formatTime = (date: Date | null) => {
+		// 	if (!date) return 'Add time'
+		// 	const hours = date.getHours()
+		// 	const minutes = date.getMinutes()
+		// 	const ampm = hours >= 12 ? 'PM' : 'AM'
+		// 	const displayHours = hours % 12 || 12
+		// 	const displayMinutes = minutes.toString().padStart(2, '0')
+		// 	return `${displayHours}:${displayMinutes} ${ampm}`
+		// }
+		// IDK why this is different from the one above, but it is
 		const formatTime = (date: Date | null) => {
 			if (!date) return 'Add time'
 			return date.toLocaleTimeString('en-US', {
@@ -286,7 +290,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
-						title={partyDetails.party_date ? formatDate(partyDetails.party_date) : 'Add date'}
+						title={formatDate(partyDetails.party_date)}
 					>
 						{formatDate(partyDetails.party_date)}
 					</button>
@@ -300,7 +304,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 							'whitespace-nowrap flex-shrink-0 text-left truncate',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
-						title={partyDetails.party_date ? formatTime(partyDetails.party_date) : 'Add time'}
+						title={formatTime(partyDetails.party_date)}
 					>
 						{formatTime(partyDetails.party_date)}
 					</button>
