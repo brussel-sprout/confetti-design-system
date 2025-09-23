@@ -26,11 +26,13 @@ import { PartySelectionLayout } from './organisms/PartySelectionLayout'
 import { PartySelector } from './organisms/PartySelector'
 import { ProgressTracker } from './organisms/ProgressTracker'
 import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
+import { TimelineContainer } from './organisms/TimelineContainer'
 
 import type { ProgressStepperStep } from './molecules/ProgressStepper'
 import type { TimelineEvent } from './molecules/TimelineItem'
 import type { PartyOption } from './organisms/PartySelector'
 import type { ProgressCategory } from './organisms/ProgressTracker'
+import type { PartyEvent } from '../types/timeline'
 
 const sampleTimelineEvents: TimelineEvent[] = [
         {
@@ -71,8 +73,164 @@ const sampleTimelineEvents: TimelineEvent[] = [
         },
 ]
 
+const samplePartyEvents: PartyEvent[] = [
+        {
+                id: '1',
+                title: 'Venue Setup',
+                description: 'Set up tables, chairs, decorations and lighting',
+                startTime: '09:00',
+                endTime: '11:00',
+                eventType: 'duration',
+                category: 'setup',
+                priority: 'high',
+                location: 'Main Hall',
+                assignedTo: ['Setup Team', 'Decorators'],
+                assignedTasks: ['Arrange tables', 'Hang decorations', 'Test lighting', 'Set up sound system'],
+                relatedElements: ['Tables', 'Chairs', 'Balloons', 'Sound Equipment'],
+                notes: 'Start early to allow time for adjustments'
+        },
+        {
+                id: '2',
+                title: 'Catering Arrival',
+                description: 'Catering team arrives and begins food preparation',
+                startTime: '11:30',
+                endTime: '13:00',
+                eventType: 'duration',
+                category: 'meal',
+                priority: 'critical',
+                location: 'Kitchen',
+                assignedTo: ['Catering Team'],
+                assignedTasks: ['Unload equipment', 'Prep ingredients', 'Set up buffet'],
+                relatedElements: ['Food', 'Serving Equipment', 'Buffet Tables']
+        },
+        {
+                id: '3',
+                title: 'DJ Sound Check',
+                description: 'Test all audio equipment and music playlist',
+                startTime: '13:30',
+                eventType: 'milestone',
+                category: 'entertainment',
+                priority: 'medium',
+                location: 'Main Hall',
+                assignedTo: ['DJ'],
+                assignedTasks: ['Test microphones', 'Check speakers', 'Review playlist'],
+                relatedElements: ['Sound System', 'Microphones', 'Music Playlist']
+        },
+        {
+                id: '4',
+                title: 'Guest Arrival',
+                description: 'Guests start arriving, welcome and registration',
+                startTime: '15:00',
+                endTime: '16:00',
+                eventType: 'duration',
+                category: 'activity',
+                priority: 'high',
+                location: 'Entrance',
+                assignedTo: ['Host', 'Volunteers'],
+                attendees: 50,
+                assignedTasks: ['Welcome guests', 'Check guest list', 'Hand out name tags'],
+                relatedElements: ['Guest List', 'Name Tags', 'Welcome Drinks']
+        },
+        {
+                id: '5',
+                title: 'Cocktail Hour',
+                description: 'Networking and appetizers before main event',
+                startTime: '16:00',
+                endTime: '17:30',
+                eventType: 'duration',
+                category: 'meal',
+                priority: 'medium',
+                location: 'Cocktail Area',
+                attendees: 50,
+                assignedTasks: ['Serve appetizers', 'Mix cocktails', 'Facilitate networking'],
+                relatedElements: ['Appetizers', 'Bar Setup', 'Cocktail Tables']
+        },
+        {
+                id: '6',
+                title: 'Main Event Begins',
+                description: 'Official start of the main celebration',
+                startTime: '17:30',
+                eventType: 'milestone',
+                category: 'activity',
+                priority: 'critical',
+                location: 'Main Hall',
+                assignedTo: ['MC', 'Event Coordinator'],
+                notes: 'Key moment - ensure all systems are ready'
+        },
+        {
+                id: '7',
+                title: 'Dinner Service',
+                description: 'Main course dinner served to all guests',
+                startTime: '18:00',
+                endTime: '19:30',
+                eventType: 'duration',
+                category: 'meal',
+                priority: 'critical',
+                location: 'Dining Area',
+                attendees: 50,
+                assignedTo: ['Catering Team', 'Servers'],
+                assignedTasks: ['Serve main courses', 'Wine service', 'Clear tables'],
+                relatedElements: ['Main Course', 'Wine', 'Table Service']
+        },
+        {
+                id: '8',
+                title: 'Speeches & Toasts',
+                description: 'Special speeches and celebratory toasts',
+                startTime: '19:45',
+                endTime: '20:15',
+                eventType: 'duration',
+                category: 'activity',
+                priority: 'high',
+                location: 'Main Hall',
+                assignedTo: ['MC', 'Speakers'],
+                assignedTasks: ['Introduce speakers', 'Manage microphone', 'Time speeches'],
+                relatedElements: ['Microphone', 'Podium', 'Spotlight']
+        },
+        {
+                id: '9',
+                title: 'Dancing & Entertainment',
+                description: 'Music, dancing and party entertainment',
+                startTime: '20:30',
+                endTime: '23:00',
+                eventType: 'duration',
+                category: 'entertainment',
+                priority: 'medium',
+                location: 'Dance Floor',
+                assignedTo: ['DJ', 'Entertainment Team'],
+                assignedTasks: ['Play music', 'Coordinate activities', 'Manage lighting'],
+                relatedElements: ['Dance Floor', 'DJ Equipment', 'Party Lights']
+        },
+        {
+                id: '10',
+                title: 'Last Call',
+                description: 'Final drinks and preparation for closing',
+                startTime: '23:00',
+                eventType: 'milestone',
+                category: 'cleanup',
+                priority: 'medium',
+                location: 'Bar Area',
+                assignedTo: ['Bar Staff'],
+                notes: 'Begin winding down the event'
+        },
+        {
+                id: '11',
+                title: 'Cleanup & Breakdown',
+                description: 'Clean venue and pack up all equipment',
+                startTime: '23:30',
+                endTime: '01:00',
+                eventType: 'duration',
+                category: 'cleanup',
+                priority: 'medium',
+                location: 'Entire Venue',
+                assignedTo: ['Cleanup Crew', 'Setup Team'],
+                assignedTasks: ['Clear tables', 'Pack decorations', 'Load equipment', 'Final cleaning'],
+                relatedElements: ['Cleaning Supplies', 'Trash Bags', 'Transport Vehicles']
+        }
+]
+
 export const Demo: React.FC = () => {
         const [showProgressTracker, setShowProgressTracker] = React.useState(false)
+        const [timelineEvents, setTimelineEvents] = React.useState<PartyEvent[]>(samplePartyEvents)
         const [progressCategories, setProgressCategories] = React.useState<ProgressCategory[]>([
                 {
                         id: 'theme-analysis',
@@ -258,6 +416,25 @@ export const Demo: React.FC = () => {
                 return () => clearInterval(interval)
         }, [showProgressTracker])
 
+        // Timeline event handlers
+        const handleEventCreate = (eventData: Omit<PartyEvent, 'id'>) => {
+                const newEvent: PartyEvent = {
+                        ...eventData,
+                        id: `event-${Date.now()}`
+                }
+                setTimelineEvents(prev => [...prev, newEvent])
+        }
+
+        const handleEventUpdate = (updatedEvent: PartyEvent) => {
+                setTimelineEvents(prev => 
+                        prev.map(event => event.id === updatedEvent.id ? updatedEvent : event)
+                )
+        }
+
+        const handleEventDelete = (eventId: string) => {
+                setTimelineEvents(prev => prev.filter(event => event.id !== eventId))
+        }
+
         return (
                 <div className="min-h-screen bg-background p-8">
                         <div className="max-w-6xl mx-auto space-y-12">
@@ -373,9 +550,42 @@ export const Demo: React.FC = () => {
                                         </Card>
                                 </section>
 
+                                {/* Timeline Container Demo */}
+                                <section className="space-y-8">
+                                        <h2 className="text-3xl font-semibold text-foreground">Timeline Container</h2>
+                                        <Card>
+                                                <CardHeader>
+                                                        <h3 className="text-xl font-semibold">Interactive Timeline Component</h3>
+                                                        <p className="text-muted-foreground">
+                                                                A comprehensive timeline component with support for duration events and milestones.
+                                                                Click on time slots to add events, and click on events to view details.
+                                                        </p>
+                                                </CardHeader>
+                                                <CardContent>
+                                                        <div className="bg-muted/30 p-4 rounded-lg">
+                                                                <TimelineContainer
+                                                                        events={timelineEvents}
+                                                                        onEventCreate={handleEventCreate}
+                                                                        onEventUpdate={handleEventUpdate}
+                                                                        onEventDelete={handleEventDelete}
+                                                                        timeScale="30min"
+                                                                        startTime="09:00"
+                                                                        endTime="24:00"
+                                                                />
+                                                        </div>
+                                                </CardContent>
+                                                <CardFooter>
+                                                        <div className="text-sm text-muted-foreground">
+                                                                <strong>Features:</strong> Duration events, milestone markers, horizontal stacking for overlapping events,
+                                                                interactive event creation, detailed event information, and responsive design.
+                                                        </div>
+                                                </CardFooter>
+                                        </Card>
+                                </section>
+
                                 {/* Event Timeline Demo */}
                                 <section className="space-y-8">
-                                        <h2 className="text-3xl font-semibold text-foreground">Event Timeline</h2>
+                                        <h2 className="text-3xl font-semibold text-foreground">Event Timeline (Legacy)</h2>
                                         <EventTimeline
                                                 events={sampleTimelineEvents}
                                                 onAddEvent={() => console.log('Add event clicked')}

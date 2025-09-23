@@ -177,5 +177,46 @@ export type {
 // Demo
 export { Demo } from "./components/Demo";
 
+// Timeline Components
+export {
+  TimelineContainer,
+  TimelineAxis,
+  EventRenderer,
+  EventBlock,
+  MilestoneMarker,
+  SideDrawerModal,
+  EventCreationModal
+} from "./components/organisms/TimelineContainer";
+export type {
+  TimelineContainerProps,
+  TimelineAxisProps,
+  EventRendererProps,
+  EventBlockProps,
+  MilestoneMarkerProps,
+  SideDrawerModalProps,
+  EventCreationModalProps
+} from "./components/organisms/TimelineContainer";
+
+// Timeline Types
+export type {
+  PartyEvent,
+  TimelinePosition,
+  OverlapGroup,
+  InternalEvent,
+  TimeScale
+} from "./types/timeline";
+
+// Timeline Utilities
+export {
+  createDateFromTimeString,
+  convertToInternalEvent,
+  findOverlapGroups,
+  calculateEventPositions,
+  formatTime,
+  calculateDuration,
+  generateTimeSlots,
+  getDefaultCategoryColor
+} from "./utils/timelineUtils";
+
 // Utilities
 export { cn } from "./utils/cn";
