@@ -588,38 +588,6 @@ export const Demo: React.FC = () => {
                                         </Card>
                                 </section>
 
-                                {/* Timeline Container Demo */}
-                                <section className="space-y-8">
-                                        <h2 className="text-3xl font-semibold text-foreground">Timeline Container</h2>
-                                        <Card>
-                                                <CardHeader>
-                                                        <h3 className="text-xl font-semibold">Interactive Timeline Component</h3>
-                                                        <p className="text-muted-foreground">
-                                                                A comprehensive timeline component with support for duration events and milestones.
-                                                                Click on time slots to add events, and click on events to view details.
-                                                        </p>
-                                                </CardHeader>
-                                                <CardContent>
-                                                        <div className="bg-muted/30 p-4 rounded-lg">
-                                                                {/* <TimelineContainer
-                                                                        events={timelineEvents}
-                                                                        onEventCreate={handleEventCreate}
-                                                                        onEventUpdate={handleEventUpdate}
-                                                                        onEventDelete={handleEventDelete}
-                                                                        timeScale="30min"
-                                                                        startTime="09:00"
-                                                                        endTime="24:00"
-                                                                />
-                                                        </div>
-                                                </CardContent>
-                                                <CardFooter>
-                                                        <div className="text-sm text-muted-foreground">
-                                                                <strong>Features:</strong> Duration events, milestone markers, horizontal stacking for overlapping events,
-                                                                interactive event creation, detailed event information, and responsive design.
-                                                        </div>
-                                                </CardFooter>
-                                        </Card>
-                                </section>
 
                                 {/* Event Timeline Demo */}
                                 <section className="space-y-8">
