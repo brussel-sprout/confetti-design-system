@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as Icons from 'lucide-react'
 import { cn } from '../../../utils/cn'
 import { Badge } from '../../atoms/Badge'
 import { Button } from '../../atoms/Button'
-import { Edit3, Trash2, MapPin, Users } from 'lucide-react'
+import { Edit3, Trash2, MapPin, Users, ChevronDown, ChevronRight } from 'lucide-react'
 import type { TimelineEvent } from '../TimelineItem/TimelineItem'
 
 export interface MilestoneMarkerProps {
@@ -13,6 +13,7 @@ export interface MilestoneMarkerProps {
   onClick: () => void
   onEdit?: (event: TimelineEvent) => void
   onDelete?: (eventId: string) => void
+  defaultExpanded?: boolean
   className?: string
 }
 
@@ -33,8 +34,15 @@ export const MilestoneMarker: React.FC<MilestoneMarkerProps> = ({
   onClick,
   onEdit,
   onDelete,
+  defaultExpanded = false,
   className = ''
 }) => {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded)
+
+  const handleToggleExpanded = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setIsExpanded(!isExpanded)
+  }
   const iconName = milestoneIcons[event.category]
   const IconComponent = Icons[iconName as keyof typeof Icons] as React.ComponentType<{ className?: string }>
   
@@ -148,21 +156,33 @@ export const MilestoneMarker: React.FC<MilestoneMarkerProps> = ({
       {/* Event details panel */}
       <div
         className={cn(
-          'ml-3 p-3 bg-background border border-border rounded-xl shadow-sm',
+          'ml-3 bg-background border border-border rounded-xl shadow-sm cursor-pointer',
           'min-w-0 max-w-sm transition-all duration-200 group',
           isSelected && 'ring-2 ring-primary shadow-lg',
-          'hover:shadow-md hover:border-primary/30'
+          'hover:shadow-md hover:border-primary/30',
+          isExpanded ? 'p-3' : 'p-2'
         )}
+        onClick={handleToggleExpanded}
       >
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <div className="flex-1 min-w-0">
+        {/* Collapsed Header */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            {isExpanded ? (
+              <ChevronDown className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+            ) : (
+              <ChevronRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+            )}
             <h4 className="font-semibold text-sm text-foreground truncate">
               {event.title}
             </h4>
-            <div className="text-sm text-muted-foreground mt-1 font-medium">
+            <div className="text-sm text-muted-foreground font-medium">
               {formatTime(event.startTime)}
             </div>
           </div>
+          
+          <Badge size="sm" variant="outline" className={getPriorityColor(event.priority)}>
+            {event.priority}
+          </Badge>
           
           {/* Actions */}
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -195,59 +215,61 @@ export const MilestoneMarker: React.FC<MilestoneMarkerProps> = ({
           </div>
         </div>
         
-        {/* Priority and Category badges */}
-        <div className="flex items-center gap-2 mb-2">
-          <Badge size="sm" className="text-xs">
-            {event.category}
-          </Badge>
-          <Badge size="sm" variant="outline" className={getPriorityColor(event.priority)}>
-            {event.priority}
-          </Badge>
-        </div>
-        
-        {/* Description */}
-        {event.description && (
-          <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-            {event.description}
-          </p>
-        )}
-        
-        {/* Additional info */}
-        {(event.location || event.assignedTo?.length) && (
-          <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-            {event.location && (
-              <div className="flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                <span className="truncate max-w-[100px]">{event.location}</span>
-              </div>
+        {/* Expanded Content */}
+        {isExpanded && (
+          <div className="mt-3 pt-3 border-t border-border space-y-2">
+            {/* Category badge */}
+            <div className="flex items-center gap-2">
+              <Badge size="sm" className="text-xs">
+                {event.category}
+              </Badge>
+            </div>
+            
+            {/* Description */}
+            {event.description && (
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {event.description}
+              </p>
             )}
             
-            {event.assignedTo && event.assignedTo.length > 0 && (
-              <div className="flex items-center gap-1">
-                <Users className="w-3 h-3" />
-                <span className="truncate max-w-[80px]">{event.assignedTo[0]}</span>
-                {event.assignedTo.length > 1 && (
-                  <span>+{event.assignedTo.length - 1}</span>
+            {/* Additional info */}
+            {(event.location || event.assignedTo?.length) && (
+              <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                {event.location && (
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    <span className="truncate max-w-[100px]">{event.location}</span>
+                  </div>
+                )}
+                
+                {event.assignedTo && event.assignedTo.length > 0 && (
+                  <div className="flex items-center gap-1">
+                    <Users className="w-3 h-3" />
+                    <span className="truncate max-w-[80px]">{event.assignedTo[0]}</span>
+                    {event.assignedTo.length > 1 && (
+                      <span>+{event.assignedTo.length - 1}</span>
+                    )}
+                  </div>
                 )}
               </div>
             )}
-          </div>
-        )}
-        
-        {/* Tasks and elements count */}
-        {(event.assignedTasks?.length || event.relatedElements?.length) && (
-          <div className="mt-2 pt-2 border-t border-border flex gap-3">
-            {event.assignedTasks && event.assignedTasks.length > 0 && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Icons.CheckSquare className="w-3 h-3" />
-                <span>{event.assignedTasks.length} tasks</span>
-              </div>
-            )}
             
-            {event.relatedElements && event.relatedElements.length > 0 && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Icons.Package className="w-3 h-3" />
-                <span>{event.relatedElements.length} items</span>
+            {/* Tasks and elements count */}
+            {(event.assignedTasks?.length || event.relatedElements?.length) && (
+              <div className="pt-2 border-t border-border flex gap-3">
+                {event.assignedTasks && event.assignedTasks.length > 0 && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Icons.CheckSquare className="w-3 h-3" />
+                    <span>{event.assignedTasks.length} tasks</span>
+                  </div>
+                )}
+                
+                {event.relatedElements && event.relatedElements.length > 0 && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Icons.Package className="w-3 h-3" />
+                    <span>{event.relatedElements.length} items</span>
+                  </div>
+                )}
               </div>
             )}
           </div>
