@@ -37,6 +37,7 @@ export interface TimelineItemProps {
         onClick?: (event: TimelineEvent) => void
         onStatusChange?: (eventId: string, status: string) => void
         defaultExpanded?: boolean
+        style?: React.CSSProperties
         className?: string
 }
 
@@ -53,6 +54,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
                         onClick,
                         onStatusChange,
                         defaultExpanded = false,
+                        style,
                         className = '',
                         ...props
                 },
@@ -160,7 +162,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
                         <div 
                                 ref={ref} 
                                 className={cn('relative flex gap-4 group', className)} 
-                                style={{ marginLeft: `${stackIndex * 20}px` }} // Horizontal stacking for overlapping events
+                                style={{ marginLeft: `${stackIndex * 20}px`, ...style }} // Horizontal stacking for overlapping events
                                 {...props}
                         >
                                 {/* Timeline Line */}
