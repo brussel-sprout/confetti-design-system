@@ -1,0 +1,354 @@
+import React, { useMemo, useRef, useState } from "react";
+import { format } from "date-fns";
+import { Clock, Cake, Plus, Trash2, Pencil } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+export type TimelineEventType = "duration" | "milestone";
+
+export interface TimelineEvent {
+  id: string;
+  title: string;
+  type: TimelineEventType;
+  start: Date;
+  end?: Date;
+  icon?: React.ReactNode;
+  color?: string;
+  tasks?: { id: string; title: string; status: "todo" | "doing" | "done" }[];
+  elements?: { id: string; title: string; type: string }[];
+}
+
+function addMin(d: Date, m: number) { const x = new Date(d); x.setMinutes(x.getMinutes() + m); return x; }
+function minutesBetween(a: Date, b: Date) { return Math.max(0, Math.round((b.getTime() - a.getTime()) / 60000)); }
+function clamp(n: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, n)); }
+
+const base = new Date();
+const dayStart = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 8, 0, 0);
+const dayEnd = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 22, 0, 0);
+
+const DEMO_EVENTS: TimelineEvent[] = [
+  { id: "1", title: "Venue setup", type: "duration", start: addMin(dayStart, 0), end: addMin(dayStart, 120), color: "bg-amber-200",
+    tasks: [ {id:"t1", title:"Unload props", status:"todo"}, {id:"t2", title:"Assemble backdrop", status:"doing"} ],
+    elements: [ {id:"e1", title:"Balloon arch", type:"decor"} ]
+  },
+  { id: "2", title: "Vendors arrive", type: "milestone", start: addMin(dayStart, 90), icon: <Clock className="h-3.5 w-3.5"/> },
+  { id: "3", title: "Photographer prep", type: "duration", start: addMin(dayStart, 100), end: addMin(dayStart, 170), color: "bg-blue-200" },
+  { id: "4", title: "Guest arrivals", type: "duration", start: addMin(dayStart, 150), end: addMin(dayStart, 210), color: "bg-emerald-200" },
+  { id: "5", title: "Face painting", type: "duration", start: addMin(dayStart, 165), end: addMin(dayStart, 240), color: "bg-violet-200" },
+  { id: "6", title: "Bounce house", type: "duration", start: addMin(dayStart, 180), end: addMin(dayStart, 360), color: "bg-sky-200" },
+  { id: "7", title: "Cake cutting", type: "milestone", start: addMin(dayStart, 270), icon: <Cake className="h-3.5 w-3.5"/> },
+  { id: "8", title: "Games rotation", type: "duration", start: addMin(dayStart, 240), end: addMin(dayStart, 330), color: "bg-pink-200" },
+  { id: "9", title: "Cleanup", type: "duration", start: addMin(dayStart, 570), end: addMin(dayStart, 660), color: "bg-neutral-200" },
+  { id: "10", title: "Sparkler send-off", type: "milestone", start: addMin(dayStart, 630) }
+];
+
+const MAX_EVENTS = 200;
+const AXIS_WIDTH = 72;
+const TRACK_GAP_X = 10;
+
+interface PlacedEvent { ev: TimelineEvent; top: number; height: number; col: number; colsInCluster: number; }
+
+function layoutEvents(
+  events: TimelineEvent[],
+  opts: { dayStart: Date; dayEnd: Date; minutesPerPx: number; trackWidth: number }
+): { placed: PlacedEvent[]; milestones: TimelineEvent[] } {
+  const durations = events.filter(e => e.type === "duration" && e.end) as TimelineEvent[];
+  const milestones = events.filter(e => e.type === "milestone");
+  const sorted = [...durations].sort((a, b) => a.start.getTime() - b.start.getTime() || (b.end!.getTime() - b.start.getTime()) - (a.end!.getTime() - a.start.getTime()));
+  type Col = { endTime: number };
+  let columns: Col[] = [];
+  const placedRaw: (PlacedEvent & { clusterId: number })[] = [];
+  let clusterId = 0;
+  let active: { id: string; end: number }[] = [];
+  for (const ev of sorted) {
+    const startMs = ev.start.getTime();
+    const endMs = ev.end!.getTime();
+    active = active.filter(a => a.end > startMs);
+    if (active.length === 0) {
+      columns = [];
+      clusterId += 1;
+    }
+    let colIdx = columns.findIndex(c => c.endTime <= startMs);
+    if (colIdx === -1) { columns.push({ endTime: endMs }); colIdx = columns.length - 1; }
+    else { columns[colIdx].endTime = endMs; }
+    active.push({ id: ev.id, end: endMs });
+    const top = minutesBetween(opts.dayStart, ev.start) / opts.minutesPerPx;
+    const height = clamp(minutesBetween(ev.start, ev.end!) / opts.minutesPerPx, 6, 99999);
+    placedRaw.push({ ev, top, height, col: colIdx, colsInCluster: 0, clusterId });
+  }
+  const maxColsByCluster: Record<number, number> = {};
+  for (const p of placedRaw) {
+    maxColsByCluster[p.clusterId] = Math.max(maxColsByCluster[p.clusterId] || 0, p.col + 1);
+  }
+  const placed: PlacedEvent[] = placedRaw.map(p => ({ ...p, colsInCluster: maxColsByCluster[p.clusterId] }));
+  return { placed, milestones };
+}
+
+function computeGridStepMinutes(focused?: TimelineEvent | null) {
+  if (!focused) return 60;
+  if (focused.type === "duration" && focused.end) {
+    const dur = minutesBetween(focused.start, focused.end);
+    if (dur <= 12) return 5;
+    if (dur <= 60) return 15;
+  }
+  return 60;
+}
+
+function buildTicks(dayStart: Date, dayEnd: Date, stepMin: number) {
+  const totalMin = minutesBetween(dayStart, dayEnd);
+  const ticks: { t: Date; label: string }[] = [];
+  for (let m = 0; m <= totalMin; m += stepMin) {
+    const t = addMin(dayStart, m);
+    const label = format(t, "h:mmaaa");
+    ticks.push({ t, label });
+  }
+  return ticks;
+}
+
+export default function ConfettiTimelinePrototype() {
+  const [events, setEvents] = useState<TimelineEvent[]>(DEMO_EVENTS);
+  const [selected, setSelected] = useState<TimelineEvent | null>(null);
+  const [creatorOpen, setCreatorOpen] = useState(false);
+  const [draftTime, setDraftTime] = useState<Date | null>(null);
+  if (events.length > MAX_EVENTS) {
+    console.warn(`Timeline: ${events.length} events exceeds MAX_EVENTS=${MAX_EVENTS}. Rendering first ${MAX_EVENTS}.`);
+  }
+  const visible = events.slice(0, MAX_EVENTS);
+  const gridStepMin = computeGridStepMinutes(selected);
+  const minutesPerPx = gridStepMin <= 5 ? 1 : 2;
+  const trackWidth = 840;
+  const { placed, milestones } = useMemo(
+    () => layoutEvents(visible, { dayStart, dayEnd, minutesPerPx, trackWidth }),
+    [visible, minutesPerPx]
+  );
+  const totalMinutes = minutesBetween(dayStart, dayEnd);
+  const totalHeight = Math.ceil(totalMinutes / minutesPerPx);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  function onBackgroundClick(e: React.MouseEvent) {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const y = e.clientY - rect.top;
+    const mins = Math.round(y * minutesPerPx);
+    const t = addMin(dayStart, clamp(mins, 0, totalMinutes));
+    setDraftTime(t);
+    setCreatorOpen(true);
+  }
+  function createEventAt(time: Date, title: string) {
+    const id = Math.random().toString(36).slice(2, 9);
+    const newEv: TimelineEvent = { id, title, type: "duration", start: time, end: addMin(time, 30), color: "bg-rose-200" };
+    setEvents(prev => [...prev, newEv]);
+    setSelected(newEv);
+  }
+  function createMilestoneAt(time: Date, title: string) {
+    const id = Math.random().toString(36).slice(2, 9);
+    const ms: TimelineEvent = { id, title, type: "milestone", start: time, icon: <Cake className="h-3.5 w-3.5"/> };
+    setEvents(prev => [...prev, ms]);
+    setSelected(ms);
+  }
+  function deleteEvent(id: string) {
+    setEvents(prev => prev.filter(e => e.id !== id));
+    setSelected(null);
+  }
+  const [draftTitle, setDraftTitle] = useState("New Event");
+  const mobileView = (
+    <div className="md:hidden space-y-2">
+      {events.slice().sort((a,b) => a.start.getTime() - b.start.getTime()).map(ev => (
+        <Card key={ev.id} onClick={() => setSelected(ev)} className="cursor-pointer">
+          <CardContent className="flex items-start gap-3 p-4">
+            <div className="shrink-0 mt-0.5">
+              {ev.type === "milestone" ? <Cake className="h-4 w-4"/> : <Clock className="h-4 w-4"/>}
+            </div>
+            <div>
+              <div className="font-medium">{ev.title}</div>
+              <div className="text-sm text-muted-foreground">
+                {format(ev.start, "h:mmaaa")} {ev.type === "duration" && ev.end ? `– ${format(ev.end, "h:mmaaa")}` : ""}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+  const desktopView = (
+    <div className="hidden md:block">
+      <div className="rounded-2xl border bg-background">
+        <div className="relative grid" style={{ gridTemplateColumns: `${AXIS_WIDTH}px 1fr` }}>
+          <div className="border-r px-2 select-none">
+            {buildTicks(dayStart, dayEnd, gridStepMin).map(({ t, label }, i) => {
+              const top = Math.round(minutesBetween(dayStart, t) / minutesPerPx);
+              return (
+                <div key={i} className="absolute text-[12px] font-medium text-foreground" style={{ top }}>
+                  {label}
+                </div>
+              );
+            })}
+          </div>
+          <div className="relative" style={{ height: totalHeight }}>
+            <div className="absolute inset-0" onClick={onBackgroundClick} ref={containerRef}>
+              {buildTicks(dayStart, dayEnd, gridStepMin).map(({ t }, i) => {
+              const y = Math.round(minutesBetween(dayStart, t) / minutesPerPx);
+              return (
+                <div key={i} className="absolute left-0 right-0 border-t border-muted" style={{ top: y }} />
+              );
+            })}
+            </div>
+            {milestones.map(ms => {
+              const y = Math.round(minutesBetween(dayStart, ms.start) / minutesPerPx);
+              return (
+                <div key={ms.id} className="absolute left-0 right-0 z-20" style={{ top: y }}>
+                  <div className="relative">
+                    <div className="absolute inset-x-0 border-t-4 border-rose-500/80 shadow-[0_0_0_1px_rgba(244,63,94,0.2)]" />
+                    <div className="absolute -left-[72px] -translate-y-1/2 flex items-center gap-2">
+                      <div className="h-7 w-7 rounded-full bg-rose-600 text-white grid place-items-center shadow-md">
+                        {ms.icon ?? <Cake className="h-4 w-4"/>}
+                      </div>
+                      <div className="px-2 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-semibold">
+                        {ms.title}
+                      </div>
+                      <div className="text-xs text-muted-foreground font-medium">
+                        {format(ms.start, "h:mmaaa")}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            {placed.map(p => {
+              const clusterWidth = trackWidth;
+              const colWidth = (clusterWidth - (p.colsInCluster - 1) * TRACK_GAP_X) / p.colsInCluster;
+              const left = p.col * (colWidth + TRACK_GAP_X);
+              return (
+                <div key={p.ev.id} className="absolute" style={{ top: p.top, left, width: colWidth, height: p.height }}>
+                  <div className={("group h-full w-full cursor-pointer rounded-xl border p-2 shadow-sm transition hover:shadow-md " + (p.ev.color ?? "bg-muted"))} onClick={() => setSelected(p.ev)}>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="line-clamp-1 font-medium text-sm">{p.ev.title}</div>
+                      <Pencil className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100" />
+                    </div>
+                    <div className="text-xs text-muted-foreground">{format(p.ev.start, "h:mmaaa")} – {p.ev.end ? format(p.ev.end, "h:mmaaa") : ""}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="fixed bottom-6 right-6">
+        <Button size="lg" className="rounded-full shadow-lg" onClick={() => { setDraftTime(addMin(dayStart, 180)); setDraftTitle("New Event"); setCreatorOpen(true); }}>
+          <Plus className="h-4 w-4 mr-2"/> Add Event
+        </Button>
+      </div>
+    </div>
+  );
+  return (
+    <div className="mx-auto max-w-6xl p-4 md:p-8">
+      <header className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Party Day Timeline</h1>
+        <div className="text-sm text-muted-foreground">{format(dayStart, "EEE, MMM d")} • {format(dayStart, "h:mmaaa")}–{format(dayEnd, "h:mmaaa")}</div>
+      </header>
+      {mobileView}
+      {desktopView}
+      <Sheet open={!!selected} onOpenChange={(open) => { if (!open) setSelected(null); }}>
+        <SheetContent side="right" className="w-[480px] sm:w-[520px]">
+          {selected && (
+            <ScrollArea className="h-full pr-4">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  {selected.type === "milestone" ? <Cake className="h-4 w-4"/> : <Clock className="h-4 w-4"/>}
+                  {selected.title}
+                </SheetTitle>
+                <SheetDescription>
+                  {format(selected.start, "h:mmaaa")} {selected.type === "duration" && selected.end ? `– ${format(selected.end, "h:mmaaa")}` : ""}
+                </SheetDescription>
+              </SheetHeader>
+              <div className="mt-4 space-y-6">
+                <section>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Tasks</h3>
+                  <div className="space-y-1">
+                    {(selected.tasks ?? []).map(t => (
+                      <div key={t.id} className="flex items-center justify-between rounded-lg border p-2">
+                        <span className="text-sm">{t.title}</span>
+                        <span className="text-xs uppercase tracking-wide text-muted-foreground">{t.status}</span>
+                      </div>
+                    ))}
+                    {(!selected.tasks || selected.tasks.length === 0) && (
+                      <div className="text-sm text-muted-foreground">No tasks linked.</div>
+                    )}
+                  </div>
+                </section>
+                <section>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Elements</h3>
+                  <div className="space-y-1">
+                    {(selected.elements ?? []).map(el => (
+                      <div key={el.id} className="flex items-center justify-between rounded-lg border p-2">
+                        <span className="text-sm">{el.title}</span>
+                        <span className="text-xs text-muted-foreground">{el.type}</span>
+                      </div>
+                    ))}
+                    {(!selected.elements || selected.elements.length === 0) && (
+                      <div className="text-sm text-muted-foreground">No elements linked.</div>
+                    )}
+                  </div>
+                </section>
+                <section className="flex items-center gap-2">
+                  <Button size="sm" variant="outline" onClick={() => deleteEvent(selected.id)}>
+                    <Trash2 className="h-3.5 w-3.5 mr-1"/> Delete
+                  </Button>
+                </section>
+              </div>
+            </ScrollArea>
+          )}
+        </SheetContent>
+      </Sheet>
+      <Sheet open={creatorOpen} onOpenChange={setCreatorOpen}>
+        <SheetContent side="right" className="w-[420px]">
+          <SheetHeader>
+            <SheetTitle>New Event</SheetTitle>
+            <SheetDescription>Create a milestone or duration event at a specific time.</SheetDescription>
+          </SheetHeader>
+          <div className="mt-4 space-y-4">
+            <Input placeholder="Event title" value={draftTitle} onChange={(e) => setDraftTitle(e.target.value)} />
+            <div className="text-sm text-muted-foreground">Time: {draftTime ? format(draftTime, "h:mmaaa") : "Choose by clicking the timeline"}</div>
+            <div className="flex items-center gap-2">
+              <Button onClick={() => { if (draftTime) { createEventAt(draftTime, draftTitle || "New Event"); setCreatorOpen(false); }}}>Create Duration (30m)</Button>
+              <Button variant="outline" onClick={() => { if (draftTime) { createMilestoneAt(draftTime, draftTitle || "Milestone"); setCreatorOpen(false); }}}>Create Milestone</Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
+}
+
+function runInlineTests() {
+  const t0 = new Date(2020, 0, 1, 9, 0, 0);
+  const evShort: TimelineEvent = { id: "a", title: "short", type: "duration", start: t0, end: addMin(t0, 10) };
+  const evMed: TimelineEvent = { id: "b", title: "med", type: "duration", start: t0, end: addMin(t0, 45) };
+  const evLong: TimelineEvent = { id: "c", title: "long", type: "duration", start: t0, end: addMin(t0, 120) };
+  const r1 = computeGridStepMinutes(null);
+  const r2 = computeGridStepMinutes(evShort);
+  const r3 = computeGridStepMinutes(evMed);
+  const r4 = computeGridStepMinutes(evLong);
+  console[r1 === 60 ? "log" : "error"]("computeGridStepMinutes(null) =>", r1);
+  console[r2 === 5 ? "log" : "error"]("computeGridStepMinutes(10m) =>", r2);
+  console[r3 === 15 ? "log" : "error"]("computeGridStepMinutes(45m) =>", r3);
+  console[r4 === 60 ? "log" : "error"]("computeGridStepMinutes(120m) =>", r4);
+  const ds = new Date(2020,0,1,8,0,0);
+  const de = new Date(2020,0,1,12,0,0);
+  const L = layoutEvents([
+    { id: "e1", title: "A", type: "duration", start: new Date(2020,0,1,9,0), end: new Date(2020,0,1,10,0) },
+    { id: "e2", title: "B", type: "duration", start: new Date(2020,0,1,9,30), end: new Date(2020,0,1,10,30) },
+    { id: "e3", title: "C", type: "duration", start: new Date(2020,0,1,10,30), end: new Date(2020,0,1,11,0) },
+    { id: "e4", title: "M", type: "milestone", start: new Date(2020,0,1,9,45) }
+  ], { dayStart: ds, dayEnd: de, minutesPerPx: 2, trackWidth: 800 });
+  const maxCols = L.placed.reduce((m,p) => Math.max(m, p.colsInCluster), 0);
+  console[maxCols >= 2 ? "log" : "error"]("layoutEvents max columns >= 2 =>", maxCols);
+}
+
+(() => {
+  const k = "__CONFETTI_TIMELINE_TESTED__";
+  const g: any = (typeof globalThis !== "undefined" ? globalThis : (typeof window !== "undefined" ? window : {}));
+  if (!g[k]) { g[k] = true; try { runInlineTests(); } catch (e) { console.error("Inline tests failed:", e); } }
+})();
