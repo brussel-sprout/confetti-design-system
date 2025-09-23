@@ -302,8 +302,7 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
                                                 <TimelineAccess 
                                                         startTime="09:00"
                                                         endTime="23:00"
-                                                        incrementMinutes={30}
-                                                        showLabels={true}
+                                                        incrementMinutes={15}
                                                 />
                                                 
                                                 {/* Events Container */}
