@@ -6,7 +6,7 @@ A comprehensive design system for the Confetti application, providing consistent
 
 - **Atomic Design**: Components organized as atoms, molecules, and organisms
 - **TypeScript**: Full type safety with comprehensive interfaces
-- **Tailwind CSS v3**: Utility-first styling with custom design tokens
+- **Tailwind CSS v4**: Utility-first styling with custom design tokens
 - **Storybook**: Interactive documentation and component playground
 - **Framer Motion**: Smooth animations and micro-interactions
 - **Accessibility**: WCAG 2.1 AA compliant components
@@ -14,6 +14,24 @@ A comprehensive design system for the Confetti application, providing consistent
 
 ## 📦 Installation
 
+### Standalone Installation
+```bash
+# Clone and install dependencies
+git clone https://github.com/brussel-sprout/confetti-design-system
+cd confetti-design-system
+pnpm install
+
+# Start development server
+pnpm run dev
+
+# Build the design system
+pnpm run build
+
+# Run tests
+pnpm test
+```
+
+### Monorepo Installation
 ```bash
 # From the monorepo root
 pnpm install
@@ -115,6 +133,15 @@ pnpm --filter @repo/confetti-design-system test:ui
 ```
 
 ## 🏗️ Development
+
+### Development Server
+Start the development server to preview all components:
+
+```bash
+pnpm run dev
+```
+
+This will start a Vite development server at `http://localhost:3000` (or next available port) showing the interactive component demo.
 
 ### Project Structure
 

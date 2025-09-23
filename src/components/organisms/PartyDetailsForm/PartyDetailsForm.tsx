@@ -1,7 +1,7 @@
 import { Calendar, Clock, MapPin, Users, X } from 'lucide-react'
 import React from 'react'
 
-import { z } from '@repo/zod'
+import { z } from 'zod'
 
 import { cn } from '../../../utils/cn'
 import { Button } from '../../atoms/Button'
@@ -339,7 +339,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 					<div
 						ref={formRef}
 						className={cn(
-							'absolute md:absolute fixed md:top-full top-0 left-0 right-0 md:mt-2 mt-0 z-50',
+							'fixed md:absolute md:top-full top-0 left-0 right-0 md:mt-2 mt-0 z-50',
 							'bg-background border border-border rounded-xl shadow-lg',
 							'p-4 md:p-6',
 							isClosing ? 'animate-scale-out' : 'animate-scale-in',

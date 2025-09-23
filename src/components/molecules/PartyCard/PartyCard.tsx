@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { FeatureList, Icon, StatusBadge } from '@repo/confetti-design-system'
+import { FeatureList } from '../../atoms/FeatureList'
+import { Icon } from '../../atoms/Icon'
+import { StatusBadge } from '../../atoms/StatusBadge'
 
 import { cn } from '../../../utils/cn'
 import { Card, CardContent, CardHeader } from '../Card'

@@ -1,7 +1,7 @@
 import { AlertCircle, Check, Clock, Loader2 } from 'lucide-react'
 import React from 'react'
 
-import { ProgressBar } from '@repo/confetti-design-system'
+import { ProgressBar } from '../../atoms/ProgressBar'
 
 import { cn } from '../../../utils/cn'
 
