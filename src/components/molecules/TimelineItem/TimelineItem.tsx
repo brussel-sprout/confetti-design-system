@@ -1,5 +1,5 @@
-import { AlertCircle, CheckCircle, Clock, Edit3, MapPin, Trash2, Users } from 'lucide-react'
-import React from 'react'
+import { AlertCircle, CheckCircle, Clock, Edit3, MapPin, Trash2, Users, ChevronDown, ChevronRight } from 'lucide-react'
+import React, { useState } from 'react'
 
 import { Badge } from '../../atoms/Badge'
 import { Button } from '../../atoms/Button'
@@ -36,6 +36,7 @@ export interface TimelineItemProps {
         onDelete?: (eventId: string) => void
         onClick?: (event: TimelineEvent) => void
         onStatusChange?: (eventId: string, status: string) => void
+        defaultExpanded?: boolean
         className?: string
 }
 
@@ -51,11 +52,19 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
                         onDelete,
                         onClick,
                         onStatusChange,
+                        defaultExpanded = false,
                         className = '',
                         ...props
                 },
                 ref
         ) => {
+                const [isExpanded, setIsExpanded] = useState(defaultExpanded)
+
+                const handleToggleExpanded = (e: React.MouseEvent) => {
+                        e.stopPropagation()
+                        setIsExpanded(!isExpanded)
+                }
+
                 const getCategoryColor = (category: TimelineEvent['category']) => {
                         switch (category) {
                                 case 'setup':
@@ -153,7 +162,6 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
                                 className={cn('relative flex gap-4 group', className)} 
                                 style={{ marginLeft: `${stackIndex * 20}px` }} // Horizontal stacking for overlapping events
                                 {...props}
-                                onClick={() => onClick?.(event)}
                         >
                                 {/* Timeline Line */}
                                 <div className="flex flex-col items-center">
@@ -185,42 +193,51 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
                                 <div className="flex-1 pb-8">
                                         <div
                                                 className={cn(
-                                                        'bg-background border border-border rounded-xl p-4 transition-all duration-200',
+                                                        'bg-background border border-border rounded-xl transition-all duration-200 cursor-pointer',
                                                         'hover:shadow-md hover:border-primary/30',
                                                         event.status === 'completed' && 'bg-success/5 border-success/20',
                                                         event.status === 'in-progress' && 'bg-primary/5 border-primary/20',
-                                                        event.status === 'cancelled' && 'bg-destructive/5 border-destructive/20'
+                                                        event.status === 'cancelled' && 'bg-destructive/5 border-destructive/20',
+                                                        isExpanded ? 'p-4' : 'p-3'
                                                 )}
+                                                onClick={handleToggleExpanded}
                                         >
-                                                {/* Header */}
-                                                <div className="flex items-start justify-between mb-3">
-                                                        <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center gap-2 mb-1">
-                                                                        <h3 className="font-semibold text-foreground truncate">{event.title}</h3>
+                                                {/* Collapsed Header */}
+                                                <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                                                                <div className="flex items-center gap-1">
+                                                                        {isExpanded ? (
+                                                                                <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                                                                        ) : (
+                                                                                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                                                                        )}
                                                                         {getStatusIcon(event.status)}
                                                                 </div>
-
-                                                                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                                                                        <span className="flex items-center gap-1">
-                                                                                <Clock className="w-3 h-3" />
-                                                                                {formatTime(event.startTime)}
-                                                                                {event.endTime && ` - ${formatTime(event.endTime)}`}
-                                                                        </span>
+                                                                <h3 className="font-semibold text-foreground truncate">{event.title}</h3>
+                                                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                                        <Clock className="w-3 h-3" />
+                                                                        <span>{formatTime(event.startTime)}</span>
+                                                                        {event.endTime && <span>- {formatTime(event.endTime)}</span>}
                                                                         {getDuration() && (
-                                                                                <span className="text-xs bg-muted px-2 py-0.5 rounded-full">
+                                                                                <Badge size="sm" variant="outline" className="text-xs ml-1">
                                                                                         {getDuration()}
-                                                                                </span>
+                                                                                </Badge>
                                                                         )}
                                                                 </div>
                                                         </div>
 
+                                                        {/* Priority badge - always visible */}
+                                                        <Badge size="sm" className={getPriorityColor(event.priority)}>
+                                                                {event.priority}
+                                                        </Badge>
+
                                                         {/* Actions */}
-                                                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-2">
                                                                 {onEdit && (
                                                                         <Button
                                                                                 variant="ghost"
                                                                                 size="sm"
-                                                                                onClick={() => onEdit(event)}
+                                                                                onClick={(e) => { e.stopPropagation(); onEdit(event); }}
                                                                                 className="h-8 w-8 p-0"
                                                                         >
                                                                                 <Edit3 className="w-3 h-3" />
@@ -230,7 +247,7 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
                                                                         <Button
                                                                                 variant="ghost"
                                                                                 size="sm"
-                                                                                onClick={() => onDelete(event.id)}
+                                                                                onClick={(e) => { e.stopPropagation(); onDelete(event.id); }}
                                                                                 className="h-8 w-8 p-0 text-destructive hover:text-destructive"
                                                                         >
                                                                                 <Trash2 className="w-3 h-3" />
@@ -239,63 +256,59 @@ const TimelineItem = React.forwardRef<HTMLDivElement, TimelineItemProps>(
                                                         </div>
                                                 </div>
 
-                                                {/* Description */}
-                                                {event.description && (
-                                                        <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-                                                                {event.description}
-                                                        </p>
-                                                )}
+                                                {/* Expanded Content */}
+                                                {isExpanded && (
+                                                        <div className="mt-4 pt-4 border-t border-border space-y-3">
+                                                                {/* Description */}
+                                                                {event.description && (
+                                                                        <p className="text-sm text-muted-foreground leading-relaxed">
+                                                                                {event.description}
+                                                                        </p>
+                                                                )}
 
-                                                {/* Badges */}
-                                                <div className="flex items-center gap-2 mb-3">
-                                                        <Badge size="sm" className={getCategoryColor(event.category)}>
-                                                                {event.category}
-                                                        </Badge>
-                                                        <Badge size="sm" variant="outline" className={getPriorityColor(event.priority)}>
-                                                                {event.priority}
-                                                        </Badge>
-                                                </div>
+                                                                {/* Category Badge */}
+                                                                <div className="flex items-center gap-2">
+                                                                        <Badge size="sm" className={getCategoryColor(event.category)}>
+                                                                                {event.category}
+                                                                        </Badge>
+                                                                </div>
 
-                                                {/* Details */}
-                                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                                        {event.location && (
-                                                                <span className="flex items-center gap-1">
-                                                                        <MapPin className="w-3 h-3" />
-                                                                        {event.location}
-                                                                </span>
-                                                        )}
-                                                        {event.attendees && (
-                                                                <span className={cn('flex items-center gap-1', 'font-semibold text-foreground')}>
-                                                                        <Users className="w-3 h-3" />
-                                                                        {event.attendees} people
-                                                                </span>
-                                                        )}
-                                                        {getDuration() && (
-                                                                <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
-                                                                        {getDuration()}
-                                                                </span>
-                                                        )}
-                                                </div>
+                                                                {/* Details */}
+                                                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                                                        {event.location && (
+                                                                                <span className="flex items-center gap-1">
+                                                                                        <MapPin className="w-3 h-3" />
+                                                                                        {event.location}
+                                                                                </span>
+                                                                        )}
+                                                                        {event.attendees && (
+                                                                                <span className={cn('flex items-center gap-1', 'font-semibold text-foreground')}>
+                                                                                        <Users className="w-3 h-3" />
+                                                                                        {event.attendees} people
+                                                                                </span>
+                                                                        )}
+                                                                </div>
 
-                                                {/* Notes */}
-                                                {event.notes && (
-                                                        <div className="mt-3 pt-3 border-t border-border">
-                                                                <p className="text-xs text-muted-foreground italic">Note: {event.notes}</p>
-                                                        </div>
-                                                )}
+                                                                {/* Notes */}
+                                                                {event.notes && (
+                                                                        <div className="pt-3 border-t border-border">
+                                                                                <p className="text-xs text-muted-foreground italic">Note: {event.notes}</p>
+                                                                        </div>
+                                                                )}
 
-                                                {/* Status Actions */}
-                                                {onStatusChange && event.status !== 'completed' && event.status !== 'cancelled' && (
-                                                        <div className="mt-3 pt-3 border-t border-border flex gap-2">
-                                                                {event.status === 'pending' && (
-                                                                        <Button
-                                                                                variant="outline"
-                                                                                size="sm"
-                                                                                onClick={() => onStatusChange(event.id, 'in-progress')}
-                                                                                className={cn('text-sm text-muted-foreground mb-3', 'text-xs')}
-                                                                        >
-                                                                                Start Task
-                                                                        </Button>
+                                                                {/* Status Actions */}
+                                                                {onStatusChange && event.status !== 'completed' && event.status !== 'cancelled' && (
+                                                                        <div className="pt-3 border-t border-border flex gap-2">
+                                                                                {event.status === 'pending' && (
+                                                                                        <Button
+                                                                                                variant="outline"
+                                                                                                size="sm"
+                                                                                                onClick={(e) => { e.stopPropagation(); onStatusChange(event.id, 'in-progress'); }}
+                                                                                        >
+                                                                                                Start Task
+                                                                                        </Button>
+                                                                                )}
+                                                                        </div>
                                                                 )}
                                                         </div>
                                                 )}
