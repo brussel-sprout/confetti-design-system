@@ -7,6 +7,7 @@ import { SearchInput } from '../../atoms/SearchInput'
 import { Select } from '../../atoms/Select'
 import { Card } from '../../molecules/Card'
 import { TimelineItem } from '../../molecules/TimelineItem'
+import { TimelineAccess, useTimelinePosition } from '../../molecules/TimelineAccess'
 
 import type { TimelineEvent } from '../../molecules/TimelineItem'
 
@@ -277,41 +278,60 @@ const EventTimeline = React.forwardRef<HTMLDivElement, EventTimelineProps>(
                                 </div>
 
                                 {/* Timeline */}
-                                <div className="space-y-0">
-                                        {eventsWithStackIndex.length === 0 ? (
-                                                <Card className="p-8">
-                                                        <div className="text-center">
-                                                                <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                                                                <h3 className="text-lg font-semibold text-foreground mb-2">No Events Found</h3>
-                                                                <p className="text-muted-foreground mb-4">
-                                                                        {searchQuery || Object.values(filters).some((f) => f !== 'all')
-                                                                                ? 'Try adjusting your search or filters'
-                                                                                : 'Start by adding your first event to the timeline'}
-                                                                </p>
-                                                                {showAddButton && onAddEvent && (
-                                                                        <Button onClick={onAddEvent} variant="outline">
-                                                                                <Plus className="w-4 h-4 mr-2" />
-                                                                                Add First Event
-                                                                        </Button>
-                                                                )}
-                                                        </div>
-                                                </Card>
-                                        ) : (
-                                                <div className="space-y-0">
-                                                        {eventsWithStackIndex.map((event, index) => (
-                                                                <TimelineItem
-                                                                        key={event.id}
-                                                                        event={event}
-                                                                        isFirst={index === 0}
-                                                                        isLast={index === eventsWithStackIndex.length - 1}
-                                                        stackIndex={event.stackIndex}
-                                                                        onEdit={onEditEvent}
-                                                                        onDelete={onDeleteEvent}
-                                                                />
-                                                        ))}
+                                {eventsWithStackIndex.length === 0 ? (
+                                        <Card className="p-8">
+                                                <div className="text-center">
+                                                        <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                                                        <h3 className="text-lg font-semibold text-foreground mb-2">No Events Found</h3>
+                                                        <p className="text-muted-foreground mb-4">
+                                                                {searchQuery || Object.values(filters).some((f) => f !== 'all')
+                                                                        ? 'Try adjusting your search or filters'
+                                                                        : 'Start by adding your first event to the timeline'}
+                                                        </p>
+                                                        {showAddButton && onAddEvent && (
+                                                                <Button onClick={onAddEvent} variant="outline">
+                                                                        <Plus className="w-4 h-4 mr-2" />
+                                                                        Add First Event
+                                                                </Button>
+                                                        )}
                                                 </div>
-                                        )}
-                                </div>
+                                        </Card>
+                                ) : (
+                                        <div className="flex gap-6">
+                                                {/* Timeline Access - Time increments */}
+                                                <TimelineAccess 
+                                                        startTime="09:00"
+                                                        endTime="23:00"
+                                                        incrementMinutes={30}
+                                                        showLabels={true}
+                                                />
+                                                
+                                                {/* Events Container */}
+                                                <div className="flex-1 relative min-h-[800px]">
+                                                        {eventsWithStackIndex.map((event, index) => {
+                                                                const topPosition = useTimelinePosition(event.startTime, "09:00", 4)
+                                                                return (
+                                                                        <TimelineItem
+                                                                                key={event.id}
+                                                                                event={event}
+                                                                                isFirst={index === 0}
+                                                                                isLast={index === eventsWithStackIndex.length - 1}
+                                                                                stackIndex={event.stackIndex}
+                                                                                onEdit={onEditEvent}
+                                                                                onDelete={onDeleteEvent}
+                                                                                style={{
+                                                                                        position: 'absolute',
+                                                                                        top: `${topPosition}px`,
+                                                                                        left: '0',
+                                                                                        right: '0',
+                                                                                        zIndex: 10
+                                                                                }}
+                                                                        />
+                                                                )
+                                                        })}
+                                                </div>
+                                        </div>
+                                )}
 
                                 {/* Quick Actions Footer */}
                                 {eventsWithStackIndex.length > 0 && (
