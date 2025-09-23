@@ -28,8 +28,8 @@ export const MilestoneMarker: React.FC<MilestoneMarkerProps> = ({
   // Get the icon component dynamically
   const IconComponent = Icons[iconName as keyof typeof Icons] as React.ComponentType<{ className?: string }>
   
-  // Calculate horizontal offset for stacking
-  const leftOffset = stackIndex * 8 // 8px offset per stack level
+  // Calculate horizontal offset for stacking - match EventBlock spacing
+  const leftOffset = stackIndex * 220 // 220px offset per stack level to match duration events
   
   return (
     <div
@@ -76,54 +76,54 @@ export const MilestoneMarker: React.FC<MilestoneMarkerProps> = ({
       {/* Event details panel */}
       <div
         className={cn(
-          'ml-3 p-2 bg-background border border-border rounded-lg shadow-sm',
-          'min-w-0 max-w-xs transition-all duration-200',
-          isSelected && 'ring-1 ring-blue-300 shadow-md',
-          'group-hover:shadow-md'
+          'ml-3 p-3 bg-background border border-border rounded-xl shadow-sm',
+          'w-48 transition-all duration-300',
+          isSelected && 'ring-2 ring-primary shadow-lg',
+          'group-hover:shadow-lg hover:border-primary/30'
         )}
       >
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-sm text-foreground truncate">
+            <h4 className="font-semibold text-sm text-foreground truncate">
               {event.title}
             </h4>
-            <div className="text-xs text-muted-foreground mt-0.5">
+            <div className="text-sm text-muted-foreground mt-1 font-medium">
               {formatTime(event.startTime)}
             </div>
           </div>
           
-          {/* Event type badge */}
+          {/* Priority badge */}
           <div className={cn(
-            'flex-shrink-0 px-1.5 py-0.5 text-xs font-medium rounded',
-            categoryStyle.bg,
-            categoryStyle.text,
-            'border',
-            categoryStyle.border
+            'px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0',
+            event.priority === 'critical' && 'bg-red-100 text-red-700 border border-red-200',
+            event.priority === 'high' && 'bg-orange-100 text-orange-700 border border-orange-200',
+            event.priority === 'medium' && 'bg-yellow-100 text-yellow-700 border border-yellow-200',
+            event.priority === 'low' && 'bg-green-100 text-green-700 border border-green-200'
           )}>
-            {event.category}
+            {event.priority}
           </div>
         </div>
         
         {/* Description */}
         {event.description && (
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+          <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
             {event.description}
           </p>
         )}
         
         {/* Additional info */}
-        <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+        <div className="mt-3 flex flex-wrap gap-3 text-sm text-muted-foreground">
           {event.location && (
-            <div className="flex items-center gap-1">
-              <Icons.MapPin className="w-3 h-3" />
-              <span className="truncate max-w-[80px]">{event.location}</span>
+            <div className="flex items-center gap-2">
+              <Icons.MapPin className="w-4 h-4" />
+              <span className="truncate max-w-[120px]">{event.location}</span>
             </div>
           )}
           
           {event.assignedTo && event.assignedTo.length > 0 && (
-            <div className="flex items-center gap-1">
-              <Icons.User className="w-3 h-3" />
-              <span className="truncate max-w-[60px]">{event.assignedTo[0]}</span>
+            <div className="flex items-center gap-2">
+              <Icons.Users className="w-4 h-4" />
+              <span className="truncate max-w-[100px]">{event.assignedTo[0]}</span>
               {event.assignedTo.length > 1 && (
                 <span>+{event.assignedTo.length - 1}</span>
               )}
@@ -133,18 +133,18 @@ export const MilestoneMarker: React.FC<MilestoneMarkerProps> = ({
         
         {/* Tasks and elements count */}
         {(event.assignedTasks?.length || event.relatedElements?.length) && (
-          <div className="mt-1 flex gap-2">
+          <div className="mt-3 flex gap-3 pt-2 border-t border-border">
             {event.assignedTasks && event.assignedTasks.length > 0 && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Icons.CheckSquare className="w-3 h-3" />
-                <span>{event.assignedTasks.length}</span>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Icons.CheckSquare className="w-4 h-4" />
+                <span>{event.assignedTasks.length} tasks</span>
               </div>
             )}
             
             {event.relatedElements && event.relatedElements.length > 0 && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Icons.Package className="w-3 h-3" />
-                <span>{event.relatedElements.length}</span>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Icons.Package className="w-4 h-4" />
+                <span>{event.relatedElements.length} items</span>
               </div>
             )}
           </div>
@@ -153,8 +153,8 @@ export const MilestoneMarker: React.FC<MilestoneMarkerProps> = ({
       
       {/* Selection indicator */}
       {isSelected && (
-        <div className="absolute top-0 left-8 transform -translate-y-2 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
-          <Icons.Check className="w-2 h-2 text-white" />
+        <div className="absolute top-0 right-0 transform -translate-y-2 translate-x-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center border-2 border-background shadow-lg">
+          <Icons.Check className="w-3 h-3 text-primary-foreground" />
         </div>
       )}
     </div>
