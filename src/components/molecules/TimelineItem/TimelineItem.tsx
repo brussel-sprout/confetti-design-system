@@ -10,20 +10,21 @@ import { cn } from '../../../utils/cn'
 export interface TimelineEvent {
         id: string
         title: string
+        type: 'duration' | 'milestone'
+        start: Date
+        end?: Date
+        icon?: React.ReactNode
+        color?: string
         description?: string
-        startTime: string // HH:MM format
-        endTime?: string // HH:MM format - optional for milestone events
-        eventType: 'duration' | 'milestone'
-        duration?: number // minutes
         location?: string
         attendees?: number
         category: 'setup' | 'activity' | 'meal' | 'entertainment' | 'cleanup' | 'other'
         priority: 'low' | 'medium' | 'high' | 'critical'
         assignedTo?: string[]
-        assignedTasks?: string[]
-        relatedElements?: string[]
         notes?: string
         status?: 'pending' | 'in-progress' | 'completed' | 'cancelled'
+        tasks?: { id: string; title: string; status: 'todo' | 'doing' | 'done' }[]
+        elements?: { id: string; title: string; type: string }[]
 }
 
 export interface TimelineItemProps {
