@@ -26,7 +26,6 @@ import { PartySelectionLayout } from './organisms/PartySelectionLayout'
 import { PartySelector } from './organisms/PartySelector'
 import { ProgressTracker } from './organisms/ProgressTracker'
 import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
-import { TimelineContainer } from './organisms/TimelineContainer'
 
 import type { ProgressStepperStep } from './molecules/ProgressStepper'
 import type { TimelineEvent } from './molecules/TimelineItem'
@@ -602,7 +601,7 @@ export const Demo: React.FC = () => {
                                                 </CardHeader>
                                                 <CardContent>
                                                         <div className="bg-muted/30 p-4 rounded-lg">
-                                                                <TimelineContainer
+                                                                {/* <TimelineContainer
                                                                         events={timelineEvents}
                                                                         onEventCreate={handleEventCreate}
                                                                         onEventUpdate={handleEventUpdate}
