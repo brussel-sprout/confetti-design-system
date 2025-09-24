@@ -1,0 +1,136 @@
+Timeline Component Specification
+TimelineContainer (Main Component)
+The TimelineContainer is the orchestrator of the entire timeline visualization. It manages the state of events, handles user interactions for event creation and selection, and coordinates the layout of all sub-components.
+
+Purpose: To display a chronological sequence of events, distinguishing between duration-based activities and specific milestones, with interactive capabilities for viewing details and adding new events.
+
+Props:
+
+events: PartyEvent[] - An array of event objects to be displayed on the timeline.
+onEventCreate: (event: Omit<PartyEvent, 'id'>) => void - Callback function triggered when a new event is created.
+onEventUpdate: (event: PartyEvent) => void - Callback function triggered when an existing event is updated.
+onEventDelete: (eventId: string) => void - Callback function triggered when an event is deleted.
+Internal State:
+
+selectedEvent: PartyEvent | null - The currently selected event, used to control the SideDrawerModal.
+isCreating: boolean - Flag to control the visibility of the EventCreationModal.
+createAtTime: string - The suggested start time for a new event, derived from where the user clicks on the TimelineAxis.
+Key Responsibilities:
+
+Renders the TimelineAxis, EventRenderer components, SideDrawerModal, and EventCreationModal.
+Calculates event positions and overlap groups using timelineUtils.
+Manages the opening and closing of the detail and creation modals.
+Sub-Components
+TimelineAxis
+Purpose: Displays the vertical time scale and provides interactive points for event creation.
+
+Props:
+
+timeScale: '30min' | '15min' | '5min' - Defines the granularity of the time slots displayed (e.g., every 30 minutes).
+onTimeClick: (time: string, event: React.MouseEvent) => void - Callback function triggered when a time slot on the axis is clicked, providing the clicked time.
+Key Responsibilities:
+
+Generates and displays time slots (e.g., 9:00 AM, 9:30 AM).
+Highlights major hour markers for readability.
+Provides a clickable interface to initiate event creation at a specific time.
+EventRenderer
+Purpose: Acts as a dispatcher, rendering either an EventBlock or a MilestoneMarker based on the eventType of the given event.
+
+Props:
+
+event: PartyEvent - The event object to be rendered.
+top: number - The calculated vertical position (in pixels) of the event on the timeline.
+stackIndex: number - The horizontal stacking index for overlapping events.
+isSelected: boolean - Indicates if the event is currently selected.
+onClick: () => void - Callback function triggered when the event is clicked.
+Key Responsibilities:
+
+Conditionally renders EventBlock for duration events.
+Conditionally renders MilestoneMarker for milestone events.
+EventBlock (for Duration Events)
+Purpose: Visually represents a duration-based event on the timeline.
+
+Props:
+
+event: PartyEvent - The duration event object.
+top: number - Vertical position.
+height: number - The calculated height (in pixels) representing the event's duration.
+stackIndex: number - Horizontal position for stacking.
+isSelected: boolean - Indicates selection state.
+onClick: () => void - Callback for click interaction.
+Key Characteristics:
+
+Visual Representation: A rectangular block whose height corresponds to its duration.
+Stacking: Overlapping events are stacked horizontally using the stackIndex to prevent visual clutter.
+Styling:
+categoryIcons: Maps event categories to Lucide icons (e.g., Wrench for setup, Utensils for food).
+categoryColors: Applies background and border colors based on the event category (e.g., bg-orange-100 for setup).
+priorityBorders: Uses left border thickness to indicate priority (low, medium, high).
+isSelected: Applies a ring-2 ring-blue-500 shadow-lg scale-105 for visual feedback when selected.
+Content: Displays event title, time range, description (if height allows), and indicators for tasks/elements.
+MilestoneMarker (for Milestone Events)
+Purpose: Visually represents a specific point-in-time milestone on the timeline.
+
+Props:
+
+event: PartyEvent - The milestone event object.
+top: number - Vertical position.
+stackIndex: number - Horizontal position for visual offset.
+isSelected: boolean - Indicates selection state.
+onClick: () => void - Callback for click interaction.
+Key Characteristics:
+
+Visual Representation: A small, circular icon connected by a horizontal line to the main timeline axis.
+Styling:
+milestoneIcons: Maps event categories to Lucide icons (e.g., Cake for food milestones).
+categoryColors: Applies background color to the circular marker based on the event category (e.g., bg-pink-500 for food).
+isSelected: Applies a ring-2 ring-blue-300 scale-110 for visual feedback when selected.
+Content: Displays the event title and start time next to the marker.
+SideDrawerModal
+Purpose: Displays detailed information about a selected PartyEvent in a slide-out panel.
+
+Props:
+
+isOpen: boolean - Controls the visibility of the drawer.
+onClose: () => void - Callback to close the drawer.
+event: PartyEvent | null - The event object whose details are to be displayed.
+onEventUpdate: (event: PartyEvent) => void - Callback for updating the event (currently a placeholder).
+onEventDelete: (eventId: string) => void - Callback for deleting the event.
+Key Responsibilities:
+
+Presents event title, type, category, description, time information, priority, and related tasks/elements.
+Provides actions to edit (placeholder) or delete the event.
+Calculates and displays event duration for duration events.
+EventCreationModal
+Purpose: Provides a form for users to create new PartyEvent objects.
+
+Props:
+
+isOpen: boolean - Controls the visibility of the modal.
+onClose: () => void - Callback to close the modal.
+onEventCreate: (event: Omit<PartyEvent, 'id'>) => void - Callback to submit the new event data.
+suggestedTime: string - A pre-filled start time based on the TimelineAxis click.
+Key Responsibilities:
+
+Collects event details: title, description, start/end times, event type (duration/milestone), category, and priority.
+Pre-fills the start time based on the suggestedTime prop.
+Dynamically hides the "End Time" field for milestone events.
+Assigns a default color based on the selected category.
+Data Structures
+PartyEvent: The core data model for an event, including id, title, description, startTime, endTime, eventType, category, priority, assignedTasks, relatedElements, and color.
+TimelinePosition: Internal interface used to store calculated rendering properties for an event: top, height, and stackIndex.
+OverlapGroup: Internal interface used by timelineUtils to group events that visually overlap.
+Utility Functions (src/utils/timelineUtils.ts)
+This module contains pure functions responsible for the complex logic of positioning events on the timeline:
+
+createDateFromTimeString: Converts "HH:mm" strings to Date objects for accurate time calculations.
+convertToInternalEvent: Transforms PartyEvent objects into an internal format (InternalEvent) that uses Date objects for startTime and endTime, facilitating date arithmetic.
+findOverlapGroups: Identifies groups of events that overlap in time, which is crucial for horizontal stacking.
+calculateEventPositions: Determines the top (vertical position), height (for duration events), and stackIndex (for horizontal stacking) for each event based on its time and overlap groups.
+Styling and Theming
+The components are styled using Tailwind CSS, providing a utility-first approach for rapid UI development. Colors, spacing, and responsive behaviors are defined through Tailwind classes. Icons are provided by Lucide React.
+
+Interactions
+Clicking on Timeline Axis: Opens the EventCreationModal with the clicked time pre-filled.
+Clicking on an Event Block/Milestone Marker: Opens the SideDrawerModal to display event details.
+Hover States: Visual feedback (e.g., scale-102, scale-105) is provided on hover for interactive elements.
