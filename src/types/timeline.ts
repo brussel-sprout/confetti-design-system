@@ -23,7 +23,7 @@ export interface TimelinePosition {
 }
 
 export interface OverlapGroup {
-  events: PartyEvent[]
+  events: InternalEvent[]
   startTime: Date
   endTime: Date
 }

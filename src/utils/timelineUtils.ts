@@ -20,7 +20,7 @@ export function convertToInternalEvent(event: PartyEvent): InternalEvent {
     ...event,
     startTime: createDateFromTimeString(event.startTime),
     endTime: event.endTime ? createDateFromTimeString(event.endTime) : undefined
-  }
+  } as InternalEvent
 }
 
 /**
@@ -95,7 +95,7 @@ export function calculateEventPositions(
   events: PartyEvent[],
   timeScale: '30min' | '15min' | '5min' = '30min',
   startTime: string = '09:00',
-  endTime: string = '23:00'
+  _endTime: string = '23:00' // TODO: Use for timeline bounds validation
 ): Map<string, TimelinePosition> {
   const positions = new Map<string, TimelinePosition>()
   
@@ -108,7 +108,7 @@ export function calculateEventPositions(
   const referenceTime = createDateFromTimeString(startTime)
   
   // Calculate pixels per minute based on time scale
-  const pixelsPerMinute = timeScale === '5min' ? 4 : timeScale === '15min' ? 2 : 1
+  const pixelsPerMinute = getPixelsPerMinute(timeScale)
   
   // Find overlap groups for horizontal stacking
   const overlapGroups = findOverlapGroups(internalEvents)
@@ -197,6 +197,60 @@ export function generateTimeSlots(
   }
   
   return slots
+}
+
+/**
+ * Generates fine-grained time ticks for the timeline axis
+ * Returns both major ticks (with labels) and minor ticks (without labels)
+ */
+export function generateTimeTicks(
+  startTime: string = '09:00',
+  endTime: string = '23:00',
+  timeScale: '30min' | '15min' | '5min' = '30min'
+): { majorTicks: string[], minorTicks: string[] } {
+  const start = createDateFromTimeString(startTime)
+  const end = createDateFromTimeString(endTime)
+  
+  const majorTicks: string[] = []
+  const minorTicks: string[] = []
+  
+  // Determine tick intervals based on time scale
+  const majorInterval = timeScale === '5min' ? 30 : timeScale === '15min' ? 30 : 30 // Major labels every 30 minutes
+  const minorInterval = timeScale === '5min' ? 5 : timeScale === '15min' ? 10 : 15 // Minor ticks every 5-15 minutes
+  
+  const current = new Date(start)
+  
+  while (current <= end) {
+    const hours = current.getHours().toString().padStart(2, '0')
+    const minutes = current.getMinutes().toString().padStart(2, '0')
+    const timeString = `${hours}:${minutes}`
+    
+    // Add major tick if it's a major interval
+    if (current.getMinutes() % majorInterval === 0) {
+      majorTicks.push(timeString)
+    } else {
+      minorTicks.push(timeString)
+    }
+    
+    current.setMinutes(current.getMinutes() + minorInterval)
+  }
+  
+  return { majorTicks, minorTicks }
+}
+
+/**
+ * Calculates pixels per minute based on time scale
+ */
+export function getPixelsPerMinute(timeScale: '30min' | '15min' | '5min'): number {
+  switch (timeScale) {
+    case '5min':
+      return 8 // More detailed view
+    case '15min':
+      return 4 // Medium detail
+    case '30min':
+    default:
+      return 2 // Standard view
+  }
 }
 
 /**

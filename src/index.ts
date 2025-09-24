@@ -147,14 +147,6 @@ export type {
   ProgressCategory 
 } from "./components/organisms/ProgressTracker";
 
-// Organisms - EventTimeline
-export { EventTimeline } from "./components/organisms/EventTimeline";
-export type { EventTimelineProps, TimeFilter } from "./components/organisms/EventTimeline";
-
-// Molecules - TimelineItem
-export { TimelineItem } from "./components/molecules/TimelineItem";
-export type { TimelineItemProps, TimelineEvent } from "./components/molecules/TimelineItem";
-
 // Organisms - ThemeSelectionHeader
 export { ThemeSelectionHeader } from "./components/organisms/ThemeSelectionHeader";
 export type { ThemeSelectionHeaderProps } from "./components/organisms/ThemeSelectionHeader";
@@ -178,24 +170,16 @@ export type {
 export { Demo } from "./components/Demo";
 
 // Timeline Components
-export {
-  TimelineContainer,
-  TimelineAxis,
-  EventRenderer,
-  EventBlock,
-  MilestoneMarker,
-  SideDrawerModal,
-  EventCreationModal
-} from "./components/organisms/TimelineContainer";
-export type {
-  TimelineContainerProps,
-  TimelineAxisProps,
-  EventRendererProps,
-  EventBlockProps,
-  MilestoneMarkerProps,
-  SideDrawerModalProps,
-  EventCreationModalProps
-} from "./components/organisms/TimelineContainer";
+export { TimelineContainer } from "./components/organisms/TimelineContainer";
+export { TimelineAxis } from "./components/molecules/TimelineAxis";
+export { EventRenderer } from "./components/molecules/EventRenderer";
+export { EventBlock } from "./components/molecules/EventBlock";
+export { MilestoneMarker } from "./components/molecules/MilestoneMarker";
+export { EventCreationModal } from "./components/molecules/EventCreationModal";
+export { SideDrawerModal } from "./components/molecules/SideDrawerModal";
+
+// Timeline Pages
+export { TimelinePage } from "./pages/TimelinePage";
 
 // Timeline Types
 export type {
