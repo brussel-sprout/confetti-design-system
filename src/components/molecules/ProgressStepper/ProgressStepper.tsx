@@ -12,10 +12,11 @@ export interface ProgressStepperStep {
 export interface ProgressStepperProps {
 	steps: ProgressStepperStep[]
 	className?: string
+	onStepClick?: (stepId: string, stepIndex: number) => void
 }
 
 const ProgressStepper = React.forwardRef<HTMLDivElement, ProgressStepperProps>(
-	({ steps, className = '', ...props }, ref) => {
+	({ steps, className = '', onStepClick, ...props }, ref) => {
 		return (
 			<div ref={ref} className={cn('w-full', className)} {...props}>
 				{/* Steps Container */}
@@ -44,14 +45,19 @@ const ProgressStepper = React.forwardRef<HTMLDivElement, ProgressStepperProps>(
 						return (
 							<div key={step.id} className="flex flex-col items-center relative z-10">
 								{/* Step Circle */}
-								<div
+								<button
+									onClick={() => onStepClick?.(step.id, index)}
+									disabled={!onStepClick}
 									className={cn(
 										'w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-lg relative',
 										'transition-all duration-300',
 										isCompleted && 'bg-primary',
 										isCurrent && 'bg-primary',
-										isUpcoming && 'bg-muted text-muted-foreground'
+										isUpcoming && 'bg-muted text-muted-foreground',
+										onStepClick && 'cursor-pointer hover:scale-110',
+										!onStepClick && 'cursor-default'
 									)}
+									aria-label={`Go to step ${index + 1}: ${step.label}`}
 								>
 									{isCompleted ? (
 										<div>
@@ -60,7 +66,7 @@ const ProgressStepper = React.forwardRef<HTMLDivElement, ProgressStepperProps>(
 									) : (
 										<span>{index + 1}</span>
 									)}
-								</div>
+								</button>
 
 								{/* Step Label */}
 								<div className="mt-3 text-center">
