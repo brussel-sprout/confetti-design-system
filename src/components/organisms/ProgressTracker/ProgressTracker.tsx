@@ -124,7 +124,7 @@ const ProgressTracker = React.forwardRef<HTMLDivElement, ProgressTrackerProps>(
                                                                                 <p className="text-sm text-muted-foreground">{subtitle}</p>
                                                                         </div>
                                                                 </div>
-                                                                {allowClose && onClose && (
+                                                                {onClose && (
                                                                         <Button variant="ghost" size="sm" onClick={onClose}>
                                                                                 <X className="w-4 h-4" />
                                                                         </Button>
