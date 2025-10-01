@@ -1,5 +1,6 @@
-import React from 'react'
 import { Check } from 'lucide-react'
+import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
 export interface ProgressStepperStep {
@@ -21,16 +22,17 @@ const ProgressStepper = React.forwardRef<HTMLDivElement, ProgressStepperProps>(
 				<div className="flex items-center justify-between relative">
 					{/* Background connecting line */}
 					<div className="absolute top-6 left-6 right-6 h-0.5 bg-muted z-0" />
-					
+
 					{/* Progress connecting line */}
 					<div
 						className="absolute top-6 left-6 h-0.5 bg-primary z-0"
 						style={{
-							width: steps.length > 1 
-								? `${(steps.filter(s => s.status === 'completed').length / (steps.length - 1)) * 100}%`
-								: '0%',
+							width:
+								steps.length > 1
+									? `${(steps.filter((s) => s.status === 'completed').length / (steps.length - 1)) * 100}%`
+									: '0%',
 							right: 'auto',
-							maxWidth: `calc(100% - 48px)` // Account for circle widths
+							maxWidth: `calc(100% - 48px)`, // Account for circle widths
 						}}
 					/>
 
@@ -61,9 +63,7 @@ const ProgressStepper = React.forwardRef<HTMLDivElement, ProgressStepperProps>(
 								</div>
 
 								{/* Step Label */}
-								<div
-									className="mt-3 text-center"
-								>
+								<div className="mt-3 text-center">
 									<span
 										className={cn(
 											'text-sm font-medium whitespace-nowrap',
