@@ -68,7 +68,7 @@ export const ElementCard: React.FC<ElementCardProps> = ({
 			onKeyDown={(e) => {
 				if (e.key === 'Enter' || e.key === ' ') {
 					e.preventDefault()
-					handleCardClick(e as any)
+					handleCardClick(e as unknown as React.MouseEvent)
 				}
 			}}
 			aria-label={`${mode.type === 'selection' ? 'Select' : 'View'} ${element.element_name}`}

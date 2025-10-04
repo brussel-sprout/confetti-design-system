@@ -1,7 +1,8 @@
 import { AlertCircle, CheckCircle, Clock, Edit3, MapPin, Trash2, Users } from 'lucide-react'
 import React from 'react'
 
-import { Badge, Button } from '@repo/confetti-design-system'
+import { Badge } from '../../atoms/Badge'
+import { Button } from '../../atoms/Button'
 
 import { cn } from '../../../utils/cn'
 

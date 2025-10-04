@@ -117,6 +117,21 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			}
 		}, [isOpen, focusField, internalFocusField])
 
+		const handleClose = React.useCallback(() => {
+			if (isClosing) return // Prevent multiple close calls
+
+			setIsClosing(true)
+
+			// Wait for animation to complete before actually closing
+			setTimeout(() => {
+				setIsOpen(false)
+				setIsClosing(false)
+				setInternalFocusField(null)
+				setIsOpening(false)
+				setFormData(partyDetails) // Reset form data
+			}, 150) // Shorter duration for fade out
+		}, [isClosing, partyDetails])
+
 		// Handle click outside to close
 		React.useEffect(() => {
 			if (!isOpen) return
@@ -152,7 +167,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 				clearTimeout(timeoutId)
 				document.removeEventListener('mousedown', handleClickOutside)
 			}
-		}, [isOpen, isOpening])
+		}, [isOpen, isOpening, handleClose])
 
 		// Handle escape key to close
 		React.useEffect(() => {
@@ -169,7 +184,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			return () => {
 				document.removeEventListener('keydown', handleEscapeKey)
 			}
-		}, [isOpen])
+		}, [isOpen, handleClose])
 
 		const handleFieldClick = (event: React.MouseEvent, field: EditableField) => {
 			setIsOpening(true)
@@ -193,21 +208,6 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			setTimeout(() => {
 				setIsOpening(false)
 			}, 150)
-		}
-
-		const handleClose = () => {
-			if (isClosing) return // Prevent multiple close calls
-
-			setIsClosing(true)
-
-			// Wait for animation to complete before actually closing
-			setTimeout(() => {
-				setIsOpen(false)
-				setIsClosing(false)
-				setInternalFocusField(null)
-				setIsOpening(false)
-				setFormData(partyDetails) // Reset form data
-			}, 150) // Shorter duration for fade out
 		}
 
 		const handleSave = () => {
@@ -236,14 +236,23 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			})
 		}
 
+		// const formatTime = (date: Date | null) => {
+		// 	if (!date) return 'Add time'
+		// 	const hours = date.getHours()
+		// 	const minutes = date.getMinutes()
+		// 	const ampm = hours >= 12 ? 'PM' : 'AM'
+		// 	const displayHours = hours % 12 || 12
+		// 	const displayMinutes = minutes.toString().padStart(2, '0')
+		// 	return `${displayHours}:${displayMinutes} ${ampm}`
+		// }
+		// IDK why this is different from the one above, but it is
 		const formatTime = (date: Date | null) => {
 			if (!date) return 'Add time'
-			const hours = date.getHours()
-			const minutes = date.getMinutes()
-			const ampm = hours >= 12 ? 'PM' : 'AM'
-			const displayHours = hours % 12 || 12
-			const displayMinutes = minutes.toString().padStart(2, '0')
-			return `${displayHours}:${displayMinutes} ${ampm}`
+			return date.toLocaleTimeString('en-US', {
+				hour: 'numeric',
+				minute: '2-digit',
+				hour12: true,
+			})
 		}
 
 		const formatHeadCount = (count: number) => {

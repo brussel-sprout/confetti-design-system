@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '../../../utils/cn'
 
@@ -55,7 +55,7 @@ const Calendar: React.FC<CalendarProps> = ({
 	const [viewMode, setViewMode] = useState<'days' | 'months' | 'years'>('days')
 	const calendarRef = useRef<HTMLDivElement>(null)
 
-	const today = new Date()
+	const today = useMemo(() => new Date(), [])
 	const currentYear = currentMonth.getFullYear()
 	const currentMonthIndex = currentMonth.getMonth()
 
@@ -74,11 +74,14 @@ const Calendar: React.FC<CalendarProps> = ({
 		return days
 	}
 
-	const isDateDisabled = (date: Date) => {
-		if (minDate && date < minDate) return true
-		if (maxDate && date > maxDate) return true
-		return false
-	}
+	const isDateDisabled = useCallback(
+		(date: Date) => {
+			if (minDate && date < minDate) return true
+			if (maxDate && date > maxDate) return true
+			return false
+		},
+		[minDate, maxDate]
+	)
 
 	const isDateSelected = (date: Date) => {
 		if (!selectedDate) return false
@@ -180,7 +183,7 @@ const Calendar: React.FC<CalendarProps> = ({
 
 		document.addEventListener('keydown', handleKeyDown)
 		return () => document.removeEventListener('keydown', handleKeyDown)
-	}, [selectedDate, viewMode, onDateSelect, onClose])
+	}, [selectedDate, viewMode, onDateSelect, onClose, isDateDisabled, today])
 
 	const renderDaysView = () => (
 		<div className="space-y-4">
