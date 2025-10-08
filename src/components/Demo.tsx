@@ -21,6 +21,7 @@ import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
 import { PartyCard } from './molecules/PartyCard'
 import { ProgressStep } from './molecules/ProgressStep'
 import { ProgressStepper } from './molecules/ProgressStepper'
+import { TimelineAxis } from './molecules/TimelineAxis'
 import { EventTimeline } from './organisms/EventTimeline'
 import { PartySelectionLayout } from './organisms/PartySelectionLayout'
 import { PartySelector } from './organisms/PartySelector'
@@ -73,6 +74,8 @@ const sampleTimelineEvents: TimelineEvent[] = [
 
 export const Demo: React.FC = () => {
 	const [showProgressTracker, setShowProgressTracker] = React.useState(false)
+	const [selectedTime, setSelectedTime] = React.useState<string | null>(null)
+	const [timeScale, setTimeScale] = React.useState<'30min' | '15min' | '5min'>('30min')
 	const [progressCategories, setProgressCategories] = React.useState<ProgressCategory[]>([
 		{
 			id: 'theme-analysis',
@@ -382,6 +385,125 @@ export const Demo: React.FC = () => {
 						onEditEvent={(event) => console.log('Edit event:', event)}
 						onDeleteEvent={(id) => console.log('Delete event:', id)}
 					/>
+				</section>
+
+				{/* TimelineAxis Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">TimelineAxis Component</h2>
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Interactive Vertical Time Scale</h3>
+							<p className="text-muted-foreground">
+								Interactive vertical time scale for event creation
+							</p>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							{/* Controls */}
+							<div className="flex flex-wrap gap-4 items-center">
+								<div className="flex items-center gap-2">
+									<label className="text-sm font-medium text-foreground">Time Scale:</label>
+									<select
+										value={timeScale}
+										onChange={(e) =>
+											setTimeScale(e.target.value as '30min' | '15min' | '5min')
+										}
+										className="px-3 py-1 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+									>
+										<option value="30min">30 minutes</option>
+										<option value="15min">15 minutes</option>
+										<option value="5min">5 minutes</option>
+									</select>
+								</div>
+								{selectedTime && (
+									<div className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-md">
+										<span className="text-sm text-primary font-medium">
+											Selected: {selectedTime}
+										</span>
+									</div>
+								)}
+							</div>
+
+							{/* Component Demo */}
+							<div className="flex border border-border rounded-lg overflow-hidden">
+								<div className="flex-shrink-0">
+									<TimelineAxis
+										timeScale={timeScale}
+										onTimeClick={(time) => {
+											setSelectedTime(time)
+											console.log(`Time clicked: ${time}`)
+										}}
+										data-id="timeline-axis-demo"
+									/>
+								</div>
+								{/* Content Area */}
+								<div className="flex-1 p-6 bg-muted/30">
+									<div className="bg-background rounded-lg p-4 border border-border">
+										<h3 className="font-lora text-lg font-medium text-foreground mb-2">
+											Event Creation Area
+										</h3>
+										<p className="text-muted-foreground text-sm mb-4">
+											Click on any time slot in the timeline axis to create an event at that
+											time.
+										</p>
+										{selectedTime ? (
+											<div className="bg-muted border border-border rounded-md p-3">
+												<p className="text-sm text-foreground">
+													<span className="font-medium">Last clicked time:</span>{' '}
+													{selectedTime}
+												</p>
+												<p className="text-xs text-muted-foreground mt-1">
+													This would trigger event creation modal in a real application.
+												</p>
+											</div>
+										) : (
+											<div className="border border-dashed border-border rounded-md p-3 text-center">
+												<p className="text-sm text-muted-foreground">
+													Click a time slot to see interaction
+												</p>
+											</div>
+										)}
+									</div>
+								</div>
+							</div>
+
+							{/* Usage Examples */}
+							<div className="border-t border-border pt-6">
+								<h4 className="font-medium text-foreground mb-4">Usage Examples</h4>
+								<div className="grid md:grid-cols-2 gap-4">
+									<div className="bg-muted rounded-lg p-4">
+										<h5 className="font-medium text-foreground mb-2 text-sm">
+											Basic Usage
+										</h5>
+										<pre className="text-xs text-muted-foreground bg-background p-3 rounded border overflow-x-auto">
+											{`<TimelineAxis 
+  timeScale="30min"
+  onTimeClick={(time, event) => {
+    console.log('Time clicked:', time);
+    // Handle event creation
+  }}
+/>`}
+										</pre>
+									</div>
+									<div className="bg-muted rounded-lg p-4">
+										<h5 className="font-medium text-foreground mb-2 text-sm">
+											With State Management
+										</h5>
+										<pre className="text-xs text-muted-foreground bg-background p-3 rounded border overflow-x-auto">
+											{`const [selectedTime, setSelectedTime] = useState(null);
+
+<TimelineAxis 
+  timeScale="15min"
+  onTimeClick={(time) => {
+    setSelectedTime(time);
+    openEventModal(time);
+  }}
+/>`}
+										</pre>
+									</div>
+								</div>
+							</div>
+						</CardContent>
+					</Card>
 				</section>
 
 				{/* Theme Selection Header Demo */}

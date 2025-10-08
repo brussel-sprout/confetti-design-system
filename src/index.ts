@@ -150,6 +150,10 @@ export type { EventTimelineProps, TimeFilter } from './components/organisms/Even
 export { TimelineItem } from './components/molecules/TimelineItem'
 export type { TimelineItemProps, TimelineEvent } from './components/molecules/TimelineItem'
 
+// Molecules - TimelineAxis
+export { TimelineAxis } from './components/molecules/TimelineAxis'
+export type { TimelineAxisProps } from './components/molecules/TimelineAxis'
+
 // Organisms - ThemeSelectionHeader
 export { ThemeSelectionHeader } from './components/organisms/ThemeSelectionHeader'
 export type { ThemeSelectionHeaderProps } from './components/organisms/ThemeSelectionHeader'
