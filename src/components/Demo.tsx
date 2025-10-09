@@ -21,7 +21,7 @@ import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
 import { PartyCard } from './molecules/PartyCard'
 import { ProgressStep } from './molecules/ProgressStep'
 import { ProgressStepper } from './molecules/ProgressStepper'
-import { TimelineAxis } from './molecules/TimelineAxis'
+import { TimelineAxis, TimelineControls } from './molecules/TimelineAxis'
 import { EventTimeline } from './organisms/EventTimeline'
 import { PartySelectionLayout } from './organisms/PartySelectionLayout'
 import { PartySelector } from './organisms/PartySelector'
@@ -390,6 +390,34 @@ export const Demo: React.FC = () => {
 				{/* TimelineAxis Demo */}
 				<section className="space-y-8">
 					<h2 className="text-3xl font-semibold text-foreground">TimelineAxis Component</h2>
+					
+					{/* TimelineControls Demo */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Timeline Controls</h3>
+							<p className="text-muted-foreground">
+								Interactive controls for adjusting timeline scale
+							</p>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							<TimelineControls
+								timeScale={timeScale}
+								onTimeScaleChange={setTimeScale}
+								startTime={new Date(2024, 0, 1, 14, 0)} // 2:00 PM
+								endTime={new Date(2024, 0, 1, 22, 0)} // 10:00 PM
+								data-id="timeline-controls-demo"
+							/>
+							<div className="border-t border-border pt-4">
+								<p className="text-sm text-muted-foreground">
+									<strong>Current Scale:</strong> {timeScale}
+								</p>
+								<p className="text-xs text-muted-foreground mt-2">
+									Use the slider, buttons, or quick select options to change the time increment.
+								</p>
+							</div>
+						</CardContent>
+					</Card>
+
 					<Card>
 						<CardHeader>
 							<h3 className="text-xl font-semibold">Interactive Vertical Time Scale</h3>

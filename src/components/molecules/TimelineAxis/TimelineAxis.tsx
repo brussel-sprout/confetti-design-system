@@ -1,68 +1,79 @@
 import React from 'react'
-
 export interface TimelineAxisProps {
   timeScale: '30min' | '15min' | '5min'
-  onTimeClick: (time: string, event: React.MouseEvent) => void
+  onTimeClick: (time: string, event: React.MouseEvent | React.KeyboardEvent) => void
+  startTime?: Date
+  endTime?: Date
   'data-id'?: string
 }
-
 export function TimelineAxis({
   timeScale,
   onTimeClick,
+  startTime,
+  endTime,
   'data-id': dataId,
 }: TimelineAxisProps) {
-  // Generate time slots based on the selected time scale
+  // Use provided times or default to 9 AM - 5 PM
+  const effectiveStartTime = startTime || new Date(2024, 0, 1, 9, 0)
+  const effectiveEndTime = endTime || new Date(2024, 0, 1, 17, 0)
+  const startHour = effectiveStartTime.getHours()
+  const startMinute = effectiveStartTime.getMinutes()
+  const endHour = effectiveEndTime.getHours()
+  const endMinute = effectiveEndTime.getMinutes()
+  // Generate time slots based on the selected time scale and time range
   const generateTimeSlots = () => {
     const slots = []
-    const startHour = 9 // Start at 9 AM
-    const endHour = 17 // End at 5 PM
     const intervals = {
       '30min': 30,
       '15min': 15,
       '5min': 5,
     }
-
     const intervalMinutes = intervals[timeScale]
-
-    for (let hour = startHour; hour < endHour; hour++) {
-      for (let minute = 0; minute < 60; minute += intervalMinutes) {
-        const timeString = formatTime(hour, minute)
-        const isMajorTick = minute === 0 // Hour markers are major ticks
-        slots.push({
-          time: timeString,
-          displayTime: formatDisplayTime(hour, minute),
-          isMajorTick,
-        })
+    // Start from the effective start time
+    let currentHour = startHour
+    let currentMinute = startMinute
+    // Round down to nearest interval
+    currentMinute =
+      Math.floor(currentMinute / intervalMinutes) * intervalMinutes
+    while (
+      currentHour < endHour ||
+      (currentHour === endHour && currentMinute <= endMinute)
+    ) {
+      const timeString = formatTime(currentHour, currentMinute)
+      const isMajorTick = currentMinute === 0 // Hour markers are major ticks
+      slots.push({
+        time: timeString,
+        displayTime: formatDisplayTime(currentHour, currentMinute),
+        isMajorTick,
+      })
+      // Increment by interval
+      currentMinute += intervalMinutes
+      if (currentMinute >= 60) {
+        currentMinute -= 60
+        currentHour += 1
       }
     }
-
     return slots
   }
-
   const formatTime = (hour: number, minute: number): string => {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
   }
-
   const formatDisplayTime = (hour: number, minute: number): string => {
     const period = hour >= 12 ? 'PM' : 'AM'
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour
     const displayMinute = minute.toString().padStart(2, '0')
     return `${displayHour}:${displayMinute} ${period}`
   }
-
   const timeSlots = generateTimeSlots()
-
   const handleTimeClick = (timeString: string, event: React.MouseEvent) => {
     onTimeClick(timeString, event)
   }
-
   const handleKeyDown = (timeString: string, event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      onTimeClick(timeString, event as any)
+      onTimeClick(timeString, event)
     }
   }
-
   return (
     <div
       className="flex flex-col bg-background border-r border-border min-w-[144px]"
@@ -74,7 +85,7 @@ export function TimelineAxis({
         <h3 className="font-lora font-medium text-sm text-foreground">Time</h3>
       </div>
       <div className="flex-1">
-        {timeSlots.map((slot, index) => (
+        {timeSlots.map((slot) => (
           <div
             key={slot.time}
             className={`
@@ -111,4 +122,3 @@ export function TimelineAxis({
     </div>
   )
 }
-
