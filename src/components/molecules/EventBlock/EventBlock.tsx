@@ -18,20 +18,26 @@ export interface EventBlockProps {
 
 const suggestionStatusConfig = {
   pending: {
-    color: 'hsl(45, 93%, 47%)',
-    bgColor: 'hsl(45, 93%, 97%)',
+    bgClass: 'bg-amber-50',
+    barClass: 'bg-amber-500',
+    badgeBgClass: 'bg-amber-50',
+    badgeTextClass: 'text-amber-700',
     label: 'Pending',
     icon: Lightbulb,
   },
   approved: {
-    color: 'hsl(142, 71%, 45%)',
-    bgColor: 'hsl(142, 71%, 97%)',
+    bgClass: 'bg-green-50',
+    barClass: 'bg-green-500',
+    badgeBgClass: 'bg-green-50',
+    badgeTextClass: 'text-green-700',
     label: 'Approved',
     icon: Check,
   },
   rejected: {
-    color: 'hsl(0, 84%, 60%)',
-    bgColor: 'hsl(0, 84%, 97%)',
+    bgClass: 'bg-red-50',
+    barClass: 'bg-red-500',
+    badgeBgClass: 'bg-red-50',
+    badgeTextClass: 'text-red-700',
     label: 'Rejected',
     icon: X,
   },
@@ -228,14 +234,8 @@ export function EventBlock({
           ${isSelected ? 'border-primary shadow-lg ring-2 ring-primary/20' : 'border-border hover:border-primary/40 hover:shadow-md'}
           ${isDimmed ? 'opacity-40' : 'opacity-100'}
           ${isDragging ? 'opacity-70 shadow-2xl' : ''}
+          ${statusConfig ? statusConfig.bgClass : isSelected ? 'bg-stone-50' : 'bg-white'}
         `}
-        style={{
-          backgroundColor: statusConfig
-            ? statusConfig.bgColor
-            : isSelected
-              ? 'hsl(30, 15%, 97%)'
-              : 'white',
-        }}
         onClick={handleClick}
       >
         {/* Top resize handle */}
@@ -254,10 +254,7 @@ export function EventBlock({
         {/* Status indicator bar */}
         {statusConfig && (
           <div
-            className="absolute left-0 top-0 bottom-0 w-1"
-            style={{
-              backgroundColor: statusConfig.color,
-            }}
+            className={`absolute left-0 top-0 bottom-0 w-1 ${statusConfig.barClass}`}
           />
         )}
 
@@ -275,11 +272,7 @@ export function EventBlock({
             </div>
             {statusConfig && (
               <div
-                className="flex-shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium"
-                style={{
-                  backgroundColor: `${statusConfig.color}15`,
-                  color: statusConfig.color,
-                }}
+                className={`flex-shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${statusConfig.badgeBgClass} ${statusConfig.badgeTextClass}`}
               >
                 <statusConfig.icon className="w-3 h-3" />
                 <span>{statusConfig.label}</span>
