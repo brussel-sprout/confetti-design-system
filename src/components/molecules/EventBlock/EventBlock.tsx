@@ -83,9 +83,13 @@ export function EventBlock({
   const leftOffset =
     totalStacks > 1 ? `${(stackIndex / totalStacks) * 100}%` : '0%'
 
-  const statusConfig = event.is_suggestion
-    ? suggestionStatusConfig[event.suggestion_status]
-    : null
+	// TODO: Adjust default statusConfig styling later
+	// Currently all events use the approved status config as default
+	// const statusConfig = suggestionStatusConfig.approved
+	const statusConfig = null
+    //   const statusConfig = event.is_suggestion
+	//   ? suggestionStatusConfig[event.suggestion_status]
+	//   : null
 
   const handleClick = () => {
     if (isDragging) return
