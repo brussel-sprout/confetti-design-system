@@ -18,6 +18,7 @@ import { StatusBadge } from './atoms/StatusBadge'
 import { TextArea } from './atoms/TextArea'
 import { TextInput } from './atoms/TextInput'
 import { Card, CardContent, CardFooter, CardHeader } from './molecules/Card'
+import { EventBlockTimeline } from './molecules/EventBlock'
 import { PartyCard } from './molecules/PartyCard'
 import { ProgressStep } from './molecules/ProgressStep'
 import { ProgressStepper } from './molecules/ProgressStepper'
@@ -29,6 +30,7 @@ import { ProgressTracker } from './organisms/ProgressTracker'
 import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
 
 import type { ProgressStepperStep } from './molecules/ProgressStepper'
+import type { TimelineEvent as EventBlockTimelineEvent } from './molecules/EventBlock/types'
 import type { TimelineEvent } from './molecules/TimelineItem'
 import type { PartyOption } from './organisms/PartySelector'
 import type { ProgressCategory } from './organisms/ProgressTracker'
@@ -72,10 +74,83 @@ const sampleTimelineEvents: TimelineEvent[] = [
 	},
 ]
 
+// EventBlockTimeline sample data
+const eventBlockTimelineStart = new Date(2024, 0, 1, 14, 0) // 2:00 PM
+const eventBlockTimelineEnd = new Date(2024, 0, 1, 20, 0) // 8:00 PM
+
+const sampleEventBlocks: EventBlockTimelineEvent[] = [
+	{
+		id: 'eb1',
+		absoluteStart: new Date(2024, 0, 1, 14, 0), // 2:00 PM
+		absoluteEnd: new Date(2024, 0, 1, 15, 30), // 3:30 PM
+		event_name: 'Setup Decorations',
+		description: 'Hang balloons, streamers, and set up photo booth area',
+		is_suggestion: false,
+		suggestion_status: 'approved',
+	},
+	{
+		id: 'eb2',
+		absoluteStart: new Date(2024, 0, 1, 15, 0), // 3:00 PM (overlaps with setup)
+		absoluteEnd: new Date(2024, 0, 1, 15, 45), // 3:45 PM
+		event_name: 'Test Audio System',
+		description: 'Check speakers and microphone for announcements',
+		is_suggestion: true,
+		suggestion_status: 'pending',
+	},
+	{
+		id: 'eb3',
+		absoluteStart: new Date(2024, 0, 1, 16, 0), // 4:00 PM
+		absoluteEnd: new Date(2024, 0, 1, 16, 30), // 4:30 PM
+		event_name: 'Guest Arrival',
+		description: 'Welcome guests and direct them to party area',
+		is_suggestion: false,
+		suggestion_status: 'approved',
+	},
+	{
+		id: 'eb4',
+		absoluteStart: new Date(2024, 0, 1, 16, 30), // 4:30 PM
+		absoluteEnd: new Date(2024, 0, 1, 17, 15), // 5:15 PM
+		event_name: 'Party Games',
+		description: 'Musical chairs, treasure hunt, and party activities',
+		is_suggestion: true,
+		suggestion_status: 'approved',
+	},
+	{
+		id: 'eb5',
+		absoluteStart: new Date(2024, 0, 1, 17, 30), // 5:30 PM
+		absoluteEnd: new Date(2024, 0, 1, 18, 0), // 6:00 PM
+		event_name: 'Birthday Song & Cake',
+		description: 'Sing happy birthday and cut the cake',
+		is_suggestion: false,
+		suggestion_status: 'approved',
+	},
+	{
+		id: 'eb6',
+		absoluteStart: new Date(2024, 0, 1, 18, 15), // 6:15 PM
+		absoluteEnd: new Date(2024, 0, 1, 19, 0), // 7:00 PM
+		event_name: 'Dinner Time',
+		description: 'Serve pizza, snacks, and beverages',
+		is_suggestion: false,
+		suggestion_status: 'approved',
+	},
+	{
+		id: 'eb7',
+		absoluteStart: new Date(2024, 0, 1, 19, 0), // 7:00 PM
+		absoluteEnd: new Date(2024, 0, 1, 19, 30), // 7:30 PM
+		event_name: 'Photo Session',
+		description: 'Group photos at the photo booth',
+		is_suggestion: true,
+		suggestion_status: 'rejected',
+	},
+]
+
 export const Demo: React.FC = () => {
 	const [showProgressTracker, setShowProgressTracker] = React.useState(false)
 	const [selectedTime, setSelectedTime] = React.useState<string | null>(null)
 	const [timeScale, setTimeScale] = React.useState<'30min' | '15min' | '5min'>('30min')
+	const [eventBlocks, setEventBlocks] =
+		React.useState<EventBlockTimelineEvent[]>(sampleEventBlocks)
+	const [selectedEventId, setSelectedEventId] = React.useState<string | undefined>(undefined)
 	const [progressCategories, setProgressCategories] = React.useState<ProgressCategory[]>([
 		{
 			id: 'theme-analysis',
@@ -385,6 +460,95 @@ export const Demo: React.FC = () => {
 						onEditEvent={(event) => console.log('Edit event:', event)}
 						onDeleteEvent={(id) => console.log('Delete event:', id)}
 					/>
+				</section>
+
+				{/* EventBlockTimeline Demo */}
+				<section className="space-y-8">
+					<h2 className="text-3xl font-semibold text-foreground">EventBlock Timeline</h2>
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Interactive Event Block Timeline</h3>
+							<p className="text-muted-foreground">
+								Drag and drop events, resize them, and see overlapping events automatically stacked
+							</p>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							{/* Info section */}
+							<div className="bg-muted/30 border border-border rounded-lg p-4 space-y-2">
+								<h4 className="font-medium text-foreground">Features:</h4>
+								<ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+									<li>
+										<strong>Drag to move:</strong> Click and drag event blocks to change their time
+									</li>
+									<li>
+										<strong>Resize:</strong> Drag the top or bottom edge to adjust duration
+									</li>
+									<li>
+										<strong>Overlap detection:</strong> Overlapping events are automatically
+										stacked side-by-side
+									</li>
+									<li>
+										<strong>Suggestion states:</strong> Yellow (pending), green (approved), red
+										(rejected)
+									</li>
+									<li>
+										<strong>Click to select:</strong> Selected events are highlighted
+									</li>
+								</ul>
+							</div>
+
+							{/* Timeline */}
+							<div className="border border-border rounded-lg overflow-hidden bg-background">
+								<div className="p-4 bg-muted/30 border-b border-border">
+									<h4 className="font-medium text-foreground">
+										Party Schedule: 2:00 PM - 8:00 PM
+									</h4>
+									{selectedEventId && (
+										<p className="text-sm text-muted-foreground mt-1">
+											Selected:{' '}
+											{eventBlocks.find((e) => e.id === selectedEventId)?.event_name ||
+												'None'}
+										</p>
+									)}
+								</div>
+								<div className="p-4">
+									<EventBlockTimeline
+										events={eventBlocks}
+										startTime={eventBlockTimelineStart}
+										endTime={eventBlockTimelineEnd}
+										pixelsPerMinute={2}
+										selectedEventId={selectedEventId}
+										onEventClick={(event) => {
+											setSelectedEventId(event.id === selectedEventId ? undefined : event.id)
+										}}
+										onTimeChange={(eventId, newStart, newEnd) => {
+											setEventBlocks((prev) =>
+												prev.map((e) =>
+													e.id === eventId
+														? { ...e, absoluteStart: newStart, absoluteEnd: newEnd }
+														: e,
+												),
+											)
+										}}
+										data-id="event-block-timeline-demo"
+									/>
+								</div>
+							</div>
+
+							{/* Reset button */}
+							<div className="flex justify-center">
+								<Button
+									variant="outline"
+									onClick={() => {
+										setEventBlocks(sampleEventBlocks)
+										setSelectedEventId(undefined)
+									}}
+								>
+									Reset Timeline
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
 				</section>
 
 				{/* TimelineAxis Demo */}

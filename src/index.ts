@@ -1,6 +1,10 @@
 // DO NOT UNCOMMENT
 // import './styles/base.css'
 
+// Shared Types
+export { SuggestionStatus } from './types/shared'
+export type { SuggestionStatusType } from './types/shared'
+
 // Atoms
 export { Button } from './components/atoms/Button'
 export type { ButtonProps } from './components/atoms/Button'
@@ -153,6 +157,10 @@ export type { TimelineItemProps, TimelineEvent } from './components/molecules/Ti
 // Molecules - TimelineAxis
 export { TimelineAxis } from './components/molecules/TimelineAxis'
 export type { TimelineAxisProps } from './components/molecules/TimelineAxis'
+
+// Molecules - EventBlock
+export { EventBlock, EventBlockTimeline } from './components/molecules/EventBlock'
+export type { EventBlockProps, EventBlockTimelineProps, TimelineEvent as EventBlockTimelineEvent } from './components/molecules/EventBlock'
 
 // Organisms - ThemeSelectionHeader
 export { ThemeSelectionHeader } from './components/organisms/ThemeSelectionHeader'
