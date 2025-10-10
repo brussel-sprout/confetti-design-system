@@ -3,7 +3,7 @@ import React from 'react'
 import { cn } from '../../../utils/cn'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-	variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive'
+	variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'action'
 	size?: 'sm' | 'md' | 'lg'
 	children: React.ReactNode
 	className?: string
@@ -71,6 +71,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				'hover:bg-destructive/80',
 				'focus:ring-destructive/20',
 				'border-destructive'
+			),
+			action: cn(
+				'bg-primary text-primary-foreground',
+				'hover:bg-primary/90',
+				'focus:ring-primary/20',
+				'border-primary',
+				'shadow-lg hover:shadow-xl',
+				'font-medium',
+				'rounded-xl',
+				'px-8 py-3',
+				'transition-all duration-300'
 			),
 		}
 

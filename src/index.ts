@@ -160,7 +160,11 @@ export type { TimelineAxisProps } from './components/molecules/TimelineAxis'
 
 // Molecules - EventBlock
 export { EventBlock, EventBlockTimeline } from './components/molecules/EventBlock'
-export type { EventBlockProps, EventBlockTimelineProps, TimelineEvent as EventBlockTimelineEvent } from './components/molecules/EventBlock'
+export type {
+	EventBlockProps,
+	EventBlockTimelineProps,
+	TimelineEvent as EventBlockTimelineEvent,
+} from './components/molecules/EventBlock'
 
 // Organisms - ThemeSelectionHeader
 export { ThemeSelectionHeader } from './components/organisms/ThemeSelectionHeader'
@@ -175,6 +179,10 @@ export {
 	ElementImage,
 } from './components/molecules/ElementCard'
 export type { ElementCardProps, Element, Layout, Mode } from './components/molecules/ElementCard'
+
+// Molecules - SuggestionElementCard
+export { SuggestionElementCard } from './components/molecules/SuggestionElementCard'
+export type { SuggestionData } from './components/molecules/SuggestionElementCard'
 
 // Demo
 export { Demo } from './components/Demo'

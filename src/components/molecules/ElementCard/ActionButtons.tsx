@@ -1,5 +1,6 @@
+import { Check, Trash2 } from 'lucide-react'
 import React from 'react'
-import { Check, Trash2, Heart } from 'lucide-react'
+
 import { cn } from '../../../utils/cn'
 
 interface ActionButtonsProps {
@@ -51,23 +52,6 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 					) : (
 						<div className="w-3 h-3 rounded-full border-2 border-current animate-fade-in" />
 					)}
-				</button>
-			)}
-
-			{/* Favorite Button */}
-			{mode === 'view' && (
-				<button
-					onClick={handleToggle}
-					className={cn(
-						'w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover-scale',
-						'backdrop-blur-sm border shadow-sm',
-						isSelected
-							? 'bg-destructive text-destructive-foreground border-destructive'
-							: 'bg-background/80 text-muted-foreground border-border hover:bg-background hover:text-foreground'
-					)}
-					aria-label={`${isSelected ? 'Remove from' : 'Add to'} favorites`}
-				>
-					<Heart className={cn('w-4 h-4', isSelected && 'fill-current')} />
 				</button>
 			)}
 
