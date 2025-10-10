@@ -99,7 +99,7 @@ export function SuggestionElementCard({
 	const elementData: Element = {
 		party_element_id: suggestion.party_element_id,
 		element_name: suggestion.element_name,
-		category: suggestion.category || 'Suggestion',
+		category: undefined, // Remove category label overlay
 		description: suggestion.description || undefined,
 		image_url: suggestion.image?.image_url,
 		created_at: suggestion.created_on.toISOString(),
