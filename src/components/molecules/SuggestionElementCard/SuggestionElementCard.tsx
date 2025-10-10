@@ -1,5 +1,5 @@
 import { Plus, X } from 'lucide-react'
-import React from 'react'
+import { useEffect, useState } from 'react'
 
 import { ElementCard } from '../ElementCard'
 
@@ -62,6 +62,21 @@ export function SuggestionElementCard({
 	onDelete,
 	className = '',
 }: SuggestionElementCardProps) {
+	// Detect if user is on a touch-only device (mobile)
+	const [isTouchDevice, setIsTouchDevice] = useState(false)
+
+	useEffect(() => {
+		// Check if device doesn't support hover (touch-only devices)
+		const mediaQuery = window.matchMedia('(hover: none)')
+		setIsTouchDevice(mediaQuery.matches)
+
+		// Listen for changes (e.g., switching to external monitor)
+		const handleChange = (e: MediaQueryListEvent) => setIsTouchDevice(e.matches)
+		mediaQuery.addEventListener('change', handleChange)
+
+		return () => mediaQuery.removeEventListener('change', handleChange)
+	}, [])
+
 	const handleApply = async (e: React.MouseEvent) => {
 		e.stopPropagation()
 		try {
@@ -106,14 +121,18 @@ export function SuggestionElementCard({
 				className={className}
 			/>
 
-			{/* Pinterest-style Hover Overlay */}
-			<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out rounded-xl pointer-events-none" />
+			{/* Pinterest-style Hover Overlay - Only on desktop */}
+			{!isTouchDevice && (
+				<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out rounded-xl pointer-events-none" />
+			)}
 
 			{/* Subtle Add Button - top-right corner */}
 			<button
 				onClick={handleApply}
 				disabled={isApplying || isRejecting}
-				className="absolute top-3 right-3 w-10 h-10 bg-white/90 hover:bg-white text-gray-900 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out z-20 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+				className={`absolute top-3 right-3 w-10 h-10 bg-white/90 hover:bg-white text-gray-900 rounded-full flex items-center justify-center ${
+					isTouchDevice ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+				} transition-all duration-300 ease-in-out z-20 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl`}
 				aria-label="Add to party"
 			>
 				{isApplying ? (
@@ -127,13 +146,19 @@ export function SuggestionElementCard({
 			<button
 				onClick={handleReject}
 				disabled={isApplying || isRejecting}
-				className="absolute top-3 left-3 w-8 h-8 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out z-20 disabled:opacity-50 disabled:cursor-not-allowed"
+				className={`absolute top-3 left-3 ${
+					isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'
+				} bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center ${
+					isTouchDevice ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+				} transition-all duration-300 ease-in-out z-20 disabled:opacity-50 disabled:cursor-not-allowed`}
 				aria-label="Reject suggestion"
 			>
 				{isRejecting ? (
-					<div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+					<div
+						className={`${isTouchDevice ? 'w-4 h-4' : 'w-3 h-3'} border-2 border-white/30 border-t-white rounded-full animate-spin`}
+					/>
 				) : (
-					<X className="w-3 h-3" />
+					<X className={isTouchDevice ? 'w-4 h-4' : 'w-3 h-3'} />
 				)}
 			</button>
 		</div>
