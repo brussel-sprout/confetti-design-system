@@ -28,7 +28,8 @@ export interface EventBlockProps {
 }
 
 // Kept for future use when uncommenting statusConfig assignment below
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
+// @ts-ignore - Intentionally unused until feature is enabled
 const _suggestionStatusConfig = {
 	pending: {
 		bgClass: 'bg-amber-50',
@@ -55,6 +56,7 @@ const _suggestionStatusConfig = {
 		icon: X,
 	},
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export function EventBlock({
 	event,
