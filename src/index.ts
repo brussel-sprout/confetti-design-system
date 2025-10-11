@@ -3,7 +3,7 @@
 
 // Shared Types
 export { SuggestionStatus } from './types/shared'
-export type { SuggestionStatusType } from './types/shared'
+export type { SuggestionStatusType, MaterialStatusAction } from './types/shared'
 
 // Atoms
 export { Button } from './components/atoms/Button'
@@ -183,6 +183,22 @@ export type { ElementCardProps, Element, Layout, Mode } from './components/molec
 // Molecules - SuggestionElementCard
 export { SuggestionElementCard } from './components/molecules/SuggestionElementCard'
 export type { SuggestionData } from './components/molecules/SuggestionElementCard'
+
+// Molecules - MaterialCard
+export { MaterialCard, MaterialActions, MaterialStatus } from './components/molecules/MaterialCard'
+export type {
+	MaterialCardProps,
+	Material,
+	MaterialStatus as MaterialStatusType,
+} from './components/molecules/MaterialCard'
+
+// Molecules - MaterialGroup
+export { MaterialGroup, MaterialGroupHeader } from './components/molecules/MaterialGroup'
+export type {
+	MaterialGroupProps,
+	PartyElement,
+	GroupMaterial,
+} from './components/molecules/MaterialGroup'
 
 // Demo
 export { Demo } from './components/Demo'
