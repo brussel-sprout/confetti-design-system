@@ -1,4 +1,5 @@
 export { MaterialCard } from './MaterialCard'
 export { MaterialActions } from './MaterialActions'
 export { MaterialStatus } from './MaterialStatus'
-export type { MaterialCardProps, Material, MaterialStatus } from './types'
+export type { MaterialCardProps, Material } from './types'
+export type { MaterialStatus as MaterialStatusType } from '../../../types/shared'
