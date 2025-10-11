@@ -68,7 +68,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
 			sizeClasses[size],
 			variantClasses[variant],
 			'rounded-xl',
-			leftIcon ? 'pl-10' : '',
+			leftIcon !== null ? 'pl-10' : '',
 			showToggle ? 'pr-10' : '',
 			error ? 'border-destructive focus:border-destructive focus:ring-destructive/20' : '',
 			className
