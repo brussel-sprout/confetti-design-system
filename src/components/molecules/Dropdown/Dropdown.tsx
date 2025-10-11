@@ -46,54 +46,52 @@ const useDropdown = () => {
 }
 
 // Main Dropdown Container
-const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
-	({ children, className = '', ...props }) => {
-		const [isOpen, setIsOpen] = React.useState(false)
-		const dropdownRef = React.useRef<HTMLDivElement>(null)
+const Dropdown: React.FC<DropdownProps> = ({ children, className = '', ...props }) => {
+	const [isOpen, setIsOpen] = React.useState(false)
+	const dropdownRef = React.useRef<HTMLDivElement>(null)
 
-		// Close dropdown when clicking outside
-		React.useEffect(() => {
-			const handleClickOutside = (event: MouseEvent) => {
-				if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-					setIsOpen(false)
-				}
+	// Close dropdown when clicking outside
+	React.useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+				setIsOpen(false)
 			}
+		}
 
-			if (isOpen) {
-				document.addEventListener('mousedown', handleClickOutside)
+		if (isOpen) {
+			document.addEventListener('mousedown', handleClickOutside)
+		}
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [isOpen])
+
+	// Close dropdown when pressing Esc
+	React.useEffect(() => {
+		const handleEscapeKey = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				setIsOpen(false)
 			}
+		}
 
-			return () => {
-				document.removeEventListener('mousedown', handleClickOutside)
-			}
-		}, [isOpen])
+		if (isOpen) {
+			document.addEventListener('keydown', handleEscapeKey)
+		}
 
-		// Close dropdown when pressing Esc
-		React.useEffect(() => {
-			const handleEscapeKey = (event: KeyboardEvent) => {
-				if (event.key === 'Escape') {
-					setIsOpen(false)
-				}
-			}
+		return () => {
+			document.removeEventListener('keydown', handleEscapeKey)
+		}
+	}, [isOpen])
 
-			if (isOpen) {
-				document.addEventListener('keydown', handleEscapeKey)
-			}
-
-			return () => {
-				document.removeEventListener('keydown', handleEscapeKey)
-			}
-		}, [isOpen])
-
-		return (
-			<DropdownContext.Provider value={{ isOpen, setIsOpen }}>
-				<div ref={dropdownRef} className={cn('relative', className)} {...props}>
-					{children}
-				</div>
-			</DropdownContext.Provider>
-		)
-	}
-)
+	return (
+		<DropdownContext.Provider value={{ isOpen, setIsOpen }}>
+			<div ref={dropdownRef} className={cn('relative', className)} {...props}>
+				{children}
+			</div>
+		</DropdownContext.Provider>
+	)
+}
 
 // Dropdown Trigger
 const DropdownTrigger = React.forwardRef<HTMLButtonElement, DropdownTriggerProps>(

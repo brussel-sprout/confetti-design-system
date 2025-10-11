@@ -4,19 +4,19 @@
 	"private": true,
 	"sideEffects": false,
 	"type": "module",
-	"main": "src/index.ts",
 	"exports": {
 		".": "./src/index.ts",
 		"./styles/base.css": "./src/styles/base.css"
 	},
+	"main": "src/index.ts",
 	"scripts": {
-		"dev": "vite",
 		"build": "tsc && vite build",
-		"preview": "vite preview",
 		"check:lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"check:types": "tsc --noEmit",
-		"test": "vitest",
-		"detect-workspace": "node scripts/detect-workspace.js"
+		"detect-workspace": "node scripts/detect-workspace.js",
+		"dev": "vite",
+		"preview": "vite preview",
+		"test": "vitest"
 	},
 	"dependencies": {
 		"clsx": "2.1.0",
@@ -27,7 +27,7 @@
 		"tailwindcss": "4.1.5",
 		"typescript": "5.8.3",
 		"vaul": "1.1.2",
-		"zod": "^3.23.8"
+		"zod": "4.0.10"
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "^4.1.13",

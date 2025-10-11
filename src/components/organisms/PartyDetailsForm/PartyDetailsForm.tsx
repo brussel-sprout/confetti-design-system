@@ -40,17 +40,16 @@ const createDateFromStrings = (dateString: string, timeString: string): Date | n
 
 	// If no time provided, default to 12:00 PM
 	const time = timeString || '12:00'
-	const dateTimeString = `${dateString}T${time}:00`
-	const date = new Date(dateString)
-	const [hours, minutes] = time.split(':').map(Number)
-	date.setHours(hours)
-	date.setMinutes(minutes)
 
-	try {
-		return new Date(dateTimeString)
-	} catch {
-		return null
-	}
+	// Parse the date string (YYYY-MM-DD format)
+	const [year, month, day] = dateString.split('-').map(Number)
+	const [hours, minutes] = time.split(':').map(Number)
+
+	// Create date in local timezone by using the Date constructor with individual components
+	// This avoids timezone conversion issues that occur with ISO string parsing
+	const date = new Date(year, month - 1, day, hours, minutes, 0, 0)
+
+	return date
 }
 
 const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>(
