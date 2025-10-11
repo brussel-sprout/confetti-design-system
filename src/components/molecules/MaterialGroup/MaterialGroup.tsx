@@ -48,8 +48,8 @@ export const MaterialGroup = React.forwardRef<HTMLDivElement, MaterialGroupProps
 
 				{/* Group Content - Collapsible */}
 				<div
-					className={`overflow-hidden transition-all duration-300 ${
-						isExpanded ? 'animate-height-auto' : 'animate-height-collapse'
+					className={`overflow-hidden transition-all duration-300 ease-in-out ${
+						isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
 					}`}
 				>
 					{/* Active Materials Section */}
