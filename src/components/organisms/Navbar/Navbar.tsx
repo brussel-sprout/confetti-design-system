@@ -122,7 +122,7 @@ const NavbarLink = React.forwardRef<HTMLAnchorElement, NavbarLinkProps>(
 
 // Account Dropdown component
 const NavbarAccountDropdown = React.forwardRef<HTMLDivElement, NavbarAccountDropdownProps>(
-	({ username, children, className = '', ...props }, ref) => {
+	({ username, children, className = '', ...props }) => {
 		return (
 			<Dropdown className={className} {...props}>
 				<DropdownTrigger
