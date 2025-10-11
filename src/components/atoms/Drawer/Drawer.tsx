@@ -28,12 +28,29 @@ const Drawer: React.FC<DrawerProps> = ({
 	showCloseButton = true,
 	closeOnOverlayClick = true,
 }) => {
-	const widthClasses = {
-		sm: direction === 'left' || direction === 'right' ? 'w-80' : 'h-80',
-		md: direction === 'left' || direction === 'right' ? 'w-96' : 'h-96',
-		lg: direction === 'left' || direction === 'right' ? 'w-[28rem]' : 'h-[28rem]',
-		xl: direction === 'left' || direction === 'right' ? 'w-[32rem]' : 'h-[32rem]',
-		full: direction === 'left' || direction === 'right' ? 'w-full' : 'h-full',
+	const getPositionClasses = () => {
+		if (width === 'full') {
+			if (direction === 'bottom') return 'w-full h-full inset-x-0 bottom-0'
+			if (direction === 'top') return 'w-full h-full inset-x-0 top-0'
+			if (direction === 'left') return 'h-full w-full inset-y-0 left-0'
+			if (direction === 'right') return 'h-full w-full inset-y-0 right-0'
+		}
+
+		const sizeMap: Record<Exclude<typeof width, 'full'>, { w: string; h: string }> = {
+			sm: { w: 'w-80', h: 'h-80' },
+			md: { w: 'w-96', h: 'h-96' },
+			lg: { w: 'w-[28rem]', h: 'h-[28rem]' },
+			xl: { w: 'w-[32rem]', h: 'h-[32rem]' },
+		}
+
+		const { w, h } = sizeMap[width as Exclude<typeof width, 'full'>]
+
+		if (direction === 'left') return `${w} h-full left-0 top-0`
+		if (direction === 'right') return `${w} h-full right-0 top-0`
+		if (direction === 'top') return `w-full ${h} top-0 left-0`
+		if (direction === 'bottom') return `w-full ${h} bottom-0 left-0`
+
+		return `${w} h-full right-0 top-0`
 	}
 
 	return (
@@ -54,7 +71,7 @@ const Drawer: React.FC<DrawerProps> = ({
 					className={cn(
 						'fixed bg-background shadow-xl border-border overflow-hidden z-50',
 						'flex flex-col',
-						widthClasses[width],
+						getPositionClasses(),
 						className
 					)}
 				>

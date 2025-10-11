@@ -1,6 +1,10 @@
 // DO NOT UNCOMMENT
 // import './styles/base.css'
 
+// Shared Types
+export { SuggestionStatus } from './types/shared'
+export type { SuggestionStatusType } from './types/shared'
+
 // Atoms
 export { Button } from './components/atoms/Button'
 export type { ButtonProps } from './components/atoms/Button'
@@ -150,6 +154,18 @@ export type { EventTimelineProps, TimeFilter } from './components/organisms/Even
 export { TimelineItem } from './components/molecules/TimelineItem'
 export type { TimelineItemProps, TimelineEvent } from './components/molecules/TimelineItem'
 
+// Molecules - TimelineAxis
+export { TimelineAxis } from './components/molecules/TimelineAxis'
+export type { TimelineAxisProps } from './components/molecules/TimelineAxis'
+
+// Molecules - EventBlock
+export { EventBlock, EventBlockTimeline } from './components/molecules/EventBlock'
+export type {
+	EventBlockProps,
+	EventBlockTimelineProps,
+	TimelineEvent as EventBlockTimelineEvent,
+} from './components/molecules/EventBlock'
+
 // Organisms - ThemeSelectionHeader
 export { ThemeSelectionHeader } from './components/organisms/ThemeSelectionHeader'
 export type { ThemeSelectionHeaderProps } from './components/organisms/ThemeSelectionHeader'
@@ -163,6 +179,10 @@ export {
 	ElementImage,
 } from './components/molecules/ElementCard'
 export type { ElementCardProps, Element, Layout, Mode } from './components/molecules/ElementCard'
+
+// Molecules - SuggestionElementCard
+export { SuggestionElementCard } from './components/molecules/SuggestionElementCard'
+export type { SuggestionData } from './components/molecules/SuggestionElementCard'
 
 // Demo
 export { Demo } from './components/Demo'
