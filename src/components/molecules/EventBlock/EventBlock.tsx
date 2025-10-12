@@ -79,6 +79,8 @@ export function EventBlock({
 	const [dragStartY, setDragStartY] = useState(0)
 	const [originalStart, setOriginalStart] = useState<Date | null>(null)
 	const [originalEnd, setOriginalEnd] = useState<Date | null>(null)
+	const [touchTimer, setTouchTimer] = useState<NodeJS.Timeout | null>(null)
+	const [isLongPress, setIsLongPress] = useState(false)
 	const blockRef = useRef<HTMLDivElement>(null)
 
 	// Calculate position and height
@@ -138,20 +140,75 @@ export function EventBlock({
 	const StatusIcon = statusConfig?.icon ?? undefined
 	const statusLabel = statusConfig?.label ?? undefined
 
-	const handleDragStart = (e: React.MouseEvent, type: 'move' | 'resize-top' | 'resize-bottom') => {
-		e.stopPropagation()
+	// Unified drag start handler for both mouse and touch
+	const handleDragStart = (clientY: number, type: 'move' | 'resize-top' | 'resize-bottom') => {
 		setIsDragging(true)
 		setDragType(type)
-		setDragStartY(e.clientY)
+		setDragStartY(clientY)
 		setOriginalStart(event.absoluteStart)
 		setOriginalEnd(event.absoluteEnd)
 	}
 
+	// Mouse event wrapper
+	const handleMouseDragStart = (
+		e: React.MouseEvent,
+		type: 'move' | 'resize-top' | 'resize-bottom'
+	) => {
+		e.stopPropagation()
+		handleDragStart(e.clientY, type)
+	}
+
+	// Touch event handlers
+	const handleTouchStart = (e: React.TouchEvent, type: 'move' | 'resize-top' | 'resize-bottom') => {
+		if (e.touches.length !== 1) return // Only handle single touch
+
+		// Store the initial touch position
+		const startY = e.touches[0].clientY
+
+		const timer = setTimeout(() => {
+			setIsLongPress(true)
+			handleDragStart(startY, type)
+			setTouchTimer(null) // Clear timer after drag starts
+		}, 300) // 300ms long-press threshold (reduced for better UX)
+		setTouchTimer(timer)
+	}
+
+	const handleTouchEnd = () => {
+		// Don't interfere if we're already dragging - let document listener handle it
+		if (isDragging) {
+			return
+		}
+
+		if (touchTimer) {
+			clearTimeout(touchTimer)
+			setTouchTimer(null)
+		}
+		setIsLongPress(false)
+	}
+
+	const handleTouchCancel = () => {
+		if (touchTimer) {
+			clearTimeout(touchTimer)
+			setTouchTimer(null)
+		}
+		setIsLongPress(false)
+	}
+
+	// Cleanup touch timer on unmount
+	useEffect(() => {
+		return () => {
+			if (touchTimer) {
+				clearTimeout(touchTimer)
+			}
+		}
+	}, [touchTimer])
+
 	useEffect(() => {
 		if (!isDragging || !dragType || !originalStart || !originalEnd) return
 
-		const handleMouseMove = (e: MouseEvent) => {
-			const deltaY = e.clientY - dragStartY
+		// Unified move handler for both mouse and touch
+		const handleMove = (clientY: number) => {
+			const deltaY = clientY - dragStartY
 			const deltaMinutes = deltaY / pixelsPerMinute
 
 			let newStart = new Date(originalStart)
@@ -197,19 +254,35 @@ export function EventBlock({
 			}
 		}
 
-		const handleMouseUp = () => {
+		const handleMouseMove = (e: MouseEvent) => {
+			handleMove(e.clientY)
+		}
+
+		const handleTouchMove = (e: TouchEvent) => {
+			e.preventDefault() // Prevent scrolling during drag
+			if (e.touches.length === 1) {
+				handleMove(e.touches[0].clientY)
+			}
+		}
+
+		const handleEnd = () => {
 			setIsDragging(false)
 			setDragType(null)
 			setOriginalStart(null)
 			setOriginalEnd(null)
+			setIsLongPress(false)
 		}
 
 		document.addEventListener('mousemove', handleMouseMove)
-		document.addEventListener('mouseup', handleMouseUp)
+		document.addEventListener('mouseup', handleEnd)
+		document.addEventListener('touchmove', handleTouchMove, { passive: false })
+		document.addEventListener('touchend', handleEnd)
 
 		return () => {
 			document.removeEventListener('mousemove', handleMouseMove)
-			document.removeEventListener('mouseup', handleMouseUp)
+			document.removeEventListener('mouseup', handleEnd)
+			document.removeEventListener('touchmove', handleTouchMove)
+			document.removeEventListener('touchend', handleEnd)
 		}
 	}, [
 		isDragging,
@@ -262,12 +335,15 @@ export function EventBlock({
 
 			{/* Main event card */}
 			<div
+				data-timeline-event="true"
+				data-timeline-dragging={isDragging ? 'true' : undefined}
 				className={`
           relative h-full mx-1 rounded-lg border-2 overflow-hidden
           transition-all duration-300 cursor-pointer group
           ${isSelected ? 'border-primary shadow-lg ring-2 ring-primary/20' : 'border-border hover:border-primary/40 hover:shadow-md'}
           ${isDimmed ? 'opacity-40' : 'opacity-100'}
-          ${isDragging ? 'opacity-70 shadow-2xl' : ''}
+          ${isDragging ? 'opacity-70 shadow-2xl scale-105' : ''}
+          ${isLongPress && !isDragging ? 'scale-95 opacity-80' : ''}
           ${statusBgClass || (isSelected ? 'bg-stone-50' : 'bg-white')}
         `}
 				onClick={handleClick}
@@ -275,8 +351,8 @@ export function EventBlock({
 				{/* Top resize handle */}
 				{onTimeChange && (
 					<div
-						className="absolute top-0 left-0 right-0 h-2 cursor-ns-resize hover:bg-primary/20 transition-colors flex items-center justify-center group/handle"
-						onMouseDown={(e) => handleDragStart(e, 'resize-top')}
+						className="hidden md:flex absolute top-0 left-0 right-0 h-2 cursor-ns-resize hover:bg-primary/20 transition-colors items-center justify-center group/handle"
+						onMouseDown={(e) => handleMouseDragStart(e, 'resize-top')}
 						onClick={(e) => e.stopPropagation()}
 					>
 						<div className="opacity-0 group-hover/handle:opacity-100 transition-opacity">
@@ -293,7 +369,15 @@ export function EventBlock({
 				{/* Content */}
 				<div
 					className={`h-full ${statusBarClass ? 'pl-3' : 'pl-2'} pr-2 py-2 flex flex-col ${onTimeChange ? 'cursor-move' : ''}`}
-					onMouseDown={(e) => onTimeChange && handleDragStart(e, 'move')}
+					onMouseDown={(e) => onTimeChange && handleMouseDragStart(e, 'move')}
+					onTouchStart={(e) => {
+						if (onTimeChange) {
+							handleTouchStart(e, 'move')
+						}
+					}}
+					onTouchEnd={handleTouchEnd}
+					onTouchCancel={handleTouchCancel}
+					onContextMenu={(e) => e.preventDefault()}
 				>
 					{/* Header with title and status */}
 					<div className="flex items-start gap-2 mb-1">
@@ -334,8 +418,8 @@ export function EventBlock({
 				{/* Bottom resize handle */}
 				{onTimeChange && (
 					<div
-						className="absolute bottom-0 left-0 right-0 h-2 cursor-ns-resize hover:bg-primary/20 transition-colors flex items-center justify-center group/handle"
-						onMouseDown={(e) => handleDragStart(e, 'resize-bottom')}
+						className="hidden md:flex absolute bottom-0 left-0 right-0 h-2 cursor-ns-resize hover:bg-primary/20 transition-colors items-center justify-center group/handle"
+						onMouseDown={(e) => handleMouseDragStart(e, 'resize-bottom')}
 						onClick={(e) => e.stopPropagation()}
 					>
 						<div className="opacity-0 group-hover/handle:opacity-100 transition-opacity">
