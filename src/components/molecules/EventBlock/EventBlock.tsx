@@ -80,8 +80,14 @@ export function EventBlock({
 	const [originalStart, setOriginalStart] = useState<Date | null>(null)
 	const [originalEnd, setOriginalEnd] = useState<Date | null>(null)
 	const [isLongPress, setIsLongPress] = useState(false)
+	const [hasDragged, setHasDragged] = useState(false)
+	const [clickStartPos, setClickStartPos] = useState<{ x: number; y: number } | null>(null)
 	const touchTimerRef = useRef<NodeJS.Timeout | null>(null)
 	const blockRef = useRef<HTMLDivElement>(null)
+
+	// Refs for synchronous checks (prevent race conditions with state updates)
+	const isDraggingRef = useRef(false)
+	const hasDraggedRef = useRef(false)
 
 	// Calculate position and height
 	const eventStart = event.absoluteStart.getTime()
@@ -107,9 +113,28 @@ export function EventBlock({
 	//   ? _suggestionStatusConfig[event.suggestion_status]
 	//   : null
 
-	const handleClick = () => {
-		if (isDragging) return
+	const handleClick = (e: React.MouseEvent | React.TouchEvent) => {
+		console.log('🖱️ Click on event:', event.event_name, {
+			isDragging,
+			isDraggingRef: isDraggingRef.current,
+			hasDragged,
+			hasDraggedRef: hasDraggedRef.current,
+			willOpenDrawer: !isDraggingRef.current && !hasDraggedRef.current,
+		})
+
+		// Use refs for synchronous check - more reliable than state
+		if (isDraggingRef.current || hasDraggedRef.current || isDragging || hasDragged) {
+			console.log('❌ Click blocked - drag detected')
+			e.preventDefault()
+			e.stopPropagation()
+			// Reset hasDragged flags after blocking the click
+			setHasDragged(false)
+			hasDraggedRef.current = false
+			return
+		}
+
 		if (onClick) {
+			console.log('✅ Opening drawer for event:', event.event_name)
 			onClick()
 		}
 		setIsExpanded(!isExpanded)
@@ -131,6 +156,20 @@ export function EventBlock({
 		return `${mins}m`
 	}
 
+	// Unified cleanup function to reset all interaction state
+	const resetInteractionState = React.useCallback(() => {
+		console.log('🧹 Resetting interaction state for event:', event.event_name)
+		setIsDragging(false)
+		setDragType(null)
+		setOriginalStart(null)
+		setOriginalEnd(null)
+		setIsLongPress(false)
+		setClickStartPos(null)
+		// Reset refs
+		isDraggingRef.current = false
+		// Note: Don't reset hasDragged here - it needs to persist until after onClick fires
+	}, [event.event_name])
+
 	// Helper to extract status config properties for use in JSX
 	// Using optional chaining with explicit undefined to help TypeScript's type narrowing
 	const statusBgClass = statusConfig?.bgClass ?? undefined
@@ -142,11 +181,17 @@ export function EventBlock({
 
 	// Unified drag start handler for both mouse and touch
 	const handleDragStart = (clientY: number, type: 'move' | 'resize-top' | 'resize-bottom') => {
+		console.log('🎯 Drag start for event:', event.event_name, { type, clientY })
+		// Set refs immediately for synchronous checks
+		isDraggingRef.current = true
+		hasDraggedRef.current = true
+		// Set state for rendering
 		setIsDragging(true)
 		setDragType(type)
 		setDragStartY(clientY)
 		setOriginalStart(event.absoluteStart)
 		setOriginalEnd(event.absoluteEnd)
+		setHasDragged(true)
 	}
 
 	// Mouse event wrapper
@@ -158,18 +203,90 @@ export function EventBlock({
 		handleDragStart(e.clientY, type)
 	}
 
+	// Track initial click position for movement detection
+	const handleMouseDown = (e: React.MouseEvent) => {
+		console.log('🖱️ Mouse down on event:', event.event_name, { x: e.clientX, y: e.clientY })
+		setClickStartPos({ x: e.clientX, y: e.clientY })
+		setHasDragged(false)
+		hasDraggedRef.current = false
+	}
+
+	// Track movement distance to detect drag intent
+	const handleMouseMove = (e: React.MouseEvent) => {
+		if (clickStartPos && !isDragging && !isDraggingRef.current && onTimeChange) {
+			const distance = Math.sqrt(
+				Math.pow(e.clientX - clickStartPos.x, 2) + Math.pow(e.clientY - clickStartPos.y, 2)
+			)
+			console.log('🖱️ Mouse move on event:', event.event_name, {
+				distance,
+				threshold: 10,
+				willStartDrag: distance > 10,
+				clickStart: clickStartPos,
+				current: { x: e.clientX, y: e.clientY },
+			})
+			if (distance > 10) {
+				console.log('🚀 Starting drag for event:', event.event_name)
+				// Set refs IMMEDIATELY before state updates
+				hasDraggedRef.current = true
+				// Start the actual drag operation now (this will set isDraggingRef)
+				handleDragStart(e.clientY, 'move')
+			}
+		}
+	}
+
+	// Reset click tracking on mouse up
+	const handleMouseUp = () => {
+		console.log('🖱️ Mouse up on event:', event.event_name, { hasDragged, isDragging })
+		setClickStartPos(null)
+	}
+
 	// Touch event handlers
 	const handleTouchStart = (e: React.TouchEvent, type: 'move' | 'resize-top' | 'resize-bottom') => {
 		if (e.touches.length !== 1) return // Only handle single touch
 
 		// Store the initial touch position
 		const startY = e.touches[0].clientY
+		const startX = e.touches[0].clientX
+		setClickStartPos({ x: startX, y: startY })
+		setHasDragged(false)
+		hasDraggedRef.current = false
 
 		touchTimerRef.current = setTimeout(() => {
+			console.log('⏱️ Long-press timer completed for event:', event.event_name)
 			setIsLongPress(true)
+			// Add haptic feedback for mobile long-press
+			if (navigator.vibrate) {
+				navigator.vibrate(50) // Short vibration feedback
+			}
 			handleDragStart(startY, type)
 			touchTimerRef.current = null
 		}, 300) // 300ms long-press threshold
+	}
+
+	// Track touch movement to detect drag intent
+	const handleTouchMove = (e: React.TouchEvent) => {
+		if (clickStartPos && !isDragging && e.touches.length === 1) {
+			const touch = e.touches[0]
+			const distance = Math.sqrt(
+				Math.pow(touch.clientX - clickStartPos.x, 2) + Math.pow(touch.clientY - clickStartPos.y, 2)
+			)
+			console.log('📱 Touch move on event:', event.event_name, {
+				distance,
+				threshold: 10,
+				willCancelLongPress: distance > 10,
+			})
+			if (distance > 10) {
+				console.log('🚫 Canceling long-press due to movement for event:', event.event_name)
+				setHasDragged(true)
+				hasDraggedRef.current = true
+				// Cancel long-press timer if user starts moving
+				if (touchTimerRef.current) {
+					clearTimeout(touchTimerRef.current)
+					touchTimerRef.current = null
+				}
+				setIsLongPress(false)
+			}
+		}
 	}
 
 	const handleTouchEnd = () => {
@@ -183,6 +300,7 @@ export function EventBlock({
 			touchTimerRef.current = null
 		}
 		setIsLongPress(false)
+		setClickStartPos(null)
 	}
 
 	const handleTouchCancel = () => {
@@ -191,6 +309,7 @@ export function EventBlock({
 			touchTimerRef.current = null
 		}
 		setIsLongPress(false)
+		setClickStartPos(null)
 	}
 
 	// Cleanup touch timer on unmount
@@ -209,6 +328,17 @@ export function EventBlock({
 		const handleMove = (clientY: number) => {
 			const deltaY = clientY - dragStartY
 			const deltaMinutes = deltaY / pixelsPerMinute
+
+			console.log('🔄 Handle move calculation:', {
+				eventName: event.event_name,
+				clientY,
+				dragStartY,
+				deltaY,
+				deltaMinutes,
+				pixelsPerMinute,
+				originalStart: originalStart.toISOString(),
+				originalEnd: originalEnd.toISOString(),
+			})
 
 			let newStart = new Date(originalStart)
 			let newEnd = new Date(originalEnd)
@@ -248,12 +378,23 @@ export function EventBlock({
 				}
 			}
 
+			console.log('📤 Calling onTimeChange:', {
+				eventId: event.id,
+				eventName: event.event_name,
+				newStart: newStart.toISOString(),
+				newEnd: newEnd.toISOString(),
+				onTimeChangeExists: !!onTimeChange,
+			})
+
 			if (onTimeChange) {
 				onTimeChange(event.id, newStart, newEnd)
 			}
 		}
 
 		const handleMouseMove = (e: MouseEvent) => {
+			console.log('📄 Document mouse move during drag for event:', event.event_name, {
+				clientY: e.clientY,
+			})
 			handleMove(e.clientY)
 		}
 
@@ -265,11 +406,10 @@ export function EventBlock({
 		}
 
 		const handleEnd = () => {
-			setIsDragging(false)
-			setDragType(null)
-			setOriginalStart(null)
-			setOriginalEnd(null)
-			setIsLongPress(false)
+			console.log('🏁 Drag end for event:', event.event_name)
+			resetInteractionState()
+			// Don't reset hasDragged here - it will be reset on next mouseDown/touchStart
+			// This ensures onClick can properly detect if a drag just occurred
 		}
 
 		document.addEventListener('mousemove', handleMouseMove)
@@ -292,8 +432,10 @@ export function EventBlock({
 		pixelsPerMinute,
 		onTimeChange,
 		event.id,
+		event.event_name,
 		timelineStart,
 		timelineEnd,
+		resetInteractionState,
 	])
 
 	return (
@@ -338,12 +480,13 @@ export function EventBlock({
 				data-timeline-dragging={isDragging ? 'true' : undefined}
 				className={`
           relative h-full mx-1 rounded-lg border-2 overflow-hidden
-          transition-all duration-300 cursor-pointer group
+          transition-all duration-300 group
           ${isSelected ? 'border-primary shadow-lg ring-2 ring-primary/20' : 'border-border hover:border-primary/40 hover:shadow-md'}
           ${isDimmed ? 'opacity-40' : 'opacity-100'}
           ${isDragging ? 'opacity-70 shadow-2xl scale-105' : ''}
-          ${isLongPress && !isDragging ? 'scale-95 opacity-80' : ''}
+          ${isLongPress && !isDragging ? 'scale-98 opacity-90 shadow-lg' : ''}
           ${statusBgClass || (isSelected ? 'bg-stone-50' : 'bg-white')}
+          ${onTimeChange ? 'cursor-grab hover:cursor-grab' : 'cursor-pointer'}
         `}
 				onClick={handleClick}
 			>
@@ -365,15 +508,25 @@ export function EventBlock({
 					<div className={`absolute left-0 top-0 bottom-0 w-1 ${statusBarClass}`} />
 				)}
 
+				{/* Drag handle indicator */}
+				{onTimeChange && (
+					<div className="absolute top-1 right-1 opacity-0 group-hover:opacity-60 transition-opacity">
+						<GripVertical className="w-3 h-3 text-muted-foreground" />
+					</div>
+				)}
+
 				{/* Content */}
 				<div
 					className={`h-full ${statusBarClass ? 'pl-3' : 'pl-2'} pr-2 py-2 flex flex-col ${onTimeChange ? 'cursor-move' : ''}`}
-					onMouseDown={(e) => onTimeChange && handleMouseDragStart(e, 'move')}
+					onMouseDown={handleMouseDown}
+					onMouseMove={handleMouseMove}
+					onMouseUp={handleMouseUp}
 					onTouchStart={(e) => {
 						if (onTimeChange) {
 							handleTouchStart(e, 'move')
 						}
 					}}
+					onTouchMove={handleTouchMove}
 					onTouchEnd={handleTouchEnd}
 					onTouchCancel={handleTouchCancel}
 					onContextMenu={(e) => e.preventDefault()}
