@@ -281,178 +281,194 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 			)}
 
 			{/* Form Content */}
-			<div className="space-y-6">
-				{/* Event Name */}
-				<div>
-					<label htmlFor="eventName" className="block text-sm font-medium text-foreground mb-1">
-						Event Name <span className="text-destructive">*</span>
-					</label>
-					<input
-						id="eventName"
-						type="text"
-						value={formData.event_name}
-						onChange={(e) => handleFieldChange('event_name', e.target.value)}
-						placeholder="e.g., Cake Cutting Ceremony"
-						maxLength={100}
-						autoFocus={mode === 'create'}
-						className="block w-full border border-border rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2 bg-background text-foreground placeholder:text-muted-foreground transition-colors text-base mobile-touch-target"
-						aria-required="true"
-					/>
-					{errors.event_name && (
-						<p className="mt-1 text-sm text-destructive">{errors.event_name}</p>
-					)}
-				</div>
-
-				{/* Description */}
-				<div>
-					<label htmlFor="description" className="block text-sm font-medium text-foreground mb-1">
-						Description (Optional)
-					</label>
-					<textarea
-						id="description"
-						value={formData.description}
-						onChange={(e) => handleFieldChange('description', e.target.value)}
-						placeholder="Add details about this event..."
-						rows={3}
-						maxLength={500}
-						className="block w-full border border-border rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2 bg-background text-foreground placeholder:text-muted-foreground transition-colors text-base resize-none mobile-touch-target"
-					/>
-					<p className="mt-1 text-xs text-muted-foreground">
-						{formData.description.length}/500 characters
-					</p>
-					{errors.description && (
-						<p className="mt-1 text-sm text-destructive">{errors.description}</p>
-					)}
-				</div>
-
-				{/* Start Date & Time */}
-				<div>
-					<div className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-						<Clock className="w-4 h-4" />
-						<span>Start Time</span>
+			<div className="space-y-5">
+				{/* Event Details Section */}
+				<div className="bg-muted/5 rounded-2xl p-5 border border-border/30">
+					<div className="flex items-center gap-2 mb-4">
+						<div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+							<div className="w-2 h-2 rounded-full bg-primary"></div>
+						</div>
+						<h3 className="text-sm font-semibold text-foreground">Event Details</h3>
 					</div>
-					<div className="grid grid-cols-2 gap-3">
+
+					<div className="space-y-4">
+						{/* Event Name */}
 						<div>
 							<label
-								htmlFor="startDate"
-								className="block text-xs font-medium text-muted-foreground mb-1"
+								htmlFor="eventName"
+								className="block text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide"
 							>
-								Date
+								Event Name <span className="text-destructive">*</span>
 							</label>
 							<input
-								id="startDate"
-								type="date"
-								value={formData.startDate}
-								onChange={(e) => handleFieldChange('startDate', e.target.value)}
-								className="block w-full border border-border rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2 bg-background text-foreground transition-colors text-base mobile-touch-target"
-								required
+								id="eventName"
+								type="text"
+								value={formData.event_name}
+								onChange={(e) => handleFieldChange('event_name', e.target.value)}
+								placeholder="e.g., Cake Cutting Ceremony"
+								maxLength={100}
+								autoFocus={mode === 'create'}
+								className="block w-full border border-border/60 rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2.5 bg-background text-foreground placeholder:text-muted-foreground transition-colors text-sm mobile-touch-target"
+								aria-required="true"
 							/>
+							{errors.event_name && (
+								<p className="mt-1 text-xs text-destructive">{errors.event_name}</p>
+							)}
 						</div>
+
+						{/* Description */}
 						<div>
 							<label
-								htmlFor="startTime"
-								className="block text-xs font-medium text-muted-foreground mb-1"
+								htmlFor="description"
+								className="block text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide"
 							>
-								Time
+								Description <span className="text-muted-foreground/60">(Optional)</span>
 							</label>
-							<input
-								id="startTime"
-								type="time"
-								value={formData.startTime}
-								onChange={(e) => handleFieldChange('startTime', e.target.value)}
-								className="block w-full border border-border rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2 bg-background text-foreground transition-colors text-base mobile-touch-target"
-								required
+							<textarea
+								id="description"
+								value={formData.description}
+								onChange={(e) => handleFieldChange('description', e.target.value)}
+								placeholder="Add details about this event..."
+								rows={3}
+								maxLength={500}
+								className="block w-full border border-border/60 rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2.5 bg-background text-foreground placeholder:text-muted-foreground transition-colors text-sm resize-none mobile-touch-target"
 							/>
+							<div className="flex justify-between items-center mt-1">
+								{errors.description && (
+									<p className="text-xs text-destructive">{errors.description}</p>
+								)}
+								<p className="text-xs text-muted-foreground ml-auto">
+									{formData.description.length}/500
+								</p>
+							</div>
 						</div>
 					</div>
-					{errors.startDateTime && (
-						<p className="mt-1 text-sm text-destructive">{errors.startDateTime}</p>
-					)}
 				</div>
 
-				{/* End Date & Time */}
-				<div>
-					<div className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-						<Clock className="w-4 h-4" />
-						<span>End Time</span>
+				{/* Event Timing Section */}
+				<div className="bg-muted/5 rounded-2xl p-5 border border-border/30">
+					<div className="flex items-center gap-2 mb-4">
+						<Clock className="w-5 h-5 text-primary" />
+						<h3 className="text-sm font-semibold text-foreground">Event Timing</h3>
+						{duration && (
+							<div className="ml-auto flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+								<Clock className="w-3 h-3" />
+								{duration}
+							</div>
+						)}
 					</div>
-					<div className="grid grid-cols-2 gap-3">
-						<div>
-							<label
-								htmlFor="endDate"
-								className="block text-xs font-medium text-muted-foreground mb-1"
-							>
-								Date
-							</label>
-							<input
-								id="endDate"
-								type="date"
-								value={formData.endDate}
-								onChange={(e) => handleFieldChange('endDate', e.target.value)}
-								className="block w-full border border-border rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2 bg-background text-foreground transition-colors text-base mobile-touch-target"
-								required
-							/>
-						</div>
-						<div>
-							<label
-								htmlFor="endTime"
-								className="block text-xs font-medium text-muted-foreground mb-1"
-							>
-								Time
-							</label>
-							<input
-								id="endTime"
-								type="time"
-								value={formData.endTime}
-								onChange={(e) => handleFieldChange('endTime', e.target.value)}
-								className="block w-full border border-border rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2 bg-background text-foreground transition-colors text-base mobile-touch-target"
-								required
-							/>
-						</div>
-					</div>
-					{errors.endDateTime && (
-						<p className="mt-1 text-sm text-destructive">{errors.endDateTime}</p>
-					)}
-				</div>
 
-				{/* Duration Display */}
-				{duration && (
-					<div className="flex items-center gap-2 px-4 py-3 bg-muted/30 rounded-lg">
-						<Clock className="w-4 h-4 text-muted-foreground" />
-						<span className="text-sm text-foreground">
-							<span className="font-medium">Duration:</span> {duration}
-						</span>
+					<div className="space-y-4">
+						{/* Start Time */}
+						<div>
+							<label className="block text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">
+								Start
+							</label>
+							<div className="flex gap-3">
+								<div className="flex-1">
+									<input
+										id="startDate"
+										type="date"
+										value={formData.startDate}
+										onChange={(e) => handleFieldChange('startDate', e.target.value)}
+										className="block w-full border border-border/60 rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2.5 bg-background text-foreground transition-colors text-sm mobile-touch-target"
+										required
+									/>
+								</div>
+								<div className="flex-1">
+									<input
+										id="startTime"
+										type="time"
+										value={formData.startTime}
+										onChange={(e) => handleFieldChange('startTime', e.target.value)}
+										className="block w-full border border-border/60 rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2.5 bg-background text-foreground transition-colors text-sm mobile-touch-target"
+										required
+									/>
+								</div>
+							</div>
+							{errors.startDateTime && (
+								<p className="mt-1 text-xs text-destructive">{errors.startDateTime}</p>
+							)}
+						</div>
+
+						{/* Visual Separator */}
+						<div className="flex items-center">
+							<div className="flex-1 h-px bg-border/40"></div>
+							<div className="px-3 text-xs text-muted-foreground bg-muted/5 rounded-full">to</div>
+							<div className="flex-1 h-px bg-border/40"></div>
+						</div>
+
+						{/* End Time */}
+						<div>
+							<label className="block text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">
+								End
+							</label>
+							<div className="flex gap-3">
+								<div className="flex-1">
+									<input
+										id="endDate"
+										type="date"
+										value={formData.endDate}
+										onChange={(e) => handleFieldChange('endDate', e.target.value)}
+										className="block w-full border border-border/60 rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2.5 bg-background text-foreground transition-colors text-sm mobile-touch-target"
+										required
+									/>
+								</div>
+								<div className="flex-1">
+									<input
+										id="endTime"
+										type="time"
+										value={formData.endTime}
+										onChange={(e) => handleFieldChange('endTime', e.target.value)}
+										className="block w-full border border-border/60 rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2.5 bg-background text-foreground transition-colors text-sm mobile-touch-target"
+										required
+									/>
+								</div>
+							</div>
+							{errors.endDateTime && (
+								<p className="mt-1 text-xs text-destructive">{errors.endDateTime}</p>
+							)}
+						</div>
 					</div>
-				)}
+				</div>
 
 				{/* Action Buttons */}
-				<div className="flex flex-col sm:flex-row justify-end gap-3 pt-2">
-					<Button
-						variant="secondary"
-						size="md"
-						onClick={handleClose}
-						disabled={isSaving || isDeleting}
-						className="order-2 sm:order-1 w-full sm:w-auto"
-					>
-						Cancel
-					</Button>
-					<Button
-						variant="default"
-						size="md"
-						onClick={handleSave}
-						disabled={isSaving || isDeleting}
-						loading={isSaving}
-						className="order-1 sm:order-2 w-full sm:w-auto"
-					>
-						{mode === 'create' ? 'Create Event' : 'Save Event'}
-					</Button>
+				<div className="bg-muted/5 rounded-2xl p-4 border border-border/30">
+					<div className="flex flex-col sm:flex-row gap-3">
+						<Button
+							variant="secondary"
+							size="md"
+							onClick={handleClose}
+							disabled={isSaving || isDeleting}
+							className="order-2 sm:order-1 w-full sm:w-auto rounded-lg"
+						>
+							Cancel
+						</Button>
+						<Button
+							variant="default"
+							size="md"
+							onClick={handleSave}
+							disabled={isSaving || isDeleting}
+							loading={isSaving}
+							className="order-1 sm:order-2 w-full sm:w-auto rounded-lg"
+						>
+							{mode === 'create' ? 'Create Event' : 'Save Event'}
+						</Button>
+					</div>
 				</div>
 
-				{/* Delete Button (Edit Mode Only) */}
+				{/* Delete Section (Edit Mode Only) */}
 				{mode === 'edit' && onDelete && (
-					<div className="pt-4 border-t border-border mt-6">
+					<div className="bg-destructive/5 rounded-2xl p-5 border border-destructive/20">
+						<div className="flex items-center gap-2 mb-4">
+							<div className="w-5 h-5 rounded-full bg-destructive/10 flex items-center justify-center">
+								<Trash2 className="w-3 h-3 text-destructive" />
+							</div>
+							<h3 className="text-sm font-semibold text-foreground">Danger Zone</h3>
+						</div>
+
 						{showDeleteConfirm ? (
-							<div className="space-y-3">
+							<div className="space-y-4">
 								<p className="text-sm text-muted-foreground">
 									Are you sure you want to delete this event? This action cannot be undone.
 								</p>
@@ -463,7 +479,7 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 										onClick={handleDelete}
 										disabled={isDeleting}
 										loading={isDeleting}
-										className="flex-1"
+										className="flex-1 rounded-lg"
 									>
 										Confirm Delete
 									</Button>
@@ -472,36 +488,38 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 										size="md"
 										onClick={() => setShowDeleteConfirm(false)}
 										disabled={isDeleting}
-										className="flex-1"
+										className="flex-1 rounded-lg"
 									>
 										Cancel
 									</Button>
 								</div>
 							</div>
 						) : (
-							<Button
-								variant="ghost"
-								size="md"
+							<button
+								type="button"
 								onClick={() => setShowDeleteConfirm(true)}
-								className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+								className="w-full flex items-center justify-center gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 py-3 px-4 rounded-lg transition-colors mobile-touch-target font-medium border border-destructive/20"
 							>
 								<Trash2 className="w-4 h-4" />
 								Delete Event
-							</Button>
+							</button>
 						)}
 					</div>
 				)}
 
 				{/* Connected Elements Section */}
 				{connectedElements.length > 0 && onNavigateToElement && (
-					<div className="pt-6 border-t border-border mt-8">
-						<div className="flex items-center gap-2 mb-3">
-							<ExternalLink className="w-4 h-4 text-muted-foreground" />
-							<h3 className="text-sm font-semibold text-foreground">
-								Connected Elements ({connectedElements.length})
-							</h3>
+					<div className="bg-muted/5 rounded-2xl p-5 border border-border/30">
+						<div className="flex items-center gap-2 mb-4">
+							<div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+								<ExternalLink className="w-3 h-3 text-primary" />
+							</div>
+							<h3 className="text-sm font-semibold text-foreground">Connected Elements</h3>
+							<div className="ml-auto flex items-center gap-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+								{connectedElements.length}
+							</div>
 						</div>
-						<p className="text-xs text-muted-foreground mb-3">Click to view element details</p>
+						<p className="text-xs text-muted-foreground mb-4">Click any element to view details</p>
 						<div className="space-y-2">
 							{connectedElements.map((element) => (
 								<button
@@ -509,17 +527,21 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 									onClick={() => onNavigateToElement(element.party_element_id)}
 									className={cn(
 										'w-full text-left flex items-center gap-3 p-3 rounded-lg',
-										'bg-muted/30 hover:bg-muted/50 transition-colors group mobile-touch-target'
+										'bg-background hover:bg-muted/50 transition-colors group mobile-touch-target border border-border/30 hover:border-border/60'
 									)}
 								>
-									{element.image && (
+									{element.image ? (
 										<img
 											src={element.image.image_url}
 											alt={element.element_name}
-											className="w-10 h-10 rounded object-cover flex-shrink-0"
+											className="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-border/20"
 										/>
+									) : (
+										<div className="w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0 border border-border/20">
+											<div className="w-4 h-4 rounded bg-muted-foreground/30"></div>
+										</div>
 									)}
-									<span className="text-sm text-foreground flex-1 truncate">
+									<span className="text-sm text-foreground flex-1 truncate font-medium">
 										{element.element_name}
 									</span>
 									<ChevronRight
