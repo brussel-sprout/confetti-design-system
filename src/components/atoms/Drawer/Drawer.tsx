@@ -1,8 +1,8 @@
+import { XIcon } from 'lucide-react'
 import React from 'react'
 import { Drawer as VaulDrawer } from 'vaul'
 
 import { cn } from '../../../utils/cn'
-import { Icon } from '../Icon'
 
 export interface DrawerProps {
 	isOpen: boolean
@@ -15,9 +15,11 @@ export interface DrawerProps {
 	showCloseButton?: boolean
 	closeOnOverlayClick?: boolean
 	closeOnEscape?: boolean
+	showMobileHandle?: boolean
+	contentClassName?: string
 }
 
-const Drawer: React.FC<DrawerProps> = ({
+export const Drawer: React.FC<DrawerProps> = ({
 	isOpen,
 	onClose,
 	title,
@@ -27,6 +29,8 @@ const Drawer: React.FC<DrawerProps> = ({
 	width = 'md',
 	showCloseButton = true,
 	closeOnOverlayClick = true,
+	showMobileHandle = false,
+	contentClassName = '',
 }) => {
 	const getPositionClasses = () => {
 		if (width === 'full') {
@@ -72,31 +76,38 @@ const Drawer: React.FC<DrawerProps> = ({
 						'fixed bg-background shadow-xl border-border overflow-hidden z-50',
 						'flex flex-col',
 						getPositionClasses(),
-						className
+						contentClassName
 					)}
 				>
+					{/* Mobile Handle */}
+					{showMobileHandle && direction === 'bottom' && (
+						<div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-muted my-3" />
+					)}
+
 					{/* Header */}
 					{(title || showCloseButton) && (
 						<div className="flex items-center justify-between p-4 border-b border-border">
-							{title && <h2 className="text-lg font-semibold text-foreground">{title}</h2>}
+							{title && (
+								<VaulDrawer.Title className="text-lg font-semibold text-foreground">
+									{title}
+								</VaulDrawer.Title>
+							)}
 							{showCloseButton && (
 								<button
 									onClick={onClose}
 									className="p-2 hover:bg-muted rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
 									aria-label="Close drawer"
 								>
-									<Icon name="x" size="sm" />
+									<XIcon size={16} />
 								</button>
 							)}
 						</div>
 					)}
 
 					{/* Content */}
-					<div className="flex-1 overflow-y-auto">{children}</div>
+					<div className={cn('flex-1 overflow-y-auto', className)}>{children}</div>
 				</VaulDrawer.Content>
 			</VaulDrawer.Portal>
 		</VaulDrawer.Root>
 	)
 }
-
-export { Drawer }
