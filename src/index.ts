@@ -3,7 +3,13 @@
 
 // Shared Types
 export { SuggestionStatus } from './types/shared'
-export type { SuggestionStatusType, MaterialStatusAction } from './types/shared'
+export type {
+	SuggestionStatusType,
+	MaterialStatusAction,
+	EventMode,
+	EventData,
+	ConnectedElement,
+} from './types/shared'
 
 // Atoms
 export { Button } from './components/atoms/Button'
@@ -129,6 +135,11 @@ export type {
 // Organisms - PartyDetailsForm
 export { PartyDetailsForm } from './components/organisms/PartyDetailsForm'
 export type { PartyDetailsFormProps, PartyDetails } from './components/organisms/PartyDetailsForm'
+
+// Organisms - EventDetailsDrawer
+export { EventDetailsDrawer } from './components/organisms/EventDetailsDrawer'
+export type { EventDetailsDrawerProps } from './components/organisms/EventDetailsDrawer'
+
 export { PartyCard } from './components/molecules/PartyCard'
 export type { PartyCardProps } from './components/molecules/PartyCard'
 
