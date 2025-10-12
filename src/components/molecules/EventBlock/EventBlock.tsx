@@ -79,8 +79,8 @@ export function EventBlock({
 	const [dragStartY, setDragStartY] = useState(0)
 	const [originalStart, setOriginalStart] = useState<Date | null>(null)
 	const [originalEnd, setOriginalEnd] = useState<Date | null>(null)
-	const [touchTimer, setTouchTimer] = useState<NodeJS.Timeout | null>(null)
 	const [isLongPress, setIsLongPress] = useState(false)
+	const touchTimerRef = useRef<NodeJS.Timeout | null>(null)
 	const blockRef = useRef<HTMLDivElement>(null)
 
 	// Calculate position and height
@@ -165,12 +165,11 @@ export function EventBlock({
 		// Store the initial touch position
 		const startY = e.touches[0].clientY
 
-		const timer = setTimeout(() => {
+		touchTimerRef.current = setTimeout(() => {
 			setIsLongPress(true)
 			handleDragStart(startY, type)
-			setTouchTimer(null) // Clear timer after drag starts
-		}, 300) // 300ms long-press threshold (reduced for better UX)
-		setTouchTimer(timer)
+			touchTimerRef.current = null
+		}, 300) // 300ms long-press threshold
 	}
 
 	const handleTouchEnd = () => {
@@ -179,17 +178,17 @@ export function EventBlock({
 			return
 		}
 
-		if (touchTimer) {
-			clearTimeout(touchTimer)
-			setTouchTimer(null)
+		if (touchTimerRef.current) {
+			clearTimeout(touchTimerRef.current)
+			touchTimerRef.current = null
 		}
 		setIsLongPress(false)
 	}
 
 	const handleTouchCancel = () => {
-		if (touchTimer) {
-			clearTimeout(touchTimer)
-			setTouchTimer(null)
+		if (touchTimerRef.current) {
+			clearTimeout(touchTimerRef.current)
+			touchTimerRef.current = null
 		}
 		setIsLongPress(false)
 	}
@@ -197,11 +196,11 @@ export function EventBlock({
 	// Cleanup touch timer on unmount
 	useEffect(() => {
 		return () => {
-			if (touchTimer) {
-				clearTimeout(touchTimer)
+			if (touchTimerRef.current) {
+				clearTimeout(touchTimerRef.current)
 			}
 		}
-	}, [touchTimer])
+	}, [])
 
 	useEffect(() => {
 		if (!isDragging || !dragType || !originalStart || !originalEnd) return
