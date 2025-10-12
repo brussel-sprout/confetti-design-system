@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+
 import { cn } from '../../../utils/cn'
 import { Icon } from '../Icon'
 
@@ -71,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({
 		>
 			{/* Backdrop */}
 			<div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-modal-backdrop" />
-			
+
 			{/* Modal Content */}
 			<div
 				ref={modalRef}
@@ -87,11 +88,7 @@ const Modal: React.FC<ModalProps> = ({
 				{/* Header */}
 				{(title || showCloseButton) && (
 					<div className="flex items-center justify-between p-6 border-b border-border">
-						{title && (
-							<h2 className="text-xl font-semibold text-foreground">
-								{title}
-							</h2>
-						)}
+						{title && <h2 className="text-xl font-semibold text-foreground">{title}</h2>}
 						{showCloseButton && (
 							<button
 								onClick={onClose}
@@ -105,9 +102,7 @@ const Modal: React.FC<ModalProps> = ({
 				)}
 
 				{/* Content */}
-				<div className="overflow-y-auto max-h-[calc(90vh-120px)]">
-					{children}
-				</div>
+				<div className="overflow-y-auto max-h-[calc(90vh-120px)]">{children}</div>
 			</div>
 		</div>
 	)

@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
-export interface NumberInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface NumberInputProps
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
 	label?: string
 	error?: string
 	helperText?: string
@@ -75,7 +77,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 			variantClasses[variant],
 			'rounded-xl',
 			leftIcon ? 'pl-10' : '',
-			(rightIcon || showStepper) ? 'pr-16' : '',
+			rightIcon || showStepper ? 'pr-16' : '',
 			error ? 'border-destructive focus:border-destructive focus:ring-destructive/20' : '',
 			className
 		)
@@ -85,7 +87,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 			const newValue = currentValue + Number(step)
 			if (max === undefined || newValue <= Number(max)) {
 				const event = {
-					target: { value: newValue.toString() }
+					target: { value: newValue.toString() },
 				} as React.ChangeEvent<HTMLInputElement>
 				onChange?.(event)
 			}
@@ -96,7 +98,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 			const newValue = currentValue - Number(step)
 			if (min === undefined || newValue >= Number(min)) {
 				const event = {
-					target: { value: newValue.toString() }
+					target: { value: newValue.toString() },
 				} as React.ChangeEvent<HTMLInputElement>
 				onChange?.(event)
 			}
@@ -141,7 +143,12 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 								disabled={max !== undefined && Number(value) >= Number(max)}
 							>
 								<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M5 15l7-7 7 7"
+									/>
 								</svg>
 							</button>
 							<button
@@ -151,7 +158,12 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 								disabled={min !== undefined && Number(value) <= Number(min)}
 							>
 								<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M19 9l-7 7-7-7"
+									/>
 								</svg>
 							</button>
 						</div>

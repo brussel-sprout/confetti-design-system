@@ -29,8 +29,8 @@ import { PartySelector } from './organisms/PartySelector'
 import { ProgressTracker } from './organisms/ProgressTracker'
 import { ThemeSelectionHeader } from './organisms/ThemeSelectionHeader'
 
-import type { ProgressStepperStep } from './molecules/ProgressStepper'
 import type { TimelineEvent as EventBlockTimelineEvent } from './molecules/EventBlock/types'
+import type { ProgressStepperStep } from './molecules/ProgressStepper'
 import type { TimelineEvent } from './molecules/TimelineItem'
 import type { PartyOption } from './organisms/PartySelector'
 import type { ProgressCategory } from './organisms/ProgressTracker'
@@ -148,8 +148,7 @@ export const Demo: React.FC = () => {
 	const [showProgressTracker, setShowProgressTracker] = React.useState(false)
 	const [selectedTime, setSelectedTime] = React.useState<string | null>(null)
 	const [timeScale, setTimeScale] = React.useState<'30min' | '15min' | '5min'>('30min')
-	const [eventBlocks, setEventBlocks] =
-		React.useState<EventBlockTimelineEvent[]>(sampleEventBlocks)
+	const [eventBlocks, setEventBlocks] = React.useState<EventBlockTimelineEvent[]>(sampleEventBlocks)
 	const [selectedEventId, setSelectedEventId] = React.useState<string | undefined>(undefined)
 	const [progressCategories, setProgressCategories] = React.useState<ProgressCategory[]>([
 		{
@@ -484,8 +483,8 @@ export const Demo: React.FC = () => {
 										<strong>Resize:</strong> Drag the top or bottom edge to adjust duration
 									</li>
 									<li>
-										<strong>Overlap detection:</strong> Overlapping events are automatically
-										stacked side-by-side
+										<strong>Overlap detection:</strong> Overlapping events are automatically stacked
+										side-by-side
 									</li>
 									<li>
 										<strong>Suggestion states:</strong> Yellow (pending), green (approved), red
@@ -500,14 +499,11 @@ export const Demo: React.FC = () => {
 							{/* Timeline */}
 							<div className="border border-border rounded-lg overflow-hidden bg-background">
 								<div className="p-4 bg-muted/30 border-b border-border">
-									<h4 className="font-medium text-foreground">
-										Party Schedule: 2:00 PM - 8:00 PM
-									</h4>
+									<h4 className="font-medium text-foreground">Party Schedule: 2:00 PM - 8:00 PM</h4>
 									{selectedEventId && (
 										<p className="text-sm text-muted-foreground mt-1">
 											Selected:{' '}
-											{eventBlocks.find((e) => e.id === selectedEventId)?.event_name ||
-												'None'}
+											{eventBlocks.find((e) => e.id === selectedEventId)?.event_name || 'None'}
 										</p>
 									)}
 								</div>
@@ -526,8 +522,8 @@ export const Demo: React.FC = () => {
 												prev.map((e) =>
 													e.id === eventId
 														? { ...e, absoluteStart: newStart, absoluteEnd: newEnd }
-														: e,
-												),
+														: e
+												)
 											)
 										}}
 										data-id="event-block-timeline-demo"
@@ -554,7 +550,7 @@ export const Demo: React.FC = () => {
 				{/* TimelineAxis Demo */}
 				<section className="space-y-8">
 					<h2 className="text-3xl font-semibold text-foreground">TimelineAxis Component</h2>
-					
+
 					{/* TimelineControls Demo */}
 					<Card>
 						<CardHeader>
@@ -596,9 +592,7 @@ export const Demo: React.FC = () => {
 									<label className="text-sm font-medium text-foreground">Time Scale:</label>
 									<select
 										value={timeScale}
-										onChange={(e) =>
-											setTimeScale(e.target.value as '30min' | '15min' | '5min')
-										}
+										onChange={(e) => setTimeScale(e.target.value as '30min' | '15min' | '5min')}
 										className="px-3 py-1 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
 									>
 										<option value="30min">30 minutes</option>
@@ -634,14 +628,12 @@ export const Demo: React.FC = () => {
 											Event Creation Area
 										</h3>
 										<p className="text-muted-foreground text-sm mb-4">
-											Click on any time slot in the timeline axis to create an event at that
-											time.
+											Click on any time slot in the timeline axis to create an event at that time.
 										</p>
 										{selectedTime ? (
 											<div className="bg-muted border border-border rounded-md p-3">
 												<p className="text-sm text-foreground">
-													<span className="font-medium">Last clicked time:</span>{' '}
-													{selectedTime}
+													<span className="font-medium">Last clicked time:</span> {selectedTime}
 												</p>
 												<p className="text-xs text-muted-foreground mt-1">
 													This would trigger event creation modal in a real application.
@@ -663,9 +655,7 @@ export const Demo: React.FC = () => {
 								<h4 className="font-medium text-foreground mb-4">Usage Examples</h4>
 								<div className="grid md:grid-cols-2 gap-4">
 									<div className="bg-muted rounded-lg p-4">
-										<h5 className="font-medium text-foreground mb-2 text-sm">
-											Basic Usage
-										</h5>
+										<h5 className="font-medium text-foreground mb-2 text-sm">Basic Usage</h5>
 										<pre className="text-xs text-muted-foreground bg-background p-3 rounded border overflow-x-auto">
 											{`<TimelineAxis 
   timeScale="30min"

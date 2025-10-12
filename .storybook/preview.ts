@@ -3,7 +3,7 @@ import type { Preview } from '@storybook/react'
 import '../src/styles/base.css'
 
 // Fix React act() warnings in Storybook
-global.IS_REACT_ACT_ENVIRONMENT = true;
+global.IS_REACT_ACT_ENVIRONMENT = true
 
 const preview: Preview = {
 	parameters: {

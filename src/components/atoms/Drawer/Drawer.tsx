@@ -73,11 +73,12 @@ export const Drawer: React.FC<DrawerProps> = ({
 				<VaulDrawer.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
 				<VaulDrawer.Content
 					className={cn(
-						'fixed bg-background shadow-xl border-border overflow-hidden z-50',
+						'fixed bg-background border-border overflow-hidden z-50',
 						'flex flex-col',
 						getPositionClasses(),
 						contentClassName
 					)}
+					style={{ boxShadow: '0 0 15px rgba(0, 0, 0, 0.25)' }}
 				>
 					{/* Mobile Handle */}
 					{showMobileHandle && direction === 'bottom' && (

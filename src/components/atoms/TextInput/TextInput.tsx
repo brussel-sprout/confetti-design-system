@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
 export interface TextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {

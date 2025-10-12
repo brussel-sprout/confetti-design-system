@@ -1,6 +1,8 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 import { ProgressStepper } from '../../molecules/ProgressStepper'
+
 import type { ProgressStepperStep } from '../../molecules/ProgressStepper'
 
 export interface ThemeSelectionHeaderProps {

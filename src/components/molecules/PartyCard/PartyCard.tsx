@@ -1,10 +1,9 @@
 import React from 'react'
 
+import { cn } from '../../../utils/cn'
 import { FeatureList } from '../../atoms/FeatureList'
 import { Icon } from '../../atoms/Icon'
 import { StatusBadge } from '../../atoms/StatusBadge'
-
-import { cn } from '../../../utils/cn'
 import { Card, CardContent, CardHeader } from '../Card'
 
 export interface PartyCardProps {

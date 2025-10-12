@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
-export interface SearchInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface SearchInputProps
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
 	label?: string
 	error?: string
 	helperText?: string
@@ -71,7 +73,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 			sizeClasses[size],
 			variantClasses[variant],
 			'rounded-xl',
-			(rightIcon || (showClearButton && hasValue)) ? 'pr-10' : '',
+			rightIcon || (showClearButton && hasValue) ? 'pr-10' : '',
 			error ? 'border-destructive focus:border-destructive focus:ring-destructive/20' : '',
 			className
 		)
@@ -118,7 +120,12 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 							onClick={onClear}
 						>
 							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M6 18L18 6M6 6l12 12"
+								/>
 							</svg>
 						</button>
 					)}

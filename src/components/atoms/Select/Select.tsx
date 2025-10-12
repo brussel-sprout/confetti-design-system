@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
 export interface SelectOption {
@@ -87,13 +88,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 				)}
 
 				<div className="relative">
-					<select
-						ref={ref}
-						id={inputId}
-						className={selectClasses}
-						required={required}
-						{...props}
-					>
+					<select ref={ref} id={inputId} className={selectClasses} required={required} {...props}>
 						{placeholder && (
 							<option value="" disabled>
 								{placeholder}
@@ -108,7 +103,12 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 
 					<div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none">
 						<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M19 9l-7 7-7-7"
+							/>
 						</svg>
 					</div>
 				</div>

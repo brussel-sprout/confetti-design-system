@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+
 import { cn } from '../../../utils/cn'
 
-export interface PasswordInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface PasswordInputProps
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
 	label?: string
 	error?: string
 	helperText?: string

@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
-export interface EmailInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface EmailInputProps
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
 	label?: string
 	error?: string
 	helperText?: string

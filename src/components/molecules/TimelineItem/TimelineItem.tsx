@@ -1,10 +1,9 @@
 import { AlertCircle, CheckCircle, Clock, Edit3, MapPin, Trash2, Users } from 'lucide-react'
 import React from 'react'
 
+import { cn } from '../../../utils/cn'
 import { Badge } from '../../atoms/Badge'
 import { Button } from '../../atoms/Button'
-
-import { cn } from '../../../utils/cn'
 
 export interface TimelineEvent {
 	id: string

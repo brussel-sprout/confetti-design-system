@@ -15,6 +15,7 @@ A comprehensive design system for the Confetti application, providing consistent
 ## 📦 Installation
 
 ### Standalone Installation
+
 ```bash
 # Clone and install dependencies
 git clone https://github.com/brussel-sprout/confetti-design-system
@@ -32,6 +33,7 @@ pnpm test
 ```
 
 ### Monorepo Installation
+
 ```bash
 # From the monorepo root
 pnpm install
@@ -135,6 +137,7 @@ pnpm --filter @repo/confetti-design-system test:ui
 ## 🏗️ Development
 
 ### Development Server
+
 Start the development server to preview all components:
 
 ```bash

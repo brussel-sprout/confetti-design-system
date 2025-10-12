@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
-export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface CheckboxProps
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
 	label?: string
 	error?: string
 	helperText?: string
@@ -87,7 +89,10 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
 					{label && (
 						<div className="flex-1">
-							<label htmlFor={inputId} className="block text-sm font-medium text-foreground cursor-pointer">
+							<label
+								htmlFor={inputId}
+								className="block text-sm font-medium text-foreground cursor-pointer"
+							>
 								{label}
 								{required && <span className="text-destructive ml-1">*</span>}
 							</label>

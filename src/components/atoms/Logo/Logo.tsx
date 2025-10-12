@@ -1,5 +1,5 @@
-import React from 'react'
 import { Wand } from 'lucide-react'
+import React from 'react'
 
 import { cn } from '../../../utils/cn'
 
@@ -62,7 +62,9 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
 			>
 				{iconElement}
 				{variant !== 'minimal' && (
-					<span className={cn('text-foreground hidden sm:inline', currentSize.text)}>Party Planner</span>
+					<span className={cn('text-foreground hidden sm:inline', currentSize.text)}>
+						Party Planner
+					</span>
 				)}
 			</div>
 		)

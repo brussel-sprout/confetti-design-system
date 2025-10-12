@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
 interface CategoryBadgeProps {
@@ -28,14 +29,6 @@ export const CategoryBadge: React.FC<CategoryBadgeProps> = ({
 	}
 
 	return (
-		<span
-			className={cn(
-				baseClasses,
-				sizeClasses[size],
-				variantClasses[variant]
-			)}
-		>
-			{category}
-		</span>
+		<span className={cn(baseClasses, sizeClasses[size], variantClasses[variant])}>{category}</span>
 	)
 }

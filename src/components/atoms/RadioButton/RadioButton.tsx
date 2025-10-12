@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../../utils/cn'
 
 export interface RadioOption {
@@ -8,7 +9,8 @@ export interface RadioOption {
 	helperText?: string
 }
 
-export interface RadioButtonProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface RadioButtonProps
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
 	label?: string
 	error?: string
 	helperText?: string
@@ -122,9 +124,7 @@ const RadioButton = React.forwardRef<HTMLInputElement, RadioButtonProps>(
 												{option.label}
 											</label>
 											{option.helperText && (
-												<p className="mt-1 text-sm text-muted-foreground">
-													{option.helperText}
-												</p>
+												<p className="mt-1 text-sm text-muted-foreground">{option.helperText}</p>
 											)}
 										</div>
 									</div>
