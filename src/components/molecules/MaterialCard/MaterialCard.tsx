@@ -122,7 +122,6 @@ export const MaterialCard = React.forwardRef<HTMLDivElement, MaterialCardProps>(
 					<MaterialActions
 						hasLink={!!material.link}
 						link={material.link}
-						onEdit={handleEdit}
 						onStatusChange={handleStatusChange}
 					/>
 				</div>
