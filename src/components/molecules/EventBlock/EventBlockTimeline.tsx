@@ -11,7 +11,7 @@ export interface EventBlockTimelineProps {
 	pixelsPerMinute?: number
 	selectedEventId?: string
 	onEventClick?: (event: TimelineEvent) => void
-	onTimelineClick?: (clickedTime: Date) => void
+	onTimelineClick?: (clickedTime: Date, position?: { x: number; y: number }) => void
 	onTimeChange?: (eventId: string, newStart: Date, newEnd: Date) => void
 	'data-id'?: string
 }
@@ -102,7 +102,9 @@ export function EventBlockTimeline({
 			Math.round(clickedTime.getTime() / (5 * 60 * 1000)) * (5 * 60 * 1000)
 		)
 
-		onTimelineClick(roundedTime)
+		// Pass click position for desktop modal positioning
+		const position = { x: e.clientX, y: e.clientY }
+		onTimelineClick(roundedTime, position)
 	}
 
 	return (
