@@ -20,6 +20,7 @@ export interface ConnectedTasksSectionProps {
 		party_task_name: string
 		completed_on: Date | null
 		due_date?: Date | null
+		importance_level?: 1 | 2 | 3
 	}>
 	onNavigateToTask?: (taskId: string) => void
 	className?: string
@@ -32,6 +33,10 @@ export interface ConnectedMaterialsSectionProps {
 		party_element_material_name: string
 		status: 'purchased' | 'needed' | 'not_needed' | 'recommended' | 'ignored'
 		link?: string | null
+		image?: {
+			image_url: string
+		} | null
+		description?: string | null
 	}>
 	onNavigateToMaterial?: (materialId: string) => void
 	className?: string

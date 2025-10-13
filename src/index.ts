@@ -96,6 +96,9 @@ export type { DrawerHeaderProps } from './components/organisms/DrawerHeader'
 export { DrawerFooter } from './components/organisms/DrawerFooter'
 export type { DrawerFooterProps } from './components/organisms/DrawerFooter'
 
+export { FilterDrawer } from './components/organisms/FilterDrawer'
+export type { FilterDrawerProps } from './components/organisms/FilterDrawer'
+
 // Organisms - Connected Sections
 export { ConnectedItemsSection } from './components/organisms/ConnectedItemsSection'
 export type {
