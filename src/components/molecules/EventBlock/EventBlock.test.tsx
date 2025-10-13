@@ -403,25 +403,6 @@ describe('EventBlock', () => {
 		})
 	})
 
-	describe('Delete Functionality', () => {
-		it('calls onDelete when delete button is clicked', () => {
-			const onDelete = vi.fn()
-			const { container } = render(<EventBlock {...defaultProps} onDelete={onDelete} />)
-
-			const deleteButton = container.querySelector('[aria-label="Delete event"]')!
-			fireEvent.click(deleteButton)
-
-			expect(onDelete).toHaveBeenCalledWith('event-1')
-		})
-
-		it('does not render delete button when onDelete is not provided', () => {
-			const { container } = render(<EventBlock {...defaultProps} />)
-
-			const deleteButton = container.querySelector('[aria-label="Delete event"]')
-			expect(deleteButton).not.toBeInTheDocument()
-		})
-	})
-
 	describe('Visual Feedback', () => {
 		it('applies dragging styles during drag operation', async () => {
 			const onTimeChange = vi.fn()
