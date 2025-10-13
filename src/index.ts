@@ -77,6 +77,46 @@ export type { EditableFieldProps } from './components/atoms/EditableField/Editab
 export { DetailsGrid } from './components/atoms/DetailsGrid/DetailsGrid'
 export type { DetailsGridProps } from './components/atoms/DetailsGrid/DetailsGrid'
 
+// Organisms - EditableField (New versions)
+export {
+	EditableField as EditableFieldOrganism,
+	EditableTextField,
+	EditableTextArea,
+} from './components/organisms/EditableField'
+export type {
+	EditableFieldProps as EditableFieldOrganismProps,
+	EditableTextFieldProps,
+	EditableTextAreaProps,
+} from './components/organisms/EditableField'
+
+// Organisms - Drawer Components
+export { DrawerHeader } from './components/organisms/DrawerHeader'
+export type { DrawerHeaderProps } from './components/organisms/DrawerHeader'
+
+export { DrawerFooter } from './components/organisms/DrawerFooter'
+export type { DrawerFooterProps } from './components/organisms/DrawerFooter'
+
+// Organisms - Connected Sections
+export { ConnectedItemsSection } from './components/organisms/ConnectedItemsSection'
+export type {
+	ConnectedItemsSectionProps,
+	ConnectedItem,
+} from './components/organisms/ConnectedItemsSection'
+
+// Molecules - Drawer Connected Sections
+export {
+	ConnectedElementsSection,
+	ConnectedTasksSection,
+	ConnectedMaterialsSection,
+	ConnectedEventsSection,
+} from './components/molecules/DrawerConnectedSections'
+export type {
+	ConnectedElementsSectionProps,
+	ConnectedTasksSectionProps,
+	ConnectedMaterialsSectionProps,
+	ConnectedEventsSectionProps,
+} from './components/molecules/DrawerConnectedSections'
+
 // Molecules
 export { Card, CardHeader, CardContent, CardFooter } from './components/molecules/Card'
 export type {
