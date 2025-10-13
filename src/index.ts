@@ -117,6 +117,10 @@ export type {
 	ConnectedEventsSectionProps,
 } from './components/molecules/DrawerConnectedSections'
 
+// Molecules - StatusDropdown
+export { StatusDropdown } from './components/molecules/StatusDropdown'
+export type { StatusDropdownProps } from './components/molecules/StatusDropdown'
+
 // Molecules
 export { Card, CardHeader, CardContent, CardFooter } from './components/molecules/Card'
 export type {
