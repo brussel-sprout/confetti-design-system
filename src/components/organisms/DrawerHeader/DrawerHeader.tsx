@@ -16,6 +16,7 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 	onDuplicate,
 	isDuplicating = false,
 	className,
+	titleContent,
 }) => {
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
@@ -33,7 +34,10 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 				className
 			)}
 		>
-			<h2 className="text-lg font-semibold text-foreground">{title}</h2>
+			<div className="flex items-center gap-3 flex-1 min-w-0">
+				<h2 className="text-lg font-semibold text-foreground">{title}</h2>
+				{titleContent}
+			</div>
 			<div className="flex items-center gap-2">
 				{/* Duplicate Button */}
 				{showDuplicate && onDuplicate && (
@@ -96,4 +100,3 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 		</div>
 	)
 }
-

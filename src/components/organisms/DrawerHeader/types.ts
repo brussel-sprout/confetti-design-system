@@ -12,5 +12,6 @@ export interface DrawerHeaderProps {
 	showDuplicate?: boolean
 	onDuplicate?: () => void
 	isDuplicating?: boolean
+	// Custom title content (for additional elements like badges, dropdowns, etc.)
+	titleContent?: React.ReactNode
 }
-
