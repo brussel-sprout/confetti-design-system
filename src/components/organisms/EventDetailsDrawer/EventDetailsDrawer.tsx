@@ -1,9 +1,10 @@
-import { ChevronRight, Clock, ExternalLink, Trash2, X as XIcon } from 'lucide-react'
+import { ChevronRight, Clock, ExternalLink } from 'lucide-react'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { cn } from '../../../utils/cn'
-import { Button } from '../../atoms/Button'
 import { Drawer } from '../../atoms/Drawer'
+import { DrawerFooter } from '../DrawerFooter'
+import { DrawerHeader } from '../DrawerHeader'
 
 import type { EventDetailsDrawerProps, EventFormData, ValidationErrors } from './types'
 
@@ -93,8 +94,6 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 
 	const [errors, setErrors] = useState<ValidationErrors>({})
 	const [isSaving, setIsSaving] = useState(false)
-	const [isDeleting, setIsDeleting] = useState(false)
-	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 	const [isDirty, setIsDirty] = useState(false)
 
 	// Initialize form data when event prop changes or drawer opens
@@ -125,7 +124,6 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 				setIsDirty(false)
 			}
 			setErrors({})
-			setShowDeleteConfirm(false)
 		}
 	}, [isOpen, mode, event, initialStartTime, initialEndTime, initialEventName])
 
@@ -243,7 +241,6 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 	const handleDelete = async () => {
 		if (!onDelete) return
 
-		setIsDeleting(true)
 		try {
 			await onDelete()
 			setIsDirty(false)
@@ -251,9 +248,6 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 		} catch (error) {
 			console.error('Failed to delete event:', error)
 			// Could show an error toast here
-		} finally {
-			setIsDeleting(false)
-			setShowDeleteConfirm(false)
 		}
 	}
 
@@ -280,55 +274,13 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 			contentClassName={isDesktop ? 'w-[500px]' : 'rounded-t-[10px] h-[96%] mt-24'}
 			className="p-0 flex flex-col"
 		>
-			{/* Custom Header with Title, Delete Button, and Close Button */}
-			<div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
-				<h2 className="text-lg font-semibold text-foreground">{title}</h2>
-				<div className="flex items-center gap-2">
-					{/* Delete Button (Edit Mode Only) */}
-					{mode === 'edit' && onDelete && (
-						<>
-							{showDeleteConfirm ? (
-								<>
-									<span className="text-sm text-muted-foreground">Delete?</span>
-									<button
-										type="button"
-										onClick={() => setShowDeleteConfirm(false)}
-										disabled={isDeleting}
-										className="py-1.5 px-3 rounded-lg border border-border hover:bg-muted transition-colors text-sm font-medium mobile-touch-target"
-									>
-										Cancel
-									</button>
-									<button
-										type="button"
-										onClick={handleDelete}
-										disabled={isDeleting}
-										className="py-1.5 px-3 rounded-lg bg-destructive hover:bg-destructive/90 text-destructive-foreground transition-colors text-sm font-medium disabled:opacity-50 mobile-touch-target"
-									>
-										{isDeleting ? 'Deleting...' : 'Delete'}
-									</button>
-								</>
-							) : (
-								<button
-									type="button"
-									onClick={() => setShowDeleteConfirm(true)}
-									className="p-2 hover:bg-muted rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 mobile-touch-target flex items-center justify-center"
-									aria-label="Delete event"
-								>
-									<Trash2 className="w-4 h-4 text-muted-foreground" />
-								</button>
-							)}
-						</>
-					)}
-					{/* Close Button */}
-					<button
-						onClick={handleClose}
-						className="p-2 hover:bg-muted rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 mobile-touch-target flex items-center justify-center"
-						aria-label="Close drawer"
-					>
-						<XIcon size={16} />
-					</button>
-				</div>
-			</div>
+			{/* Header */}
+			<DrawerHeader
+				title={title}
+				onClose={handleClose}
+				showDelete={mode === 'edit' && !!onDelete}
+				onDelete={handleDelete}
+			/>
 
 			{/* Content Area */}
 			<div className="p-4 flex flex-col flex-1 overflow-y-auto">
@@ -542,30 +494,14 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 				</div>
 			</div>
 
-			{/* Action Buttons - Fixed at Bottom */}
-			<div className="bg-background border-t border-border/30 p-4 flex-shrink-0">
-				<div className="flex flex-col sm:flex-row gap-3">
-					<Button
-						variant="secondary"
-						size="md"
-						onClick={handleClose}
-						disabled={isSaving || isDeleting}
-						className="order-2 sm:order-1 w-full sm:w-auto rounded-lg"
-					>
-						Cancel
-					</Button>
-					<Button
-						variant="default"
-						size="md"
-						onClick={handleSave}
-						disabled={isSaving || isDeleting}
-						loading={isSaving}
-						className="order-1 sm:order-2 w-full sm:w-auto rounded-lg"
-					>
-						{mode === 'create' ? 'Create Event' : 'Save Event'}
-					</Button>
-				</div>
-			</div>
+			{/* Footer */}
+			<DrawerFooter
+				onCancel={handleClose}
+				onSave={handleSave}
+				primaryLabel={mode === 'create' ? 'Create Event' : 'Save Event'}
+				cancelLabel="Cancel"
+				isSaving={isSaving}
+			/>
 		</Drawer>
 	)
 }
