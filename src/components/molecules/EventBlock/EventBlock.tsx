@@ -1,4 +1,4 @@
-import { Check, Clock, GripVertical, Lightbulb, Trash2, X } from 'lucide-react'
+import { Check, Clock, GripVertical, Lightbulb, X } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 
 import type { LucideIcon } from 'lucide-react'
@@ -24,7 +24,6 @@ export interface EventBlockProps {
 	isDimmed?: boolean
 	onClick?: () => void
 	onTimeChange?: (eventId: string, newStart: Date, newEnd: Date) => void
-	onDelete?: (eventId: string) => void
 	'data-id'?: string
 }
 
@@ -70,7 +69,6 @@ export function EventBlock({
 	isDimmed = false,
 	onClick,
 	onTimeChange,
-	onDelete,
 	'data-id': dataId,
 }: EventBlockProps) {
 	const [isExpanded, setIsExpanded] = useState(false)
@@ -458,20 +456,6 @@ export function EventBlock({
 						height: '100%',
 					}}
 				/>
-			)}
-
-			{/* Delete button */}
-			{onDelete && (
-				<button
-					onClick={(e) => {
-						e.stopPropagation()
-						onDelete(event.id)
-					}}
-					className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded z-10"
-					aria-label="Delete event"
-				>
-					<Trash2 className="w-4 h-4 text-red-600" />
-				</button>
 			)}
 
 			{/* Main event card */}

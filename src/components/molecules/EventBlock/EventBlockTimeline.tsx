@@ -13,7 +13,6 @@ export interface EventBlockTimelineProps {
 	onEventClick?: (event: TimelineEvent) => void
 	onTimelineClick?: (clickedTime: Date) => void
 	onTimeChange?: (eventId: string, newStart: Date, newEnd: Date) => void
-	onDelete?: (eventId: string) => void
 	'data-id'?: string
 }
 
@@ -78,7 +77,6 @@ export function EventBlockTimeline({
 	onEventClick,
 	onTimelineClick,
 	onTimeChange,
-	onDelete,
 	'data-id': dataId,
 }: EventBlockTimelineProps) {
 	const positionedEvents = useMemo(() => detectOverlaps(events), [events])
@@ -141,7 +139,6 @@ export function EventBlockTimeline({
 							isDimmed={isDimmed}
 							onClick={() => onEventClick?.(event)}
 							onTimeChange={onTimeChange}
-							onDelete={onDelete}
 						/>
 					)
 				})
