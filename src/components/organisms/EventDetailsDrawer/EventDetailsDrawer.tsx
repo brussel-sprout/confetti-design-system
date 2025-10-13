@@ -72,10 +72,13 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 	mode,
 	event,
 	initialStartTime,
+	initialEndTime,
+	initialEventName,
 	connectedElements = [],
 	onSave,
 	onDelete,
 	onNavigateToElement,
+	onPreviewChange,
 }) => {
 	const isDesktop = useMediaQuery('(min-width: 768px)')
 
@@ -110,21 +113,21 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 			} else if (mode === 'create') {
 				// For create mode, use initialStartTime if provided, otherwise use current time
 				const startTime = initialStartTime || new Date()
-				const oneHourLater = new Date(startTime.getTime() + 60 * 60 * 1000)
+				const endTime = initialEndTime || new Date(startTime.getTime() + 60 * 60 * 1000)
 				setFormData({
-					event_name: '',
+					event_name: initialEventName || '',
 					description: '',
 					startDate: getDateString(startTime),
 					startTime: getTimeString(startTime),
-					endDate: getDateString(oneHourLater),
-					endTime: getTimeString(oneHourLater),
+					endDate: getDateString(endTime),
+					endTime: getTimeString(endTime),
 				})
 				setIsDirty(false)
 			}
 			setErrors({})
 			setShowDeleteConfirm(false)
 		}
-	}, [isOpen, mode, event, initialStartTime])
+	}, [isOpen, mode, event, initialStartTime, initialEndTime, initialEventName])
 
 	// Calculate start and end dates for display and validation
 	const { startDateTime, endDateTime, duration } = useMemo(() => {
@@ -194,6 +197,11 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 	const handleFieldChange = (field: keyof EventFormData, value: string) => {
 		setFormData((prev) => ({ ...prev, [field]: value }))
 		setIsDirty(true)
+
+		// Call preview change for event name in create mode
+		if (field === 'event_name' && mode === 'create') {
+			onPreviewChange?.(value)
+		}
 
 		// Clear error for this field
 		if (field === 'event_name' || field === 'description') {

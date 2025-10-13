@@ -12,6 +12,12 @@ export interface EventDetailsDrawerProps {
 	// Initial start time for create mode (optional)
 	initialStartTime?: Date
 
+	// Initial end time for create mode (optional)
+	initialEndTime?: Date
+
+	// Initial event name for create mode (optional)
+	initialEventName?: string
+
 	// Connected elements (for display and navigation)
 	connectedElements?: ConnectedElement[]
 
@@ -25,6 +31,7 @@ export interface EventDetailsDrawerProps {
 
 	onDelete?: () => Promise<void>
 	onNavigateToElement?: (elementId: string) => void
+	onPreviewChange?: (eventName: string) => void
 }
 
 export interface EventFormData {

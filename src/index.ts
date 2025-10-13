@@ -140,6 +140,10 @@ export type { PartyDetailsFormProps, PartyDetails } from './components/organisms
 export { EventDetailsDrawer } from './components/organisms/EventDetailsDrawer'
 export type { EventDetailsDrawerProps } from './components/organisms/EventDetailsDrawer'
 
+// Molecules - QuickAddEventSheet
+export { QuickAddEventSheet } from './components/molecules/QuickAddEventSheet'
+export type { QuickAddEventSheetProps } from './components/molecules/QuickAddEventSheet'
+
 export { PartyCard } from './components/molecules/PartyCard'
 export type { PartyCardProps } from './components/molecules/PartyCard'
 
