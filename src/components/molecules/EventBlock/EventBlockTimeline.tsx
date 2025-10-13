@@ -11,6 +11,7 @@ export interface EventBlockTimelineProps {
 	pixelsPerMinute?: number
 	selectedEventId?: string
 	onEventClick?: (event: TimelineEvent) => void
+	onTimelineClick?: (clickedTime: Date) => void
 	onTimeChange?: (eventId: string, newStart: Date, newEnd: Date) => void
 	onDelete?: (eventId: string) => void
 	'data-id'?: string
@@ -75,6 +76,7 @@ export function EventBlockTimeline({
 	pixelsPerMinute = 2,
 	selectedEventId,
 	onEventClick,
+	onTimelineClick,
 	onTimeChange,
 	onDelete,
 	'data-id': dataId,
@@ -86,13 +88,33 @@ export function EventBlockTimeline({
 
 	const hasOverlaps = positionedEvents.some((pe) => pe.totalStacks > 1)
 
+	const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
+		// Only handle clicks on the container itself, not on child elements (events)
+		if (e.target !== e.currentTarget) return
+		if (!onTimelineClick) return
+
+		// Calculate clicked time based on Y offset
+		const rect = e.currentTarget.getBoundingClientRect()
+		const clickY = e.clientY - rect.top
+		const minutesFromStart = clickY / pixelsPerMinute
+		const clickedTime = new Date(startTime.getTime() + minutesFromStart * 60 * 1000)
+
+		// Round to nearest 5 minutes (consistent with drag behavior)
+		const roundedTime = new Date(
+			Math.round(clickedTime.getTime() / (5 * 60 * 1000)) * (5 * 60 * 1000)
+		)
+
+		onTimelineClick(roundedTime)
+	}
+
 	return (
 		<div
 			data-id={dataId}
-			className="relative w-full"
+			className="relative w-full cursor-pointer"
 			style={{
 				height: `${containerHeight}px`,
 			}}
+			onClick={handleTimelineClick}
 		>
 			{positionedEvents.length === 0 ? (
 				<div className="flex items-center justify-center h-full">
