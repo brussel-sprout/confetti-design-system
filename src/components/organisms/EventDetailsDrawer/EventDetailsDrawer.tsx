@@ -95,6 +95,7 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 	const [errors, setErrors] = useState<ValidationErrors>({})
 	const [isSaving, setIsSaving] = useState(false)
 	const [isDirty, setIsDirty] = useState(false)
+	const [localEventName, setLocalEventName] = useState('')
 
 	// Initialize form data when event prop changes or drawer opens
 	useEffect(() => {
@@ -108,19 +109,22 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 					endDate: getDateString(event.absoluteEnd),
 					endTime: getTimeString(event.absoluteEnd),
 				})
+				setLocalEventName(event.event_name)
 				setIsDirty(false)
 			} else if (mode === 'create') {
 				// For create mode, use initialStartTime if provided, otherwise use current time
 				const startTime = initialStartTime || new Date()
 				const endTime = initialEndTime || new Date(startTime.getTime() + 60 * 60 * 1000)
+				const eventName = initialEventName || ''
 				setFormData({
-					event_name: initialEventName || '',
+					event_name: eventName,
 					description: '',
 					startDate: getDateString(startTime),
 					startTime: getTimeString(startTime),
 					endDate: getDateString(endTime),
 					endTime: getTimeString(endTime),
 				})
+				setLocalEventName(eventName)
 				setIsDirty(false)
 			}
 			setErrors({})
@@ -192,6 +196,20 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 		return Object.keys(newErrors).length === 0
 	}
 
+	const handleSaveEventName = (newName: string) => {
+		setLocalEventName(newName)
+		setFormData((prev) => ({ ...prev, event_name: newName }))
+		setIsDirty(true)
+
+		// Call preview change for event name in create mode
+		if (mode === 'create') {
+			onPreviewChange?.(newName)
+		}
+
+		// Clear error for this field
+		setErrors((prev) => ({ ...prev, event_name: undefined }))
+	}
+
 	const handleFieldChange = (field: keyof EventFormData, value: string) => {
 		setFormData((prev) => ({ ...prev, [field]: value }))
 		setIsDirty(true)
@@ -259,8 +277,6 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 		onClose()
 	}
 
-	const title = mode === 'create' ? 'New Event' : 'Edit Event'
-
 	return (
 		<Drawer
 			isOpen={isOpen}
@@ -276,10 +292,14 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 		>
 			{/* Header */}
 			<DrawerHeader
-				title={title}
+				title={localEventName || (mode === 'create' ? 'New Event' : 'Event')}
 				onClose={handleClose}
 				showDelete={mode === 'edit' && !!onDelete}
 				onDelete={handleDelete}
+				isEditable={true}
+				onTitleChange={handleSaveEventName}
+				titlePlaceholder="Event name..."
+				maxTitleLength={100}
 			/>
 
 			{/* Content Area */}
@@ -303,30 +323,6 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
 						</div>
 
 						<div className="space-y-4">
-							{/* Event Name */}
-							<div>
-								<label
-									htmlFor="eventName"
-									className="block text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide"
-								>
-									Event Name <span className="text-destructive">*</span>
-								</label>
-								<input
-									id="eventName"
-									type="text"
-									value={formData.event_name}
-									onChange={(e) => handleFieldChange('event_name', e.target.value)}
-									placeholder="e.g., Cake Cutting Ceremony"
-									maxLength={100}
-									autoFocus={mode === 'create'}
-									className="block w-full border border-border/60 rounded-lg shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 px-3 py-2.5 bg-background text-foreground placeholder:text-muted-foreground transition-colors text-sm mobile-touch-target"
-									aria-required="true"
-								/>
-								{errors.event_name && (
-									<p className="mt-1 text-xs text-destructive">{errors.event_name}</p>
-								)}
-							</div>
-
 							{/* Description */}
 							<div>
 								<label
