@@ -183,10 +183,6 @@ export type {
 export { PartyDetailsForm } from './components/organisms/PartyDetailsForm'
 export type { PartyDetailsFormProps, PartyDetails } from './components/organisms/PartyDetailsForm'
 
-// Organisms - EventDetailsDrawer
-export { EventDetailsDrawer } from './components/organisms/EventDetailsDrawer'
-export type { EventDetailsDrawerProps } from './components/organisms/EventDetailsDrawer'
-
 // Molecules - QuickAddEventSheet
 export { QuickAddEventSheet } from './components/molecules/QuickAddEventSheet'
 export type { QuickAddEventSheetProps } from './components/molecules/QuickAddEventSheet'
