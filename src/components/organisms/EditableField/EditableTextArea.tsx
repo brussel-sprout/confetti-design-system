@@ -20,7 +20,7 @@ export interface EditableTextAreaProps extends EditableFieldProps {
 }
 
 export const EditableTextArea = React.forwardRef<HTMLTextAreaElement, EditableTextAreaProps>(
-	({ minLength = 2, maxLength, validation, rows = 3, ...props }, ref) => {
+	({ minLength = 2, maxLength, validation, ...props }, ref) => {
 		const validate = (value: string): string | null => {
 			// Run custom validation if provided
 			if (validation) {
@@ -46,4 +46,3 @@ export const EditableTextArea = React.forwardRef<HTMLTextAreaElement, EditableTe
 )
 
 EditableTextArea.displayName = 'EditableTextArea'
-

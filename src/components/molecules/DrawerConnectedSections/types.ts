@@ -1,5 +1,3 @@
-import type React from 'react'
-
 // Connected Elements Section
 export interface ConnectedElementsSectionProps {
 	elements: Array<{

@@ -57,11 +57,12 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
 		<div className="flex items-center gap-2">
 			<Filter size={20} className="text-primary" />
 			<span>{title}</span>
-			{activeFiltersCount > 0 && (
-				<div className="flex items-center gap-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
-					{activeFiltersCount}
-				</div>
-			)}
+		</div>
+	)
+
+	const titleContent = activeFiltersCount > 0 && (
+		<div className="flex items-center gap-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+			{activeFiltersCount}
 		</div>
 	)
 
@@ -79,9 +80,12 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
 			className="p-0 flex flex-col"
 		>
 			{/* Header */}
-			<DrawerHeader title="" onClose={onClose} className="border-b border-border">
-				<div className="flex items-center gap-2 flex-1 min-w-0">{headerTitle}</div>
-			</DrawerHeader>
+			<DrawerHeader
+				title={headerTitle}
+				onClose={onClose}
+				className="border-b border-border"
+				titleContent={titleContent}
+			/>
 
 			{/* Content */}
 			<div className="p-4 flex flex-col flex-1 overflow-y-auto">{children}</div>

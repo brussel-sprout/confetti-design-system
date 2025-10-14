@@ -6,7 +6,7 @@ export interface ConnectedItem {
 	image?: {
 		image_url: string
 	} | null
-	[key: string]: any
+	[key: string]: unknown
 }
 
 export interface ConnectedItemsSectionProps {
@@ -17,4 +17,3 @@ export interface ConnectedItemsSectionProps {
 	emptyMessage?: string
 	className?: string
 }
-
