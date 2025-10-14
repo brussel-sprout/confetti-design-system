@@ -2,6 +2,7 @@ import { Copy, Trash2, X as XIcon } from 'lucide-react'
 import React, { useState } from 'react'
 
 import { cn } from '../../../utils/cn'
+import { EditableTextField } from '../EditableField/EditableTextField'
 
 import type { DrawerHeaderProps } from './types'
 
@@ -17,6 +18,11 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 	isDuplicating = false,
 	className,
 	titleContent,
+	prefixContent,
+	isEditable = false,
+	onTitleChange,
+	titlePlaceholder = 'Enter title...',
+	maxTitleLength = 100,
 }) => {
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
@@ -30,12 +36,25 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 	return (
 		<div
 			className={cn(
-				'flex items-center justify-between p-4 border-b border-border flex-shrink-0',
+				'flex items-center justify-between px-4 sm:px-6 py-4 border-b border-border/30 flex-shrink-0',
 				className
 			)}
 		>
 			<div className="flex items-center gap-3 flex-1 min-w-0">
-				<h2 className="text-lg font-semibold text-foreground">{title}</h2>
+				{prefixContent}
+				{isEditable && onTitleChange ? (
+					<div className="flex-1 min-w-0">
+						<EditableTextField
+							value={typeof title === 'string' ? title : ''}
+							onSave={onTitleChange}
+							placeholder={titlePlaceholder}
+							maxLength={maxTitleLength}
+							className="text-lg font-semibold"
+						/>
+					</div>
+				) : (
+					<h2 className="text-lg font-semibold text-foreground">{title}</h2>
+				)}
 				{titleContent}
 			</div>
 			<div className="flex items-center gap-2">
@@ -45,10 +64,10 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 						type="button"
 						onClick={onDuplicate}
 						disabled={isDuplicating}
-						className="p-2 hover:bg-muted rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 mobile-touch-target flex items-center justify-center"
+						className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
 						aria-label="Duplicate"
 					>
-						<Copy className="w-4 h-4 text-muted-foreground" />
+						<Copy className="w-5 h-5" />
 					</button>
 				)}
 				{/* Delete Button (with inline confirmation) */}
@@ -78,10 +97,10 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 							<button
 								type="button"
 								onClick={() => setShowDeleteConfirm(true)}
-								className="p-2 hover:bg-muted rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 mobile-touch-target flex items-center justify-center"
+								className="text-muted-foreground hover:text-destructive transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
 								aria-label="Delete"
 							>
-								<Trash2 className="w-4 h-4 text-muted-foreground" />
+								<Trash2 className="w-5 h-5" />
 							</button>
 						)}
 					</>
@@ -90,10 +109,10 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 				{showCloseButton && (
 					<button
 						onClick={onClose}
-						className="p-2 hover:bg-muted rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 mobile-touch-target flex items-center justify-center"
-						aria-label="Close drawer"
+						className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
+						aria-label="Close"
 					>
-						<XIcon size={16} />
+						<XIcon size={20} />
 					</button>
 				)}
 			</div>

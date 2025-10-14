@@ -14,4 +14,11 @@ export interface DrawerHeaderProps {
 	isDuplicating?: boolean
 	// Custom title content (for additional elements like badges, dropdowns, etc.)
 	titleContent?: React.ReactNode
+	// Content before the title (like checkboxes, icons, etc.)
+	prefixContent?: React.ReactNode
+	// Editable title support
+	isEditable?: boolean
+	onTitleChange?: (newTitle: string) => void | Promise<void>
+	titlePlaceholder?: string
+	maxTitleLength?: number
 }
