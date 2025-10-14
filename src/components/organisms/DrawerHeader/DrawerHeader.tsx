@@ -23,6 +23,7 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 	onTitleChange,
 	titlePlaceholder = 'Enter title...',
 	maxTitleLength = 100,
+	variant = 'default',
 }) => {
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
@@ -49,11 +50,21 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 							onSave={onTitleChange}
 							placeholder={titlePlaceholder}
 							maxLength={maxTitleLength}
-							className="text-lg font-semibold"
+							className={cn(
+								'text-lg font-semibold transition-all duration-200',
+								variant === 'completed' && 'line-through text-muted-foreground'
+							)}
 						/>
 					</div>
 				) : (
-					<h2 className="text-lg font-semibold text-foreground">{title}</h2>
+					<h2
+						className={cn(
+							'text-lg font-semibold text-foreground transition-all duration-200',
+							variant === 'completed' && 'line-through text-muted-foreground'
+						)}
+					>
+						{title}
+					</h2>
 				)}
 				{titleContent}
 			</div>

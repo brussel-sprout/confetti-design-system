@@ -21,4 +21,6 @@ export interface DrawerHeaderProps {
 	onTitleChange?: (newTitle: string) => void | Promise<void>
 	titlePlaceholder?: string
 	maxTitleLength?: number
+	// Variant for different states (e.g., completed task)
+	variant?: 'default' | 'completed'
 }
