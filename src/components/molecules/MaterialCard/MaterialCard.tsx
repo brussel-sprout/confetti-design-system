@@ -15,6 +15,10 @@ export const MaterialCard = React.forwardRef<HTMLDivElement, MaterialCardProps>(
 			const baseStyles =
 				'bg-background border border-border rounded-xl transition-all duration-200 relative shadow-sm hover:shadow-md hover:border-primary/20 overflow-hidden'
 
+			if (material.isNew && !isCompleted) {
+				return `${baseStyles} border-l-4 border-l-primary shadow-sm`
+			}
+
 			if (isCompleted) {
 				return `${baseStyles} opacity-30 hover:opacity-50`
 			}
@@ -70,21 +74,29 @@ export const MaterialCard = React.forwardRef<HTMLDivElement, MaterialCardProps>(
 									<MaterialStatus status={material.status} />
 
 									{/* Material Title */}
-									{onEdit ? (
-										<button
-											onClick={handleEdit}
-											className={`text-lg font-semibold tracking-tight truncate text-left hover:text-primary transition-colors ${getTextStyles()}`}
-											aria-label="Edit material"
-										>
-											{material.name}
-										</button>
-									) : (
-										<h3
-											className={`text-lg font-semibold tracking-tight truncate ${getTextStyles()}`}
-										>
-											{material.name}
-										</h3>
-									)}
+									<div className="flex items-center gap-2 flex-1 min-w-0">
+										{onEdit ? (
+											<button
+												onClick={handleEdit}
+												className={`text-lg font-semibold tracking-tight truncate text-left hover:text-primary transition-colors ${getTextStyles()}`}
+												aria-label="Edit material"
+											>
+												{material.name}
+											</button>
+										) : (
+											<h3
+												className={`text-lg font-semibold tracking-tight truncate ${getTextStyles()}`}
+											>
+												{material.name}
+											</h3>
+										)}
+										{/* New Badge */}
+										{material.isNew && !isCompleted && (
+											<span className="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded-md bg-primary/10 text-primary border border-primary/20">
+												New
+											</span>
+										)}
+									</div>
 								</div>
 							</div>
 

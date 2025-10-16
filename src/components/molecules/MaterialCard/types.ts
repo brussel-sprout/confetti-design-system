@@ -10,6 +10,7 @@ export interface Material {
 	}
 	link?: string
 	elementName?: string
+	isNew?: boolean
 }
 
 export interface MaterialCardProps {
