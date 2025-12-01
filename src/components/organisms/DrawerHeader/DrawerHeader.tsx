@@ -75,7 +75,7 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 						type="button"
 						onClick={onDuplicate}
 						disabled={isDuplicating}
-						className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
+						className="flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
 						aria-label="Duplicate"
 					>
 						<Copy className="w-5 h-5" />
@@ -108,7 +108,7 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 							<button
 								type="button"
 								onClick={() => setShowDeleteConfirm(true)}
-								className="text-muted-foreground hover:text-destructive transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
+								className="flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
 								aria-label="Delete"
 							>
 								<Trash2 className="w-5 h-5" />
@@ -120,7 +120,7 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
 				{showCloseButton && (
 					<button
 						onClick={onClose}
-						className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
+						className="flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted mobile-touch-target"
 						aria-label="Close"
 					>
 						<XIcon size={20} />
