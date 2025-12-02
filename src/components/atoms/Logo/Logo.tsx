@@ -1,4 +1,3 @@
-import { Wand } from 'lucide-react'
 import React from 'react'
 
 import { cn } from '../../../utils/cn'
@@ -14,20 +13,17 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
 		const sizeClasses = {
 			sm: {
 				container: 'gap-2',
-				icon: 'w-6 h-6 p-1',
-				iconSize: 'w-4 h-4',
+				icon: 'w-6 h-6',
 				text: 'text-sm font-semibold',
 			},
 			md: {
 				container: 'gap-3',
-				icon: 'w-8 h-8 p-1.5',
-				iconSize: 'w-5 h-5',
+				icon: 'w-8 h-8',
 				text: 'text-base font-semibold',
 			},
 			lg: {
 				container: 'gap-4',
-				icon: 'w-10 h-10 p-2',
-				iconSize: 'w-6 h-6',
+				icon: 'w-10 h-10',
 				text: 'text-lg font-bold',
 			},
 		}
@@ -37,18 +33,22 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
 		const iconElement = (
 			<div
 				className={cn(
-					'bg-primary text-primary-foreground rounded-lg flex items-center justify-center',
-					'shadow-sm transition-all duration-200',
+					'flex items-center justify-center flex-shrink-0 transition-all duration-200',
 					currentSize.icon
 				)}
 			>
-				<Wand className={currentSize.iconSize} />
+				<img
+					src="/favicon.svg"
+					alt="Party Sprout Logo"
+					className="w-full h-full object-contain"
+					style={{ imageRendering: 'crisp-edges' }}
+				/>
 			</div>
 		)
 
 		if (variant === 'icon-only') {
 			return (
-				<div ref={ref} className={cn('inline-flex', className)} {...props}>
+				<div ref={ref} className={cn('inline-flex items-center', className)} {...props}>
 					{iconElement}
 				</div>
 			)
@@ -62,8 +62,8 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
 			>
 				{iconElement}
 				{variant !== 'minimal' && (
-					<span className={cn('text-foreground hidden sm:inline', currentSize.text)}>
-						Party Planner
+					<span className={cn('text-foreground hidden sm:inline flex-shrink-0', currentSize.text)}>
+						Party Sprout
 					</span>
 				)}
 			</div>
