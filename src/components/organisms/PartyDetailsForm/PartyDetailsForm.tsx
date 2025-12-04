@@ -267,12 +267,12 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 		return (
 			<div ref={ref || containerRef} className={cn('relative', className)} {...props}>
 				{/* Compact Display */}
-				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full">
+				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full min-w-0">
 					<button
 						onClick={(e) => handleFieldClick(e, 'name')}
 						className={cn(
 							'font-semibold text-foreground hover:text-primary transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left truncate',
+							'whitespace-nowrap flex-shrink text-left truncate max-w-[200px]',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={partyDetails.name || 'Add party name'}
@@ -286,7 +286,7 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						onClick={(e) => handleFieldClick(e, 'date')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left truncate',
+							'whitespace-nowrap flex-shrink-0 text-left',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={formatDate(partyDetails.party_date)}
@@ -294,13 +294,13 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						{formatDate(partyDetails.party_date)}
 					</button>
 
-					<span className="text-muted-foreground flex-shrink-0">•</span>
+					<span className="text-muted-foreground flex-shrink-0 hidden md:inline">•</span>
 
 					<button
 						onClick={(e) => handleFieldClick(e, 'time')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left truncate',
+							'whitespace-nowrap flex-shrink-0 text-left hidden md:inline-block',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={formatTime(partyDetails.party_date)}
@@ -308,13 +308,13 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						{formatTime(partyDetails.party_date)}
 					</button>
 
-					<span className="text-muted-foreground flex-shrink-0">•</span>
+					<span className="text-muted-foreground flex-shrink-0 hidden lg:inline">•</span>
 
 					<button
 						onClick={(e) => handleFieldClick(e, 'headCount')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left truncate',
+							'whitespace-nowrap flex-shrink-0 text-left hidden lg:inline-block',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={`${partyDetails.headCount || 0} guests`}
@@ -322,13 +322,13 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 						{formatHeadCount(partyDetails.headCount)}
 					</button>
 
-					<span className="text-muted-foreground flex-shrink-0">•</span>
+					<span className="text-muted-foreground flex-shrink-0 hidden xl:inline">•</span>
 
 					<button
 						onClick={(e) => handleFieldClick(e, 'address')}
 						className={cn(
 							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap text-left truncate min-w-0',
+							'whitespace-nowrap text-left truncate min-w-0 hidden xl:inline-block',
 							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
 						)}
 						title={partyDetails.address || 'Add location'}
