@@ -61,16 +61,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 			),
 		}
 
-		const inputClasses = cn(
-			baseClasses,
-			sizeClasses[size],
-			variantClasses[variant],
-			'rounded-xl',
-			leftIcon ? 'pl-10' : '',
-			rightIcon ? 'pr-10' : '',
-			error ? 'border-destructive focus:border-destructive focus:ring-destructive/20' : '',
-			className
-		)
+	const inputClasses = cn(
+		baseClasses,
+		sizeClasses[size],
+		variantClasses[variant],
+		'rounded-xl',
+		leftIcon ? 'pl-10 sm:pl-10' : '',
+		rightIcon ? 'pr-10' : '',
+		error ? 'border-destructive focus:border-destructive focus:ring-destructive/20' : '',
+		// Add extra left padding on mobile for date/time inputs to prevent icon overlap
+		props.type === 'date' || props.type === 'time' ? 'pl-11 sm:pl-10' : '',
+		className
+	)
 
 		return (
 			<div className="w-full">
