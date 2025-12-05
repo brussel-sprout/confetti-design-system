@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Badge } from './atoms/Badge'
 import { Button } from './atoms/Button'
+import { CountIndicatorWide } from './atoms/CountIndicator'
+import { SidebarListItem } from './molecules/SidebarListItem'
 import { Checkbox } from './atoms/Checkbox'
 import { DatePicker } from './atoms/DatePicker'
 import { EmailInput } from './atoms/EmailInput'
@@ -845,6 +847,142 @@ export const Demo: React.FC = () => {
 								selectedIds={selectedElementIds}
 								onSelectionChange={setSelectedElementIds}
 							/>
+						</CardContent>
+					</Card>
+
+					{/* Count Indicator */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Count Indicator</h3>
+							<p className="text-muted-foreground">
+								Elegant wide pill combining total and delta values for sidebar lists
+							</p>
+						</CardHeader>
+						<CardContent className="space-y-8">
+							{/* Sidebar List Demo */}
+							<div className="space-y-6">
+								<div className="space-y-4">
+									<h4 className="font-medium text-foreground">Sidebar List with "New" Indicators</h4>
+									<p className="text-sm text-muted-foreground">
+										Recommended approach: Keep "new" indicator on icon, count indicator separate on the right
+									</p>
+									<div className="bg-muted/30 border border-border rounded-lg p-6 max-w-xs">
+										<div className="space-y-1">
+											{/* With new indicator */}
+											<SidebarListItem
+												icon={<Icon name="cake" size="md" className="text-muted-foreground" />}
+												label="Timeline"
+												total={5}
+												delta={1}
+												hasNewIndicator
+											/>
+											<SidebarListItem
+												icon={<Icon name="baby" size="md" className="text-muted-foreground" />}
+												label="Tasks"
+												total={18}
+												delta={6}
+												hasNewIndicator
+											/>
+											{/* Without new indicator */}
+											<SidebarListItem
+												icon={<Icon name="dinner" size="md" className="text-muted-foreground" />}
+												label="Shopping List"
+												total={4}
+												delta={0}
+											/>
+											<SidebarListItem
+												icon={<Icon name="cake" size="md" className="text-muted-foreground" />}
+												label="Notes"
+												total={12}
+												delta={-2}
+											/>
+										</div>
+									</div>
+								</div>
+
+								{/* Alternative: Simple list without component */}
+								<div className="space-y-4">
+									<h4 className="font-medium text-foreground">Simple Implementation</h4>
+									<div className="bg-muted/30 border border-border rounded-lg p-6 max-w-xs">
+										<div className="space-y-1">
+											{/* With new indicator */}
+											<div className="flex items-center justify-between py-2 px-3 hover:bg-background/50 rounded-md transition-colors">
+												<div className="flex items-center gap-3 flex-1 min-w-0">
+													<div className="relative flex-shrink-0">
+														<Icon name="cake" size="md" className="text-muted-foreground" />
+														<span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-primary ring-2 ring-background animate-pulse" />
+													</div>
+													<span className="text-sm font-medium text-foreground">Timeline</span>
+												</div>
+												<CountIndicatorWide total={5} delta={1} hasNewIndicator />
+											</div>
+
+											{/* Without new indicator */}
+											<div className="flex items-center justify-between py-2 px-3 hover:bg-background/50 rounded-md transition-colors">
+												<div className="flex items-center gap-3 flex-1 min-w-0">
+													<Icon name="dinner" size="md" className="text-muted-foreground" />
+													<span className="text-sm font-medium text-foreground">Shopping List</span>
+												</div>
+												<CountIndicatorWide total={4} delta={0} />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							{/* Component Examples */}
+							<div className="space-y-4">
+								<h4 className="font-medium text-foreground">Variations</h4>
+								<div className="space-y-3">
+									<div className="flex items-center gap-4 flex-wrap">
+										<CountIndicatorWide total={24} delta={6} />
+										<CountIndicatorWide total={18} delta={3} />
+										<CountIndicatorWide total={12} delta={-2} />
+										<CountIndicatorWide total={5} delta={0} />
+										<CountIndicatorWide total={100} delta={0} />
+										<CountIndicatorWide total={1} delta={1} />
+									</div>
+									<p className="text-sm text-muted-foreground">
+										Wide pill with total on the left, delta on the right, separated by a subtle divider dot. Delta is
+										hidden when zero.
+									</p>
+								</div>
+							</div>
+
+							{/* Design Notes */}
+							<div className="border-t border-border pt-6 space-y-4">
+								<div>
+									<h4 className="font-medium text-foreground mb-3">Design Principles</h4>
+									<ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
+										<li>Single pill per row - no overlapping or stacked badges</li>
+										<li>Clear hierarchy: total is primary, delta is secondary but readable</li>
+										<li>Soft neutrals with rounded corners and light shadows</li>
+										<li>Right-aligned pills for consistent vertical alignment</li>
+										<li>Supports positive, negative, and zero delta values</li>
+									</ul>
+								</div>
+
+								<div>
+									<h4 className="font-medium text-foreground mb-3">"New" Indicator Best Practices</h4>
+									<ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
+										<li>
+											<strong>Separation:</strong> Keep "new" indicator on the icon, count indicator separate on the right
+										</li>
+										<li>
+											<strong>Visual Connection:</strong> When hasNewIndicator is true, the count pill gets a subtle ring
+											accent to create visual harmony
+										</li>
+										<li>
+											<strong>Clarity:</strong> Two distinct indicators serve different purposes - "new" = attention, count =
+											information
+										</li>
+										<li>
+											<strong>Consistency:</strong> All count indicators align on the same vertical line regardless of
+											"new" status
+										</li>
+									</ul>
+								</div>
+							</div>
 						</CardContent>
 					</Card>
 				</section>
