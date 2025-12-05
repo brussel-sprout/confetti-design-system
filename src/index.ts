@@ -258,6 +258,13 @@ export type {
 	GroupMaterial,
 } from './components/molecules/MaterialGroup'
 
+// Molecules - SuggestedElementsList
+export { SuggestedElementsList } from './components/molecules/SuggestedElementsList'
+export type {
+	SuggestedElementsListProps,
+	SuggestedElement,
+} from './components/molecules/SuggestedElementsList'
+
 // Demo
 export { Demo } from './components/Demo'
 

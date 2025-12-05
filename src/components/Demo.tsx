@@ -22,6 +22,7 @@ import { EventBlockTimeline } from './molecules/EventBlock'
 import { PartyCard } from './molecules/PartyCard'
 import { ProgressStep } from './molecules/ProgressStep'
 import { ProgressStepper } from './molecules/ProgressStepper'
+import { SuggestedElementsList } from './molecules/SuggestedElementsList'
 import { TimelineAxis, TimelineControls } from './molecules/TimelineAxis'
 import { EventTimeline } from './organisms/EventTimeline'
 import { PartySelectionLayout } from './organisms/PartySelectionLayout'
@@ -198,6 +199,7 @@ export const Demo: React.FC = () => {
 			],
 		},
 	])
+	const [selectedElementIds, setSelectedElementIds] = React.useState<string[]>(['1', '2', '3'])
 
 	const stepperSteps: ProgressStepperStep[] = [
 		{
@@ -812,6 +814,37 @@ export const Demo: React.FC = () => {
 									/>
 								</div>
 							</div>
+						</CardContent>
+					</Card>
+
+					{/* Suggested Elements List */}
+					<Card>
+						<CardHeader>
+							<h3 className="text-xl font-semibold">Suggested Elements List</h3>
+							<p className="text-muted-foreground">Selectable list of suggested party elements</p>
+						</CardHeader>
+						<CardContent>
+							<SuggestedElementsList
+								elements={[
+									{
+										id: '1',
+										title: 'Rainbow Balloon Garland',
+										description: 'Vibrant balloon arch with mixed sizes',
+									},
+									{
+										id: '2',
+										title: 'Confetti Cupcakes',
+										description: 'Cupcakes topped with rainbow sprinkles',
+									},
+									{
+										id: '3',
+										title: 'DIY Photo Booth',
+										description: 'Colorful backdrop with props',
+									},
+								]}
+								selectedIds={selectedElementIds}
+								onSelectionChange={setSelectedElementIds}
+							/>
 						</CardContent>
 					</Card>
 				</section>
