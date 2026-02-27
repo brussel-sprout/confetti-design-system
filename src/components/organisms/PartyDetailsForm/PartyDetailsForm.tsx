@@ -1,4 +1,4 @@
-import { Calendar, Clock, MapPin, Users, X } from 'lucide-react'
+import { Calendar, ChevronDown, Clock, MapPin, Users, X } from 'lucide-react'
 import React from 'react'
 
 import { Button, Input } from '@repo/confetti-design-system'
@@ -235,6 +235,11 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 			})
 		}
 
+		const formatDateCompact = (date: Date | null) => {
+			if (!date) return 'Add date'
+			return `${date.getMonth() + 1}/${date.getDate()}`
+		}
+
 		// const formatTime = (date: Date | null) => {
 		// 	if (!date) return 'Add time'
 		// 	const hours = date.getHours()
@@ -266,74 +271,91 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 
 		return (
 			<div ref={ref || containerRef} className={cn('relative', className)} {...props}>
-				{/* Compact Display */}
-				<div className="flex items-center gap-1 text-sm overflow-hidden max-w-full min-w-0">
+				{/* Compact Display - pill container with chevron for tap-to-edit affordance */}
+				<div
+					className={cn(
+						'rounded-lg px-2 py-1.5',
+						'bg-muted/40 hover:bg-muted/50 active:bg-muted/60 transition-colors',
+						'flex items-center gap-1 overflow-hidden max-w-full min-w-0'
+					)}
+				>
+					<div className="flex items-center gap-1 text-xs sm:text-sm overflow-hidden max-w-full min-w-0 flex-1">
+						<button
+							onClick={(e) => handleFieldClick(e, 'name')}
+							className={cn(
+								'font-semibold text-foreground hover:text-primary transition-colors',
+								'whitespace-nowrap flex-shrink text-left truncate max-w-[100px] sm:max-w-[140px] md:max-w-[200px]',
+								'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
+							)}
+							title={partyDetails.name || 'Add party name'}
+							aria-label="Edit party details: name, date, time, guests, location"
+						>
+							{partyDetails.name || 'Untitled Party'}
+						</button>
+
+						<span className="text-muted-foreground flex-shrink-0">•</span>
+
+						<button
+							onClick={(e) => handleFieldClick(e, 'date')}
+							className={cn(
+								'text-muted-foreground hover:text-foreground transition-colors',
+								'whitespace-nowrap min-w-0 flex-shrink truncate text-left',
+								'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
+							)}
+							title={formatDate(partyDetails.party_date)}
+						>
+							<span className="sm:hidden">{formatDateCompact(partyDetails.party_date)}</span>
+							<span className="hidden sm:inline">{formatDate(partyDetails.party_date)}</span>
+						</button>
+
+						<span className="text-muted-foreground flex-shrink-0 hidden md:inline">•</span>
+
+						<button
+							onClick={(e) => handleFieldClick(e, 'time')}
+							className={cn(
+								'text-muted-foreground hover:text-foreground transition-colors',
+								'whitespace-nowrap flex-shrink-0 text-left hidden md:inline-block',
+								'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
+							)}
+							title={formatTime(partyDetails.party_date)}
+						>
+							{formatTime(partyDetails.party_date)}
+						</button>
+
+						<span className="text-muted-foreground flex-shrink-0 hidden lg:inline">•</span>
+
+						<button
+							onClick={(e) => handleFieldClick(e, 'headCount')}
+							className={cn(
+								'text-muted-foreground hover:text-foreground transition-colors',
+								'whitespace-nowrap flex-shrink-0 text-left hidden lg:inline-block',
+								'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
+							)}
+							title={`${partyDetails.headCount || 0} guests`}
+						>
+							{formatHeadCount(partyDetails.headCount)}
+						</button>
+
+						<span className="text-muted-foreground flex-shrink-0 hidden xl:inline">•</span>
+
+						<button
+							onClick={(e) => handleFieldClick(e, 'address')}
+							className={cn(
+								'text-muted-foreground hover:text-foreground transition-colors',
+								'whitespace-nowrap text-left truncate min-w-0 hidden xl:inline-block',
+								'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
+							)}
+							title={partyDetails.address || 'Add location'}
+						>
+							{formatAddress(partyDetails.address)}
+						</button>
+					</div>
 					<button
 						onClick={(e) => handleFieldClick(e, 'name')}
-						className={cn(
-							'font-semibold text-foreground hover:text-primary transition-colors',
-							'whitespace-nowrap flex-shrink text-left truncate max-w-[200px]',
-							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
-						)}
-						title={partyDetails.name || 'Add party name'}
+						className="p-0.5 flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary/20"
+						aria-label="Edit party details"
 					>
-						{partyDetails.name || 'Untitled Party'}
-					</button>
-
-					<span className="text-muted-foreground flex-shrink-0">•</span>
-
-					<button
-						onClick={(e) => handleFieldClick(e, 'date')}
-						className={cn(
-							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left',
-							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
-						)}
-						title={formatDate(partyDetails.party_date)}
-					>
-						{formatDate(partyDetails.party_date)}
-					</button>
-
-					<span className="text-muted-foreground flex-shrink-0 hidden md:inline">•</span>
-
-					<button
-						onClick={(e) => handleFieldClick(e, 'time')}
-						className={cn(
-							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left hidden md:inline-block',
-							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
-						)}
-						title={formatTime(partyDetails.party_date)}
-					>
-						{formatTime(partyDetails.party_date)}
-					</button>
-
-					<span className="text-muted-foreground flex-shrink-0 hidden lg:inline">•</span>
-
-					<button
-						onClick={(e) => handleFieldClick(e, 'headCount')}
-						className={cn(
-							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap flex-shrink-0 text-left hidden lg:inline-block',
-							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
-						)}
-						title={`${partyDetails.headCount || 0} guests`}
-					>
-						{formatHeadCount(partyDetails.headCount)}
-					</button>
-
-					<span className="text-muted-foreground flex-shrink-0 hidden xl:inline">•</span>
-
-					<button
-						onClick={(e) => handleFieldClick(e, 'address')}
-						className={cn(
-							'text-muted-foreground hover:text-foreground transition-colors',
-							'whitespace-nowrap text-left truncate min-w-0 hidden xl:inline-block',
-							'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-1'
-						)}
-						title={partyDetails.address || 'Add location'}
-					>
-						{formatAddress(partyDetails.address)}
+						<ChevronDown className="w-4 h-4" aria-hidden />
 					</button>
 				</div>
 
