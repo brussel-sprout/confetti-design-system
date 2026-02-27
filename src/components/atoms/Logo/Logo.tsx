@@ -4,11 +4,13 @@ import { cn } from '../../../utils/cn'
 
 export interface LogoProps {
 	size?: 'sm' | 'md' | 'lg'
+	/** When false, only the icon is shown (no "Party Sprout" text). Default: true */
+	showText?: boolean
 	className?: string
 }
 
 const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
-	({ size = 'md', className = '', ...props }, ref) => {
+	({ size = 'md', showText = true, className = '', ...props }, ref) => {
 		const sizeClasses = {
 			sm: {
 				container: 'gap-1.5',
@@ -43,9 +45,11 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
 						style={{ imageRendering: 'crisp-edges' }}
 					/>
 				</div>
-				<span className={cn('text-foreground hidden sm:inline flex-shrink-0', currentSize.text)}>
-					Party Sprout
-				</span>
+				{showText && (
+					<span className={cn('text-foreground hidden sm:inline flex-shrink-0', currentSize.text)}>
+						Party Sprout
+					</span>
+				)}
 			</div>
 		)
 	}

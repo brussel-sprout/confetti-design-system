@@ -271,14 +271,8 @@ const PartyDetailsForm = React.forwardRef<HTMLDivElement, PartyDetailsFormProps>
 
 		return (
 			<div ref={ref || containerRef} className={cn('relative', className)} {...props}>
-				{/* Compact Display - pill container with chevron for tap-to-edit affordance */}
-				<div
-					className={cn(
-						'rounded-lg px-2 py-1.5',
-						'bg-muted/40 hover:bg-muted/50 active:bg-muted/60 transition-colors',
-						'flex items-center gap-1 overflow-hidden max-w-full min-w-0'
-					)}
-				>
+				{/* Compact Display - typography and chevron for tap-to-edit affordance, no pill */}
+				<div className="flex items-center gap-1 overflow-hidden max-w-full min-w-0">
 					<div className="flex items-center gap-1 text-xs sm:text-sm overflow-hidden max-w-full min-w-0 flex-1">
 						<button
 							onClick={(e) => handleFieldClick(e, 'name')}
