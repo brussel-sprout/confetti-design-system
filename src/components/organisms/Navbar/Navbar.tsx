@@ -126,20 +126,25 @@ const NavbarAccountDropdown = React.forwardRef<HTMLDivElement, NavbarAccountDrop
 		return (
 			<div ref={ref} className="inline-block">
 				<Dropdown className={className} {...props}>
-				<DropdownTrigger
-					className={cn(
-						'flex items-center gap-2 px-3 py-2 rounded-lg',
-						'text-sm font-medium text-foreground',
-						'hover:bg-muted/50 transition-colors duration-200'
-					)}
-				>
-					<span>{username}</span>
-					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-					</svg>
-				</DropdownTrigger>
-				<DropdownContent>{children}</DropdownContent>
-			</Dropdown>
+					<DropdownTrigger
+						className={cn(
+							'flex items-center gap-2 px-3 py-2 rounded-lg',
+							'text-sm font-medium text-foreground',
+							'hover:bg-muted/50 transition-colors duration-200'
+						)}
+					>
+						<span>{username}</span>
+						<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M19 9l-7 7-7-7"
+							/>
+						</svg>
+					</DropdownTrigger>
+					<DropdownContent>{children}</DropdownContent>
+				</Dropdown>
 			</div>
 		)
 	}
